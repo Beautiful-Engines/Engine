@@ -3,8 +3,8 @@
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
-#include "ImGui/imgui_impl_sdl.h"
-#include "ImGui/imgui_impl_opengl2.h"
+#include "ImGui\imgui_impl_sdl.h"
+#include "ImGui\imgui_impl_opengl2.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -110,7 +110,7 @@ bool ModuleRenderer3D::Init()
 
 	return ret;
 }
-
+bool test = false;
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
@@ -118,7 +118,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	bool test = false;
+	
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
