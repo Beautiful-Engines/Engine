@@ -110,7 +110,7 @@ bool ModuleRenderer3D::Init()
 
 	return ret;
 }
-bool test = false;
+
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
@@ -118,7 +118,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	
+	bool test = false;
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -136,7 +136,19 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		}
 		if (ImGui::BeginMenu("Edit"))
 		{
-			ImGui::Checkbox("Demo Window", &test);
+			//TODO put strings at xml file
+			if (ImGui::MenuItem("Cut		  	Ctrl+X"))
+			{
+				//TODO put cut function
+			}
+			if (ImGui::MenuItem("Copy		 	Ctrl+C"))
+			{
+				//TODO put copy function
+			}
+			if (ImGui::MenuItem("Paste			Ctrl+V"))
+			{
+				//TODO put paste function
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
