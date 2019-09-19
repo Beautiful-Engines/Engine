@@ -134,6 +134,11 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 			ImGui::Checkbox("Demo Window", &test);
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Edit"))
+		{
+			ImGui::Checkbox("Demo Window", &test);
+			ImGui::EndMenu();
+		}
 		ImGui::EndMainMenuBar();
 	}
 	if (test)
