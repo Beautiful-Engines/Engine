@@ -4,9 +4,9 @@ Application::Application()
 {
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
-	audio = new ModuleAudio(this, true);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
+	gui = new ModuleGUI(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -16,7 +16,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(audio);
+	AddModule(gui);
 
 	// Renderer last!
 	AddModule(renderer3D);
@@ -24,14 +24,15 @@ Application::Application()
 
 Application::~Application()
 {
-	std::list<Module*>::iterator item = list_modules.begin();
+	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
 
-	while (item != list_modules.end())
+	while (item != list_modules.rend())
 	{
-		delete *item;
-		*item = NULL;
-		item++;
+		delete (*item);
+		++item;
 	}
+
+	list_modules.clear();
 }
 
 bool Application::Init()
@@ -44,7 +45,7 @@ bool Application::Init()
 	while (item != list_modules.end() && ret == true)
 	{
 		ret = (*item)->Init();
-		item++;
+		++item;
 	}
 
 	// After all Init calls we call Start() in all modules
@@ -54,7 +55,7 @@ bool Application::Init()
 	while (item != list_modules.end() && ret == true)
 	{
 		ret = (*item)->Start();
-		item++;
+		++item;
 	}
 
 	ms_timer.Start();
@@ -103,7 +104,6 @@ update_status Application::Update()
 		item++;
 	}
 
-	FinishUpdate();
 	return ret;
 }
 
@@ -115,7 +115,7 @@ bool Application::CleanUp()
 	while (item != list_modules.rend() && ret == true)
 	{
 		ret = (*item)->CleanUp();
-		item++;
+		++item;
 	}
 
 	return ret;
