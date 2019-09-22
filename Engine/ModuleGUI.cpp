@@ -1,12 +1,20 @@
 #include "Application.h"
+#include "Globals.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "ImGui\imgui.h"
 #include "ImGui\imgui_impl_sdl.h"
 #include "ImGui\imgui_impl_opengl3.h"
 #include "ModuleGUI.h"
-#include <gl/GL.h>
 
+#include "EngineWindow.h"
+#include "HierarchyWindow.h"
+
+// TODO Delete later
+#include <gl/GL.h>
+#include "PCG\pcg_extras.hpp"
+#include "PCG\pcg_random.hpp"
+#include "PCG\pcg_uint128.hpp"
 #include "MathGeoLib\include\MathGeoLib.h"
 
 ModuleGUI::ModuleGUI(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -20,6 +28,9 @@ ModuleGUI::~ModuleGUI()
 
 bool ModuleGUI::Init()
 {
+	hierarchy_window = new HierarchyWindow();
+	engine_windows.push_back(hierarchy_window);
+
 	// Initialize ImGUi
 	LOG("Creating ImGui context");
 
@@ -48,9 +59,6 @@ update_status ModuleGUI::Update(float dt)
 	update_status ret = UPDATE_CONTINUE;
 	// Create main menu bar
 	ret = CreateMainMenuBar();
-	
-	// TESTING INTERSECTION
-	IntersectionTest();
 
 	return ret;
 }
@@ -68,6 +76,8 @@ bool ModuleGUI::CleanUp()
 {
 	LOG("Cleaning GUI");
 
+	for (uint i = 0; i < engine_windows.size(); ++i) { RELEASE(engine_windows[i]) };
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
@@ -83,47 +93,58 @@ update_status ModuleGUI::CreateMainMenuBar()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Exit"))
-			{
-				return UPDATE_STOP;
-			}
+			if (ImGui::MenuItem("Exit")) { return UPDATE_STOP; }
 			ImGui::EndMenu();
 		}
+
 		if (ImGui::BeginMenu("Edit"))
 		{
 			//TODO put strings at xml file
-			if (ImGui::MenuItem("Cut		  	Ctrl+X"))
-			{
-				//TODO put cut function
-				edittest = 1;
-				
-			}
-			if (ImGui::MenuItem("Copy		 	Ctrl+C"))
-			{
-				//TODO put copy function
-				edittest = 2;
-			}
-			if (ImGui::MenuItem("Paste			Ctrl+V"))
-			{
-				//TODO put paste function
-				edittest = 3;
-			}
+			if (ImGui::MenuItem("Cut", "Ctrl+X"))	{ /*TODO put cut function*/ edittest = 1; }
+			if (ImGui::MenuItem("Copy", "Ctrl+C"))	{ /*TODO put copy function*/	edittest = 2; }
+			if (ImGui::MenuItem("Paste", "Ctrl+V"))	{ /*TODO put paste function*/ edittest = 3; }
 			ImGui::EndMenu();
 		}
+
+		if (ImGui::BeginMenu("Assets"))
+		{
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("GameObject"))
+		{
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Component"))
+		{
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("Window"))
 		{
+			if (ImGui::MenuItem("Hierarchy", "ALT+H")) { hierarchy_window->Show_NotShow(); }
+
 			ImGui::Checkbox("Demo Window", &demo);
-			if (ImGui::CollapsingHeader("Configuration"))
+
+			if (ImGui::CollapsingHeader("Windows"))
 			{
 				ImGui::Checkbox("Window1", &window1);
 			}
 			ImGui::EndMenu();
 		}
+
+		if (ImGui::BeginMenu("Help"))
+		{
+			ImGui::EndMenu();
+		}
+
 		ImGui::EndMainMenuBar();
 	}
 
 	if (demo)
 		ImGui::ShowDemoWindow(&demo);
+
 	if (window1)
 		ShowWindow1(&window1);
 
@@ -184,26 +205,5 @@ void ModuleGUI::ShowWindow1(bool *window)
 	}
 
 	ImGui::End();
-
-}
-
-void ModuleGUI ::IntersectionTest()
-{
-	//TODO try PCG Family random number
-	LCG random;
-
-	math::Sphere sphere({ random.Float(0, 100) ,random.Float(0, 100) ,random.Float(0, 100) }, random.Float(0, 100));
-	math::Capsule capsule({ random.Float(0, 100) ,random.Float(0, 100) ,random.Float(0, 100) },{ random.Float(0, 100) ,random.Float(0, 100) ,random.Float(0, 100) }, random.Float(0, 100));
-	math::Ray ray({ random.Float(0, 100) ,random.Float(0, 100) ,random.Float(0, 100) } , { random.Float(0, 100) ,random.Float(0, 100) ,random.Float(0, 100) });
-	ray.dir.Normalize();
-
-	if (sphere.Intersects(capsule))	LOG("SPHERE AND CAPSULE INTERSECTION");
-	if (capsule.Intersects(ray)) LOG("CAPSULE AND RAY INTERSECTION");
-	if (ray.Intersects(sphere))	LOG("RAY AND SPHERE INTERSECTION");
-
-	// TESTING COLOR
-	ImVec4 background_color = ImVec4(0.4f, 0.2f, 0.4f, 0.0f);
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glClearColor(background_color.x, background_color.y, background_color.z, background_color.w);
 
 }

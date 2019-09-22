@@ -3,6 +3,9 @@
 
 #include "Module.h"
 
+class EngineWindow;
+class HierarchyWindow;
+
 class ModuleGUI : public Module
 {
 public:
@@ -18,10 +21,14 @@ public:
 private:
 	update_status CreateMainMenuBar();
 	void ShowWindow1(bool *window);
-	void IntersectionTest();
-	
+
+public:
+	HierarchyWindow* hierarchy_window = nullptr;
 
 private:
+
+	std::vector<EngineWindow*> engine_windows;
+
 	bool window1 = false;
 	bool demo = false;
 };
