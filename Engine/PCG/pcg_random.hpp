@@ -399,12 +399,12 @@ namespace pcg_detail {
 			// It would be nice to use std::numeric_limits for these, but
 			// we can't be sure that it'd be defined for the 128-bit types.
 
-			static constexpr result_type MIN()
+			static constexpr result_type (min)()
 			{
-				return result_type;
+				return result_type();
 			}
 
-			static constexpr result_type MAX()
+			static constexpr result_type (max)()
 			{
 				return result_type(~result_type(0UL));
 			}

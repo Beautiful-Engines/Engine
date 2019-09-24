@@ -3,12 +3,13 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleScene.h"
 
-// TODO Delete later
+
 #include <gl/GL.h>
 #include "PCG\pcg_extras.hpp"
 #include "PCG\pcg_random.hpp"
 #include "PCG\pcg_uint128.hpp"
 #include "MathGeoLib\include\MathGeoLib.h"
+#include <random>
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -56,8 +57,23 @@ bool ModuleScene::CleanUp()
 
 void ModuleScene::IntersectionTest()
 {
-	//TODO try PCG Family random number
-	pcg32  myRNG;
+	// RANDOM CREATION TEST
+	// Choose a random int
+	pcg_extras::seed_seq_from<std::random_device> seed_source_int;
+	pcg32 rn_int(seed_source_int);
+	std::uniform_int_distribution<int> uniform_int(0, 100);
+	int random_int = uniform_int(rn_int);
+	LOG("number int is: %i", random_int);
+
+	// Choose a random float
+	pcg_extras::seed_seq_from<std::random_device> seed_source_float;
+	pcg32 rn_float(seed_source_float);
+	std::uniform_real_distribution<float> uniform_float(0, 1);
+	float random_float = uniform_float(rn_float);
+	LOG("number float is: %f", random_float);
+
+
+	// MATH INTERSECTS TEST
 	LCG random;
 
 	math::Sphere sphere({ random.Float(0, 100) ,random.Float(0, 100) ,random.Float(0, 100) }, random.Float(0, 100));

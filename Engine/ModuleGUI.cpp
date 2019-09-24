@@ -10,13 +10,6 @@
 #include "EngineWindow.h"
 #include "HierarchyWindow.h"
 
-// TODO Delete later
-#include <gl/GL.h>
-#include "PCG\pcg_extras.hpp"
-#include "PCG\pcg_random.hpp"
-#include "PCG\pcg_uint128.hpp"
-#include "MathGeoLib\include\MathGeoLib.h"
-
 ModuleGUI::ModuleGUI(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
