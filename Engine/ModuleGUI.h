@@ -31,6 +31,13 @@ private:
 
 	bool window1 = false;
 	bool demo = false;
+	bool config = false;
+
+	int width = SCREEN_WIDTH * SCREEN_SIZE;
+	int height = SCREEN_HEIGHT * SCREEN_SIZE;
+	float brightness = 0;
+	int refresh_rate = 0;
+	bool fullscreen, fulldesktop, resizable, borderless;
 };
 
 #endif // !__ModuleGUI_H__

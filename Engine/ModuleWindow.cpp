@@ -91,3 +91,77 @@ void ModuleWindow::SetTitle(const char* title)
 {
 	SDL_SetWindowTitle(window, title);
 }
+
+int ModuleWindow::GetWindowHeight()
+{
+	return height;
+}
+
+int ModuleWindow::GetWindowWidth()
+{
+	return width;
+}
+
+float ModuleWindow::GetBrightness()
+{
+	return brightness;
+}
+
+int ModuleWindow::GetRefreshRate()
+{
+	return refrate;
+}
+
+void ModuleWindow::SetWindowHeight(int height)
+{
+	this->height = height;
+	SDL_SetWindowSize(window, width, height);
+}
+
+void ModuleWindow::SetWindowWidth(int width)
+{
+	this->width = width;
+	SDL_SetWindowSize(window, width, height);
+}
+
+void ModuleWindow::SetBrightness(float brightness)
+{
+	SDL_SetWindowBrightness(window, brightness);
+}
+
+void ModuleWindow::SetScreenMode(SCREENMODE mode, bool check)
+{
+	switch (mode)
+	{
+	case FULLSCREEN:
+		if (check) 
+		{ 
+			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN); 
+		}
+		else SDL_SetWindowFullscreen(window, 0); break;
+
+	case FULLDESKTOP:
+		if (check)
+		{
+			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		}
+		else SDL_SetWindowFullscreen(window, 0); break;
+
+	case RESIZABLE:
+		if (check)
+		{
+			SDL_SetWindowResizable(window, SDL_TRUE);
+		}
+		else SDL_SetWindowResizable(window, SDL_FALSE);	break;
+
+	case BORDERLESS:
+		if (check)
+		{
+			SDL_SetWindowBordered(window, SDL_FALSE);
+		}
+		else SDL_SetWindowBordered(window, SDL_TRUE); break;
+
+	default:
+		break;
+	}
+}

@@ -5,6 +5,7 @@
 #include "ImGui\imgui.h"
 #include "ImGui\imgui_impl_sdl.h"
 #include "ImGui\imgui_impl_opengl3.h"
+#include <string> 
 #include "ModuleGUI.h"
 
 #include "EngineWindow.h"
@@ -127,6 +128,12 @@ update_status ModuleGUI::CreateMainMenuBar()
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("View"))
+		{
+			ImGui::Checkbox("Configuration", &config);
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("Help"))
 		{
 			ImGui::EndMenu();
@@ -140,6 +147,46 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 	if (window1)
 		ShowWindow1(&window1);
+
+	if (config)
+	{
+		ImGui::Begin("Configuration", &config);
+		ImGui::Text("Options");
+		if (ImGui::CollapsingHeader("Application"))
+		{
+		}
+		if (ImGui::CollapsingHeader("Window"))
+		{
+			if (ImGui::SliderInt("Width", &width, 0, 1920))	App->window->SetWindowWidth(width);
+			if (ImGui::SliderInt("Height", &height, 0, 1080)) App->window->SetWindowHeight(height);
+			if (ImGui::SliderFloat("Brightness", &brightness, 0, 1)) App->window->SetBrightness(brightness);
+
+			ImGui::Text("Refresh rate");
+			ImGui::SameLine();
+			std::string conv = std::to_string(App->window->GetRefreshRate());
+			ImGui::TextColored({ 255, 255, 0, 255 }, conv.c_str());
+
+			if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
+				App->window->SetScreenMode(FULLSCREEN, fullscreen);
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Resizable", &resizable)) {
+				App->window->SetScreenMode(RESIZABLE, resizable);
+			}
+			if (ImGui::Checkbox("Borderless", &borderless)) {
+				App->window->SetScreenMode(BORDERLESS, borderless);
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Full Desktop", &fulldesktop)) {
+				App->window->SetScreenMode(FULLDESKTOP, fulldesktop);
+			}
+		}
+		ImGui::End();
+	}
 
 	switch (edittest)
 	{
