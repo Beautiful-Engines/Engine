@@ -274,10 +274,16 @@
     <ClInclude Include="ModuleScene.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="HierarchyWindow.h">
+    <ClInclude Include="WindowAbout.h">
       <Filter>Sources\EngineWindows</Filter>
     </ClInclude>
-    <ClInclude Include="EngineWindow.h">
+    <ClInclude Include="WindowEngine.h">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowHierarchy.h">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowConfig.h">
       <Filter>Sources\EngineWindows</Filter>
     </ClInclude>
   </ItemGroup>
@@ -438,10 +444,16 @@
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="HierarchyWindow.cpp">
+    <ClCompile Include="WindowEngine.cpp">
       <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
-    <ClCompile Include="EngineWindow.cpp">
+    <ClCompile Include="WindowHierarchy.cpp">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowAbout.cpp">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowConfig.cpp">
       <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
   </ItemGroup>

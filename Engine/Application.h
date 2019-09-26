@@ -7,13 +7,15 @@
 
 #include "Globals.h"
 #include "Timer.h"
-#include "Module.h"
-#include "ModuleWindow.h"
-#include "ModuleInput.h"
-#include "ModuleRenderer3D.h"
-#include "ModuleCamera3D.h"
-#include "ModuleGUI.h"
-#include "ModuleScene.h"
+
+class Module;
+class ModuleWindow;
+class ModuleInput;
+class ModuleRenderer3D;
+class ModuleCamera3D;
+class ModuleGUI;
+class ModuleScene;
+
 
 
 class Application
@@ -47,5 +49,7 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
+
+extern Application* App;
 
 #endif // !__Application_H__

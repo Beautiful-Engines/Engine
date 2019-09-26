@@ -5,13 +5,14 @@
 #include "ImGui\imgui.h"
 #include "ImGui\imgui_impl_sdl.h"
 #include "ImGui\imgui_impl_opengl3.h"
-#include <string> 
 #include "ModuleGUI.h"
 
-#include "EngineWindow.h"
-#include "HierarchyWindow.h"
+#include "WindowEngine.h"
+#include "WindowHierarchy.h"
+#include "WindowConfig.h"
+#include "WindowAbout.h"
 
-ModuleGUI::ModuleGUI(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleGUI::ModuleGUI(bool start_enabled) : Module(start_enabled)
 {
 }
 
@@ -22,8 +23,15 @@ ModuleGUI::~ModuleGUI()
 
 bool ModuleGUI::Init()
 {
-	hierarchy_window = new HierarchyWindow();
-	engine_windows.push_back(hierarchy_window);
+	// Creating windows
+	window_hierarchy = new WindowHierarchy();
+	window_config = new WindowConfig();
+	window_about = new WindowAbout();
+
+	// Push windows into vector
+	windows_engine.push_back(window_hierarchy);
+	windows_engine.push_back(window_config);
+	windows_engine.push_back(window_about);
 
 	// Initialize ImGUi
 	LOG("Creating ImGui context");
@@ -70,7 +78,7 @@ bool ModuleGUI::CleanUp()
 {
 	LOG("Cleaning GUI");
 
-	for (uint i = 0; i < engine_windows.size(); ++i) { RELEASE(engine_windows[i]) };
+	for (uint i = 0; i < windows_engine.size(); ++i) { RELEASE(windows_engine[i]) };
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -80,23 +88,22 @@ bool ModuleGUI::CleanUp()
 }
 
 // Private Methods-------------------------
-int edittest = 0;
 update_status ModuleGUI::CreateMainMenuBar()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Exit")) { return UPDATE_STOP; }
+			if (ImGui::MenuItem("Quit", "ALT+F4")) { return UPDATE_STOP; }
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Edit"))
 		{
 			//TODO put strings at xml file
-			if (ImGui::MenuItem("Cut", "Ctrl+X"))	{ /*TODO put cut function*/ edittest = 1; }
-			if (ImGui::MenuItem("Copy", "Ctrl+C"))	{ /*TODO put copy function*/	edittest = 2; }
-			if (ImGui::MenuItem("Paste", "Ctrl+V"))	{ /*TODO put paste function*/ edittest = 3; }
+			if (ImGui::MenuItem("Cut", "Ctrl+X"))	{ /*TODO put cut function*/ }
+			if (ImGui::MenuItem("Copy", "Ctrl+C"))	{ /*TODO put copy function*/}
+			if (ImGui::MenuItem("Paste", "Ctrl+V"))	{ /*TODO put paste function*/}
 			ImGui::EndMenu();
 		}
 
@@ -117,133 +124,40 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 		if (ImGui::BeginMenu("Window"))
 		{
-			if (ImGui::MenuItem("Hierarchy", "ALT+H")) { hierarchy_window->Show_NotShow(); }
+			if (ImGui::MenuItem("Hierarchy", "ALT+H")) 
+			{
+
+				window_hierarchy->Show_NotShow(); 
+			}
 
 			ImGui::Checkbox("Demo Window", &demo);
 
-			if (ImGui::CollapsingHeader("Windows"))
-			{
-				ImGui::Checkbox("Window1", &window1);
-			}
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("View"))
 		{
-			ImGui::Checkbox("Configuration", &config);
+			if (ImGui::MenuItem("Configuration", "ALT+C")) { window_config->Show_NotShow(); }
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Help"))
 		{
+			if (ImGui::MenuItem("About", "ALT+A")) { window_about->Show_NotShow(); }
 			ImGui::EndMenu();
 		}
 
 		ImGui::EndMainMenuBar();
 	}
 
+	for (uint i = 0; i < windows_engine.size(); ++i)
+	{
+		if (windows_engine[i]->IsEnabled())	windows_engine[i]->Draw();
+	}
+
 	if (demo)
 		ImGui::ShowDemoWindow(&demo);
-
-	if (window1)
-		ShowWindow1(&window1);
-
-	if (config)
-	{
-		ImGui::Begin("Configuration", &config);
-		ImGui::Text("Options");
-		if (ImGui::CollapsingHeader("Application"))
-		{
-		}
-		if (ImGui::CollapsingHeader("Window"))
-		{
-			if (ImGui::SliderInt("Width", &width, 0, 1920))	App->window->SetWindowWidth(width);
-			if (ImGui::SliderInt("Height", &height, 0, 1080)) App->window->SetWindowHeight(height);
-			if (ImGui::SliderFloat("Brightness", &brightness, 0, 1)) App->window->SetBrightness(brightness);
-
-			ImGui::Text("Refresh rate");
-			ImGui::SameLine();
-			std::string conv = std::to_string(App->window->GetRefreshRate());
-			ImGui::TextColored({ 255, 255, 0, 255 }, conv.c_str());
-
-			if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
-				App->window->SetScreenMode(FULLSCREEN, fullscreen);
-			}
-
-			ImGui::SameLine();
-
-			if (ImGui::Checkbox("Resizable", &resizable)) {
-				App->window->SetScreenMode(RESIZABLE, resizable);
-			}
-			if (ImGui::Checkbox("Borderless", &borderless)) {
-				App->window->SetScreenMode(BORDERLESS, borderless);
-			}
-
-			ImGui::SameLine();
-
-			if (ImGui::Checkbox("Full Desktop", &fulldesktop)) {
-				App->window->SetScreenMode(FULLDESKTOP, fulldesktop);
-			}
-		}
-		ImGui::End();
-	}
-
-	switch (edittest)
-	{
-	case 0:
-		ImGui::Text("Hello, world! \n\nTry to do something with Edit menu.");
-		break;
-	case 1:
-		ImGui::Text("OH NO, Le has cortado los huevos al motor");
-		break;
-	case 2:
-		ImGui::Text("No copies codigo!");
-		break;
-	case 3:
-		ImGui::Text("El motor te responde pegandote una ostia.");
-		break;
-	default:
-		break;
-	}
 
 	return UPDATE_CONTINUE;
 }
 
-void ModuleGUI::ShowWindow1(bool *window)
-{
-	static bool no_titlebar = false;
-	static bool no_scrollbar = false;
-	static bool no_menu = false;
-	static bool no_move = false;
-	static bool no_resize = false;
-	static bool no_collapse = false;
-	static bool no_close = false;
-	static bool no_nav = false;
-	static bool no_background = false;
-	static bool no_bring_to_front = false;
-	static bool no_docking = false;
-
-	ImGuiWindowFlags window_flags = 0;
-	if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
-	if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
-	if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
-	if (no_move)            window_flags |= ImGuiWindowFlags_NoMove;
-	if (no_resize)          window_flags |= ImGuiWindowFlags_NoResize;
-	if (no_collapse)        window_flags |= ImGuiWindowFlags_NoCollapse;
-	if (no_nav)             window_flags |= ImGuiWindowFlags_NoNav;
-	if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
-	if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-	if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
-	if (no_close)           window = NULL; // Don't pass our bool* to Begin
-
-	// Main body of the Demo window starts here.
-	if (!ImGui::Begin("Window1", window, window_flags))
-	{
-		// Early out if the window is collapsed, as an optimization.
-		ImGui::End();
-		return;
-	}
-
-	ImGui::End();
-
-}

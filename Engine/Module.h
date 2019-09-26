@@ -1,18 +1,14 @@
 #ifndef __Module_H__
 #define __Module_H__
 
-class Application;
-
 class Module
 {
 private:
 	bool enabled;
 
 public:
-	Application * App;
 
-	Module(Application* parent, bool start_enabled = true) : App(parent)
-	{}
+	Module(bool start_enabled = true) {}
 
 	virtual ~Module()
 	{}

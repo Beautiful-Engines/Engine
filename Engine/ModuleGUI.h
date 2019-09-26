@@ -3,13 +3,15 @@
 
 #include "Module.h"
 
-class EngineWindow;
-class HierarchyWindow;
+class WindowEngine;
+class WindowHierarchy;
+class WindowConfig;
+class WindowAbout;
 
 class ModuleGUI : public Module
 {
 public:
-	ModuleGUI(Application* app, bool start_enabled = true);
+	ModuleGUI(bool start_enabled = true);
 	~ModuleGUI();
 
 	bool Init();
@@ -20,24 +22,18 @@ public:
 
 private:
 	update_status CreateMainMenuBar();
-	void ShowWindow1(bool *window);
 
 public:
-	HierarchyWindow* hierarchy_window = nullptr;
+	WindowHierarchy* window_hierarchy = nullptr;
+	WindowConfig* window_config = nullptr;
+	WindowAbout* window_about = nullptr;
 
 private:
 
-	std::vector<EngineWindow*> engine_windows;
+	std::vector<WindowEngine*> windows_engine;
 
-	bool window1 = false;
 	bool demo = false;
-	bool config = false;
 
-	int width = SCREEN_WIDTH * SCREEN_SIZE;
-	int height = SCREEN_HEIGHT * SCREEN_SIZE;
-	float brightness = 0;
-	int refresh_rate = 0;
-	bool fullscreen, fulldesktop, resizable, borderless;
 };
 
 #endif // !__ModuleGUI_H__

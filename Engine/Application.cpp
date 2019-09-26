@@ -1,13 +1,20 @@
 #include "Application.h"
+#include "Module.h"
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleCamera3D.h"
+#include "ModuleGUI.h"
+#include "ModuleScene.h"
+#include "ModuleRenderer3D.h"
 
 Application::Application()
 {
-	window = new ModuleWindow(this);
-	input = new ModuleInput(this);
-	renderer3D = new ModuleRenderer3D(this);
-	camera = new ModuleCamera3D(this);
-	gui = new ModuleGUI(this);
-	scene = new ModuleScene(this);
+	window = new ModuleWindow();
+	input = new ModuleInput();
+	camera = new ModuleCamera3D();
+	gui = new ModuleGUI();
+	scene = new ModuleScene();
+	renderer3D = new ModuleRenderer3D();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -15,8 +22,8 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
-	AddModule(camera);
 	AddModule(input);
+	AddModule(camera);
 	AddModule(gui);
 	AddModule(scene);
 
