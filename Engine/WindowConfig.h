@@ -3,6 +3,8 @@
 
 #include "WindowEngine.h"
 
+enum KEY_STATE;
+
 class WindowConfig : public WindowEngine
 {
 public:
@@ -27,6 +29,10 @@ private:
 	int refresh_rate = 0;
 	bool fullscreen = false, fulldesktop = false, borderless = false;
 	bool resizable = true;
+
+	ImGuiTextBuffer buff;
+
+	SDL_version compiled_version;
 };
 
 #endif // !__WindowConfig_H__

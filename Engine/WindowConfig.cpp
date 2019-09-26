@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleInput.h"
 #include "ModuleGUI.h"
 #include "WindowConfig.h"
 
@@ -75,6 +76,64 @@ bool WindowConfig::Draw()
 			if (ImGui::Checkbox("Full Desktop", &fulldesktop)) {
 				App->window->SetScreenMode(FULLDESKTOP, fulldesktop);
 			}
+		}
+		if (ImGui::CollapsingHeader("File System"))
+		{
+		}
+		if (ImGui::CollapsingHeader("Input"))
+		{
+			ImGui::Text("Mouse Position:");
+			ImGui::SameLine(); ImGui::TextColored({ 255, 255, 0, 255 }, "%i, %i", App->input->GetMouseX(), App->input->GetMouseY());
+
+			ImGui::Text("Mouse Motion:");
+			ImGui::SameLine(); ImGui::TextColored({ 255, 255, 0, 255 }, "%i, %i", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+
+			ImGui::Text("Mouse Wheel:");
+			ImGui::SameLine(); ImGui::TextColored({ 255, 255, 0, 255 }, "%i", App->input->GetMouseZ());
+
+			ImGui::Separator();
+			ImGui::Text("Input LOGS:");
+
+			ImGuiWindowFlags scrollFlags = 0;
+			scrollFlags |= ImGuiWindowFlags_AlwaysVerticalScrollbar;
+
+			if (ImGui::BeginChild("scroll", ImVec2(0, 0), false, scrollFlags))
+			{
+				//ImGui::TextUnformatted(buff.begin());
+				ImGui::SetScrollHere(1.0f);
+			}
+			ImGui::EndChild();
+		}
+		if (ImGui::CollapsingHeader("Hardware"))
+		{
+			SDL_VERSION(&compiled_version);
+			ImGui::Text("SDL Version:");
+			ImGui::SameLine();
+			std::string temp = std::to_string(compiled_version.major) + "." + std::to_string(compiled_version.minor) + "." + std::to_string(compiled_version.patch);
+			ImGui::TextColored({ 255, 255, 0, 255 }, temp.c_str());
+
+			ImGui::Separator();
+
+			ImGui::Text("CPU cores:");
+			ImGui::SameLine();
+			temp = std::to_string(SDL_GetCPUCount()) + " (Cache: " + std::to_string(SDL_GetCPUCacheLineSize()) + "Kb)";
+			ImGui::TextColored({ 255, 255, 0, 255 }, temp.c_str());
+
+			ImGui::Text("System RAM:");
+			ImGui::SameLine();
+			temp = std::to_string(SDL_GetSystemRAM()) + "Mb";
+			ImGui::TextColored({ 255, 255, 0, 255 }, temp.c_str());
+
+			ImGui::Text("Caps:");
+			ImGui::SameLine();
+			ImGui::Text("Caps:"); ImGui::SameLine();
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%s%s%s%s%s%s%s%s%s%s%s", (SDL_HasAVX()) ? "AVX " : "", (SDL_HasAVX2()) ? "AVX2 " : "", (SDL_HasAltiVec()) ? "AltiVec " : "",
+				(SDL_Has3DNow()) ? "3DNow " : "", (SDL_HasMMX()) ? "MMX " : "", (SDL_HasRDTSC()) ? "RDTSC " : "", (SDL_HasSSE()) ? "SEE " : "",
+				(SDL_HasSSE2()) ? "SSE2 " : "", (SDL_HasSSE3()) ? "SSE3 " : "", (SDL_HasSSE41()) ? "SSE41 " : "",
+				(SDL_HasSSE42()) ? "SSE42 " : "");
+
+			ImGui::Separator();
+
 		}
 
 		ImGui::End();
