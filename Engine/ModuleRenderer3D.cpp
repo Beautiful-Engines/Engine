@@ -160,3 +160,22 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
+
+bool ModuleRenderer3D::GetVSync()
+{
+	return VSync;
+}
+
+void ModuleRenderer3D::SetVSync(bool VSync)
+{
+	this->VSync = VSync;
+
+	if (this->VSync)
+	{
+		SDL_GL_SetSwapInterval(1);
+	}
+	else 
+	{
+		SDL_GL_SetSwapInterval(0);
+	}
+}

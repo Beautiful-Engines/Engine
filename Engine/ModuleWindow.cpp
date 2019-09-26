@@ -109,6 +109,12 @@ float ModuleWindow::GetBrightness()
 
 int ModuleWindow::GetRefreshRate()
 {
+	uint refrate = 0;
+
+	SDL_DisplayMode desktopDisplay;
+	if (SDL_GetDesktopDisplayMode(0, &desktopDisplay) == 0)
+		refrate = desktopDisplay.refresh_rate;
+
 	return refrate;
 }
 

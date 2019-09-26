@@ -26,6 +26,10 @@ public:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+	bool VSync = false;
+
+	bool GetVSync();
+	void SetVSync(bool VSync);
 };
 
 #endif // !__ModuleRenderer3D_H__

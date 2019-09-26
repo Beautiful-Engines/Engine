@@ -81,6 +81,22 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	lastframems = ms_timer.Read();
+
+	if (!renderer3D->GetVSync() && cap_frames)
+	{
+		if (lastframems < cap_ms)
+			SDL_Delay(cap_ms - lastframems);
+
+		lastframems = ms_timer.Read();
+	}
+
+	//AddMsToTrack(lastframems);
+
+	fps = 1000.0 / lastframems;
+	//GetFPS(fps);
+
+	dt = 1.0 / fps;
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -128,6 +144,34 @@ bool Application::CleanUp()
 	}
 
 	return ret;
+}
+
+void Application::SetName(std::string name)
+{
+}
+
+void Application::SetOrganization(std::string org)
+{
+}
+
+void Application::SetFPSCap(int capfps)
+{
+	cap_frames = capfps;
+}
+
+std::string Application::GetName()
+{
+	return name;
+}
+
+std::string Application::GetOrganization()
+{
+	return organization;
+}
+
+int Application::GetFPSCap()
+{
+	return cap_frames;
 }
 
 void Application::AddModule(Module* mod)
