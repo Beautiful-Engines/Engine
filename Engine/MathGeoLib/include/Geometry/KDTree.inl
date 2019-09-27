@@ -23,6 +23,8 @@
 #include "../Math/assume.h"
 #include "../Math/MathFunc.h"
 
+#include <algorithm>
+
 MATH_BEGIN_NAMESPACE
 
 template<typename T>
@@ -218,7 +220,7 @@ int KdTree<T>::TreeHeight(int nodeIndex) const
 	const KdTreeNode &node = nodes[nodeIndex];
 	if (node.IsLeaf())
 		return 1;
-	return 1 + std::max(TreeHeight(node.LeftChildIndex()), TreeHeight(node.RightChildIndex()));
+	return 1 + std::max<int>(TreeHeight(node.LeftChildIndex()), TreeHeight(node.RightChildIndex()));
 }
 
 template<typename T>

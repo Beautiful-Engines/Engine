@@ -32,7 +32,7 @@ bool WindowConfig::Draw()
 
 			ImGui::Text("Framerate Cap:");
 			ImGui::SameLine();
-			ImGui::TextColored({ 255,255,0,255 }, std::to_string(App->GetFPSCap()).c_str());
+			ImGui::TextColored({ 255,255,0,255 }, "%i",App->GetFPSCap());
 
 			char title[25];
 			/*sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
@@ -109,20 +109,17 @@ bool WindowConfig::Draw()
 			SDL_VERSION(&compiled_version);
 			ImGui::Text("SDL Version:");
 			ImGui::SameLine();
-			std::string temp = std::to_string(compiled_version.major) + "." + std::to_string(compiled_version.minor) + "." + std::to_string(compiled_version.patch);
-			ImGui::TextColored({ 255, 255, 0, 255 }, temp.c_str());
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i.%i.%i", compiled_version.major, compiled_version.minor, compiled_version.patch);
 
 			ImGui::Separator();
 
 			ImGui::Text("CPU cores:");
 			ImGui::SameLine();
-			temp = std::to_string(SDL_GetCPUCount()) + " (Cache: " + std::to_string(SDL_GetCPUCacheLineSize()) + "Kb)";
-			ImGui::TextColored({ 255, 255, 0, 255 }, temp.c_str());
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Cache: %i Kb", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
 
 			ImGui::Text("System RAM:");
 			ImGui::SameLine();
-			temp = std::to_string(SDL_GetSystemRAM()) + "Mb";
-			ImGui::TextColored({ 255, 255, 0, 255 }, temp.c_str());
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Mb", SDL_GetSystemRAM());
 
 			ImGui::Text("Caps:");
 			ImGui::SameLine();
