@@ -1,6 +1,7 @@
 #ifndef __Application_H__
 #define __Application_H__
 
+#define MAX_FPS 120
 
 #include <list>
 #include <vector>
@@ -30,14 +31,16 @@ public:
 
 private:
 
-	std::string name;
-	std::string organization;
+	const char*	name = nullptr;
+	const char*	organization = nullptr;
 
 	Timer	ms_timer;
 	int lastframems = 0;
 	int cap_frames = 0;
 	int cap_ms = 0;
 	int fps = 0;
+	std::vector<float> fps_log;
+	std::vector<float> ms_log;
 	float	dt;
 	std::list<Module*> list_modules;
 
@@ -50,16 +53,19 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-	void SetName(std::string name);
-	void SetOrganization(std::string org);
+	void SetName(const char* name);
+	void SetOrganization(const char* org);
 	void SetFPSCap(int capfps);
 
-	std::string GetName();
-	std::string GetOrganization();
+	const char* GetName() const;
+	const char* GetOrganization() const;
 	int GetFPSCap();
+	std::vector<float> GetFPSVector();
+	std::vector<float> GetLastFrameMSVector();
 
 private:
 
+	void FillFPS();
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();

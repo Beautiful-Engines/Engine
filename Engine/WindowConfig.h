@@ -3,8 +3,6 @@
 
 #include "WindowEngine.h"
 
-enum KEY_STATE;
-
 class WindowConfig : public WindowEngine
 {
 public:
@@ -19,11 +17,9 @@ private:
 	int width = SCREEN_WIDTH * SCREEN_SIZE;
 	int height = SCREEN_HEIGHT * SCREEN_SIZE;
 
-	std::string app_name = "";
-	std::string org_name = "";
+	char app_name[20] = TITLE;
+	char org_name[20] = ORGANIZATION;
 	int fpscap = 0;
-	std::vector<float> fps_log;
-	std::vector<float> ms_log;
 
 	float brightness = 1;
 	int refresh_rate = 0;

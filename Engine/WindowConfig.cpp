@@ -23,10 +23,12 @@ bool WindowConfig::Draw()
 		ImGui::Text("Options");
 		if (ImGui::CollapsingHeader("Application"))
 		{
-			/*if (ImGui::InputText("Name", &app_name, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+			if (ImGui::InputText("Name", app_name, 20, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
 				App->SetName(app_name);
-			if (ImGui::InputText("Organization", &org_name, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
-				App->SetOrganization(org_name);*/
+			
+			if (ImGui::InputText("Organization", org_name, 20, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+				App->SetOrganization(org_name);
+			
 			if (ImGui::SliderInt("Cap FPS", &fpscap, 0, 144))
 				App->SetFPSCap(fpscap);
 
@@ -34,11 +36,12 @@ bool WindowConfig::Draw()
 			ImGui::SameLine();
 			ImGui::TextColored({ 255,255,0,255 }, "%i",App->GetFPSCap());
 
+			
 			char title[25];
-			/*sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
-			ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-			sprintf_s(title, 25, "Milliseconds %0.1f", ms_log[ms_log.size() - 1]);
-			ImGui::PlotHistogram("##milliseconds", &ms_log[0], ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));*/
+			sprintf_s(title, 25, "Framerate %.1f", App->GetFPSVector()[App->GetFPSVector().size() - 1]);
+			ImGui::PlotHistogram("##framerate", &App->GetFPSVector()[0], App->GetFPSVector().size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+			sprintf_s(title, 25, "Milliseconds %0.1f", App->GetLastFrameMSVector()[App->GetLastFrameMSVector().size() - 1]);
+			ImGui::PlotHistogram("##milliseconds", &App->GetLastFrameMSVector()[0], App->GetLastFrameMSVector().size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 
 			bool vsync = App->renderer3D->GetVSync();
 			if (ImGui::Checkbox("Use VSync", &vsync))
@@ -140,3 +143,5 @@ bool WindowConfig::Draw()
 	
 	return true;
 }
+
+

@@ -91,12 +91,11 @@ void Application::FinishUpdate()
 		lastframems = ms_timer.Read();
 	}
 
-	//AddMsToTrack(lastframems);
-
 	fps = 1000.0 / lastframems;
-	//GetFPS(fps);
 
 	dt = 1.0 / fps;
+
+	FillFPS();
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -129,6 +128,8 @@ update_status Application::Update()
 		item++;
 	}
 
+	FinishUpdate();
+
 	return ret;
 }
 
@@ -146,11 +147,11 @@ bool Application::CleanUp()
 	return ret;
 }
 
-void Application::SetName(std::string name)
+void Application::SetName(const char* name)
 {
 }
 
-void Application::SetOrganization(std::string org)
+void Application::SetOrganization(const char* org)
 {
 }
 
@@ -159,12 +160,12 @@ void Application::SetFPSCap(int capfps)
 	cap_frames = capfps;
 }
 
-std::string Application::GetName()
+const char* Application::GetName() const
 {
 	return name;
 }
 
-std::string Application::GetOrganization()
+const char* Application::GetOrganization() const
 {
 	return organization;
 }
@@ -172,6 +173,44 @@ std::string Application::GetOrganization()
 int Application::GetFPSCap()
 {
 	return cap_frames;
+}
+
+std::vector<float> Application::GetFPSVector()
+{
+	return fps_log;
+}
+
+std::vector<float> Application::GetLastFrameMSVector()
+{
+	return ms_log;
+}
+
+void Application::FillFPS()
+{
+	static uint count = 0;
+	if (count >= MAX_FPS)
+	{
+		for (uint i = 0; i < MAX_FPS - 1; ++i)
+		{
+			fps_log[i] = fps_log[i + 1];
+			ms_log[i] = ms_log[i + 1];
+		}
+		fps_log[count - 1] = fps;
+		ms_log[count - 1] = lastframems;
+
+	}
+	else
+	{
+		++count;
+		if (fps_log.size() < MAX_FPS)
+		{
+			for (uint i = 0; i < MAX_FPS; ++i)
+			{
+				fps_log.push_back(i);
+				ms_log.push_back(i);
+			}
+		}
+	}
 }
 
 void Application::AddModule(Module* mod)

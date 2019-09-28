@@ -45,5 +45,6 @@ enum update_status
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
 #define TITLE "Engine"
+#define ORGANIZATION "Beautiful Engines"
 
 #endif // !__Globals_H_
