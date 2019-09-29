@@ -25,7 +25,7 @@ bool WindowConfig::Draw()
 		{
 			if (ImGui::InputText("Name", app_name, 20, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
 				App->SetName(app_name);
-			
+
 			if (ImGui::InputText("Organization", org_name, 20, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
 				App->SetOrganization(org_name);
 			

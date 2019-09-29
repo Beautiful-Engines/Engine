@@ -83,7 +83,7 @@ void Application::FinishUpdate()
 {
 	lastframems = ms_timer.Read();
 
-	if (!renderer3D->GetVSync() && cap_frames)
+	if (!renderer3D->GetVSync() && lastframems < cap_ms && cap_ms > 0)
 	{
 		if (lastframems < cap_ms)
 			SDL_Delay(cap_ms - lastframems);
@@ -149,15 +149,26 @@ bool Application::CleanUp()
 
 void Application::SetName(const char* name)
 {
+	this->name  = name;
+	App->window->SetTitle(name);
 }
 
 void Application::SetOrganization(const char* org)
 {
+	organization = org;
 }
 
 void Application::SetFPSCap(int capfps)
 {
 	cap_frames = capfps;
+	if (cap_frames <= 0)
+	{
+		cap_ms = 1000 / 1;
+	}
+	else
+	{
+		cap_ms = 1000 / cap_frames;
+	}
 }
 
 const char* Application::GetName() const
