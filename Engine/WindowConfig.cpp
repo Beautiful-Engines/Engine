@@ -6,8 +6,7 @@
 #include "WindowConfig.h"
 
 #include "ImGui\imgui_stdlib.h"
-
-
+#include "glew\glew.h"
 
 WindowConfig::WindowConfig() : WindowEngine() 
 {
@@ -103,13 +102,16 @@ bool WindowConfig::Draw()
 		if (ImGui::CollapsingHeader("Input"))
 		{
 			ImGui::Text("Mouse Position:");
-			ImGui::SameLine(); ImGui::TextColored({ 255, 255, 0, 255 }, "%i, %i", App->input->GetMouseX(), App->input->GetMouseY());
+			ImGui::SameLine(); 
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i, %i", App->input->GetMouseX(), App->input->GetMouseY());
 
 			ImGui::Text("Mouse Motion:");
-			ImGui::SameLine(); ImGui::TextColored({ 255, 255, 0, 255 }, "%i, %i", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+			ImGui::SameLine(); 
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i, %i", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
 
 			ImGui::Text("Mouse Wheel:");
-			ImGui::SameLine(); ImGui::TextColored({ 255, 255, 0, 255 }, "%i", App->input->GetMouseZ());
+			ImGui::SameLine(); 
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i", App->input->GetMouseZ());
 
 			ImGui::Separator();
 			ImGui::Text("Input LOGS:");
@@ -141,15 +143,22 @@ bool WindowConfig::Draw()
 			ImGui::SameLine();
 			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Mb", SDL_GetSystemRAM());
 
-			ImGui::Text("Caps:");
+			ImGui::Text("Caps:"); 
 			ImGui::SameLine();
-			ImGui::Text("Caps:"); ImGui::SameLine();
 			ImGui::TextColored({ 255, 255, 0, 255 }, "%s%s%s%s%s%s%s%s%s%s%s", (SDL_HasAVX()) ? "AVX " : "", (SDL_HasAVX2()) ? "AVX2 " : "", (SDL_HasAltiVec()) ? "AltiVec " : "",
 				(SDL_Has3DNow()) ? "3DNow " : "", (SDL_HasMMX()) ? "MMX " : "", (SDL_HasRDTSC()) ? "RDTSC " : "", (SDL_HasSSE()) ? "SEE " : "",
 				(SDL_HasSSE2()) ? "SSE2 " : "", (SDL_HasSSE3()) ? "SSE3 " : "", (SDL_HasSSE41()) ? "SSE41 " : "",
 				(SDL_HasSSE42()) ? "SSE42 " : "");
 
 			ImGui::Separator();
+
+			ImGui::Text("Vendor:");
+			ImGui::SameLine();
+			ImGui::TextColored({ 0, 255, 255, 255 }, (const char*)glGetString(GL_VENDOR));
+
+			ImGui::Text("GPU Model:");
+			ImGui::SameLine();
+			ImGui::TextColored({ 0, 255, 255, 255 }, (const char*)glGetString(GL_RENDERER));
 
 		}
 
