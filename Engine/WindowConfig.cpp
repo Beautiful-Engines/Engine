@@ -5,7 +5,9 @@
 #include "ModuleGUI.h"
 #include "WindowConfig.h"
 
-#include "ImGui/imgui_stdlib.h"
+#include "ImGui\imgui_stdlib.h"
+
+
 
 WindowConfig::WindowConfig() : WindowEngine() 
 {
@@ -20,7 +22,22 @@ bool WindowConfig::Draw()
 
 	if (ImGui::Begin("Configuration", &enabled, aboutFlags))
 	{
-		ImGui::Text("Options");
+		if (ImGui::BeginMenu("Options"))
+		{
+			if (ImGui::MenuItem("Set Defaults"))
+			{
+				App->LoadDefaultConfig();
+			}
+			if (ImGui::MenuItem("Load"))
+			{
+				App->LoadConfig();
+			}
+			if (ImGui::MenuItem("Save"))
+			{
+				App->SaveConfig();
+			}
+			ImGui::End();
+		}
 		if (ImGui::CollapsingHeader("Application"))
 		{
 			if (ImGui::InputText("Name", app_name, 20, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
@@ -102,7 +119,7 @@ bool WindowConfig::Draw()
 
 			if (ImGui::BeginChild("scroll", ImVec2(0, 0), false, scrollFlags))
 			{
-				//ImGui::TextUnformatted(buff.begin());
+				ImGui::TextUnformatted(buff.begin());
 				ImGui::SetScrollHere(1.0f);
 			}
 			ImGui::EndChild();

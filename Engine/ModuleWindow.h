@@ -23,8 +23,14 @@ public:
 	void SetTitle(const char* title);
 
 private:
-	int width, height, refrate = 0;
-	float brightness = 0;
+	int width = SCREEN_WIDTH * SCREEN_SIZE;
+	int height = SCREEN_HEIGHT * SCREEN_SIZE;
+
+	float brightness = 1;
+	bool fullscreen = false;
+	bool fulldesktop = false;
+	bool borderless = false;
+	bool resizable = true;
 public:
 	//The window we'll be rendering to
 	SDL_Window * window;
@@ -40,6 +46,11 @@ public:
 	void SetWindowWidth(int width);
 	void SetBrightness(float brightness);
 	void SetScreenMode(SCREENMODE mode, bool check);
+
+	//Load and Save
+	bool LoadDefault(nlohmann::json &load_default_json);
+	bool Load(nlohmann::json &load_json);
+	bool Save(nlohmann::json &save_json);
 
 };
 

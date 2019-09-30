@@ -7,6 +7,10 @@
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
 
+#include "nlohmann\json.hpp"
+#include <fstream>
+#include <iomanip>
+
 Application::Application()
 {
 	window = new ModuleWindow();
@@ -56,6 +60,8 @@ bool Application::Init()
 		ret = (*item)->Init();
 		++item;
 	}
+
+	if (!LoadConfig()) { LoadDefaultConfig(); };
 
 	// After all Init calls we call Start() in all modules
 	LOG("Application Start --------------");
@@ -147,13 +153,13 @@ bool Application::CleanUp()
 	return ret;
 }
 
-void Application::SetName(const char* name)
+void Application::SetName(std::string name)
 {
 	this->name  = name;
-	App->window->SetTitle(name);
+	App->window->SetTitle(name.c_str());
 }
 
-void Application::SetOrganization(const char* org)
+void Application::SetOrganization(std::string org)
 {
 	organization = org;
 }
@@ -171,12 +177,12 @@ void Application::SetFPSCap(int capfps)
 	}
 }
 
-const char* Application::GetName() const
+std::string Application::GetName() const
 {
 	return name;
 }
 
-const char* Application::GetOrganization() const
+std::string Application::GetOrganization() const
 {
 	return organization;
 }
@@ -223,6 +229,68 @@ void Application::FillFPS()
 		}
 	}
 }
+
+// LOAD AND SAVE
+void Application::LoadDefaultConfig()
+{
+	std::ifstream i("Settings/DefaultConfig.json");
+	nlohmann::json load_default_json;
+	i >> load_default_json;
+
+	SetName(load_default_json["Application"]["Title"]);
+	SetOrganization(load_default_json["Application"]["Organization"]);
+	SetFPSCap(load_default_json["Application"]["FPS_cap"]);
+
+	for (std::list<Module*>::iterator iterator = list_modules.begin(); iterator != list_modules.end(); iterator++)
+	{
+		(*iterator)->LoadDefault(load_default_json);
+	}
+
+}
+bool Application::LoadConfig()
+{
+	std::ifstream i("Settings/Config.json");
+	
+	if (!i.is_open())
+	{
+		return false;
+	}
+	else
+	{
+		nlohmann::json load_json;
+		i >> load_json;
+
+		SetName(load_json["Application"]["Title"]);
+		SetOrganization(load_json["Application"]["Organization"]);
+		SetFPSCap(load_json["Application"]["FPS_cap"]);
+
+		for (std::list<Module*>::iterator iterator = list_modules.begin(); iterator != list_modules.end(); iterator++)
+		{
+			(*iterator)->Load(load_json);
+		}
+	}
+	
+	return true;
+}
+void Application::SaveConfig()
+{
+	std::ofstream o("Settings/Config.json");
+	nlohmann::json save_json;
+
+	save_json["Application"]["Title"] = name;
+	save_json["Application"]["Organization"] = organization;
+	save_json["Application"]["FPS_cap"] = cap_frames;
+
+	for (std::list<Module*>::iterator iterator = list_modules.begin(); iterator != list_modules.end(); iterator++)
+	{
+		(*iterator)->Save(save_json);
+	}
+
+	
+	o << std::setw(4) << save_json << std::endl;
+}
+
+
 
 void Application::AddModule(Module* mod)
 {

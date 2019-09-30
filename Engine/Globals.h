@@ -46,5 +46,6 @@ enum update_status
 #define VSYNC true
 #define TITLE "Engine"
 #define ORGANIZATION "Beautiful Engines"
+#define FPS_CAP 60
 
 #endif // !__Globals_H_

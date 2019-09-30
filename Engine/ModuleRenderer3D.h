@@ -19,6 +19,12 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
+	
+	//Load and Save
+	bool LoadDefault(nlohmann::json &load_default_json);
+	bool Load(nlohmann::json &load_json);
+	bool Save(nlohmann::json &save_json);
+
 
 public:
 
@@ -26,7 +32,7 @@ public:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
-	bool VSync = false;
+	bool VSync = true;
 
 	bool GetVSync();
 	void SetVSync(bool VSync);

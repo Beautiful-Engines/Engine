@@ -31,12 +31,12 @@ public:
 
 private:
 
-	const char*	name = nullptr;
-	const char*	organization = nullptr;
+	std::string name = TITLE;
+	std::string organization = ORGANIZATION;
 
 	Timer	ms_timer;
 	int lastframems = 0;
-	int cap_frames = 0;
+	int cap_frames = FPS_CAP;
 	int cap_ms = 0;
 	int fps = 0;
 	std::vector<float> fps_log;
@@ -53,15 +53,21 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-	void SetName(const char* name);
-	void SetOrganization(const char* org);
+	void SetName(std::string name);
+	void SetOrganization(std::string org);
 	void SetFPSCap(int capfps);
 
-	const char* GetName() const;
-	const char* GetOrganization() const;
+	std::string GetName() const;
+	std::string GetOrganization() const;
 	int GetFPSCap();
 	std::vector<float> GetFPSVector();
 	std::vector<float> GetLastFrameMSVector();
+
+	// Load and Save Configurations
+	void LoadDefaultConfig();
+	bool LoadConfig();
+	void SaveConfig();
+	
 
 private:
 

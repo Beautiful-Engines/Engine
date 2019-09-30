@@ -19,7 +19,7 @@ private:
 
 	char app_name[20] = TITLE;
 	char org_name[20] = ORGANIZATION;
-	int fpscap = 0;
+	int fpscap = FPS_CAP;
 
 	float brightness = 1;
 	int refresh_rate = 0;

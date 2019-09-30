@@ -11,6 +11,7 @@
 
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
+	name = "Renderer3D";
 }
 
 // Destructor
@@ -159,6 +160,28 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+//Load and Save
+bool ModuleRenderer3D::LoadDefault(nlohmann::json &load_default_json)
+{
+	VSync = load_default_json[name]["VSync"];
+
+	return true;
+}
+
+bool ModuleRenderer3D::Load(nlohmann::json &load_json)
+{
+	VSync = load_json[name]["VSync"];
+
+	return true;
+}
+
+bool ModuleRenderer3D::Save(nlohmann::json &save_json)
+{
+	save_json[name]["VSync"] = VSync;
+
+	return true;
 }
 
 bool ModuleRenderer3D::GetVSync()

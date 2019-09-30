@@ -126,7 +126,6 @@ update_status ModuleGUI::CreateMainMenuBar()
 		{
 			if (ImGui::MenuItem("Hierarchy", "ALT+H")) 
 			{
-
 				window_hierarchy->Show_NotShow(); 
 			}
 

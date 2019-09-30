@@ -3,6 +3,7 @@
 
 ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 {
+	name = "Window";
 	window = NULL;
 	screen_surface = NULL;
 }
@@ -170,4 +171,46 @@ void ModuleWindow::SetScreenMode(SCREENMODE mode, bool check)
 	default:
 		break;
 	}
+}
+
+//Load and Save
+bool ModuleWindow::LoadDefault(nlohmann::json &load_default_json)
+{
+	width = load_default_json[name]["Width"];
+	height = load_default_json[name]["Height"];
+	brightness = load_default_json[name]["Brightness"];
+	fullscreen = load_default_json[name]["Fullscreen"];
+	fulldesktop = load_default_json[name]["Fulldesktop"];
+	borderless = load_default_json[name]["Borderless"];
+	resizable = load_default_json[name]["Resizable"];
+
+	return true;
+}
+
+bool ModuleWindow::Load(nlohmann::json &load_json)
+{
+	width = load_json[name]["Width"];
+	height = load_json[name]["Height"];
+	brightness = load_json[name]["Brightness"];
+	fullscreen = load_json[name]["Fullscreen"];
+	fulldesktop = load_json[name]["Fulldesktop"];
+	borderless = load_json[name]["Borderless"];
+	resizable = load_json[name]["Resizable"];
+
+	return true;
+}
+
+bool ModuleWindow::Save(nlohmann::json &save_json)
+{
+	save_json[name]["Width"] = width;
+	save_json[name]["Height"] = height;
+	save_json[name]["Brightness"] = brightness;
+	save_json[name]["Fullscreen"] = fullscreen;
+	save_json[name]["Fulldesktop"] = fulldesktop;
+	save_json[name]["Borderless"] = borderless;
+	save_json[name]["Resizable"] = resizable;
+
+		
+
+	return true;
 }
