@@ -26,6 +26,16 @@ private:
 	bool fullscreen = false, fulldesktop = false, borderless = false;
 	bool resizable = true;
 
+	int total_reported_mem = 0;
+	int total_actual_mem = 0;
+	int peak_reported_mem = 0;
+	int peak_actual_mem = 0;
+	int accumulated_reported_mem = 0;
+	int accumulated_actual_mem = 0;
+	int accumulated_alloc_unit = 0;
+	int total_alloc_unity_count = 0;
+	int peak_alloc_unit_count = 0;
+
 	ImGuiTextBuffer buff;
 
 	SDL_version compiled_version;

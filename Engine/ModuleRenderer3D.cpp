@@ -35,7 +35,7 @@ bool ModuleRenderer3D::Init()
 	if (ret == true)
 	{
 		//Use Vsync
-		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		if (VSync && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
 		//Initialize Projection Matrix
@@ -99,7 +99,7 @@ bool ModuleRenderer3D::Init()
 
 	}
 	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
 
 	// Initialize glew
 	GLenum error = glewInit();
@@ -107,6 +107,14 @@ bool ModuleRenderer3D::Init()
 	{
 		LOG("Error initializing gler library! %s\n", SDL_GetError());
 			ret = false;
+	}
+	else
+	{
+		LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+		LOG("OpenGL version supported %s", glGetString(GL_VERSION));
+		LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		LOG("Vendor: %s", glGetString(GL_VENDOR));
+		LOG("Renderer: %s", glGetString(GL_RENDERER));
 	}
 
 	return ret;

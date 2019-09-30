@@ -66,6 +66,7 @@ bool WindowConfig::Draw()
 				if (vsync && App->GetFPSCap()>0)
 					App->SetFPSCap(fpscap);
 			}
+
 		}
 		if (ImGui::CollapsingHeader("Window"))
 		{
@@ -141,7 +142,7 @@ bool WindowConfig::Draw()
 
 			ImGui::Text("System RAM:");
 			ImGui::SameLine();
-			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Mb", SDL_GetSystemRAM());
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Gb", SDL_GetSystemRAM()/1024);
 
 			ImGui::Text("Caps:"); 
 			ImGui::SameLine();
@@ -152,13 +153,35 @@ bool WindowConfig::Draw()
 
 			ImGui::Separator();
 
-			ImGui::Text("Vendor:");
+			ImGui::Text("GPU:");
 			ImGui::SameLine();
-			ImGui::TextColored({ 0, 255, 255, 255 }, (const char*)glGetString(GL_VENDOR));
+			ImGui::TextColored({ 255, 255, 0, 255 }, "Vendor %s", (const char*)glGetString(GL_VENDOR));
 
-			ImGui::Text("GPU Model:");
+			ImGui::Text("Brand:");
 			ImGui::SameLine();
-			ImGui::TextColored({ 0, 255, 255, 255 }, (const char*)glGetString(GL_RENDERER));
+			ImGui::TextColored({ 255, 255, 0, 255 }, (const char*)glGetString(GL_RENDERER));
+			
+			ImGui::Text("VRAM Budget: ");
+			ImGui::SameLine();
+			int temp = 0;
+			glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &temp);
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Mb", temp/1024);
+
+			ImGui::Text("VRAM Usage: ");
+			ImGui::SameLine();
+			glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &temp);
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Mb", temp / 1024);
+
+			ImGui::Text("VRAM Available: ");
+			ImGui::SameLine();
+			glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &temp);
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Mb", temp / 1024);
+
+			ImGui::Text("VRAM Reserved: ");
+			ImGui::SameLine();
+			glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTED_MEMORY_NVX, &temp);
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Mb", temp / 1024);
+
 
 		}
 
