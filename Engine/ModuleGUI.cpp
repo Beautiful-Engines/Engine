@@ -11,6 +11,7 @@
 #include "WindowHierarchy.h"
 #include "WindowConfig.h"
 #include "WindowAbout.h"
+#include "WindowConsole.h"
 
 ModuleGUI::ModuleGUI(bool start_enabled) : Module(start_enabled)
 {
@@ -27,11 +28,13 @@ bool ModuleGUI::Init()
 	window_hierarchy = new WindowHierarchy();
 	window_config = new WindowConfig();
 	window_about = new WindowAbout();
+	window_console = new WindowConsole();
 
 	// Push windows into vector
 	windows_engine.push_back(window_hierarchy);
 	windows_engine.push_back(window_config);
 	windows_engine.push_back(window_about);
+	windows_engine.push_back(window_console);
 
 	// Initialize ImGUi
 	LOG("Creating ImGui context");
@@ -122,27 +125,18 @@ update_status ModuleGUI::CreateMainMenuBar()
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Window"))
-		{
-			if (ImGui::MenuItem("Hierarchy", "ALT+H")) 
-			{
-				window_hierarchy->Show_NotShow(); 
-			}
-
-			ImGui::Checkbox("Demo Window", &demo);
-
-			ImGui::EndMenu();
-		}
-
 		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Configuration", "ALT+C")) { window_config->Show_NotShow(); }
+			ImGui::Checkbox("Configuration", &window_config->enabled);
+			ImGui::Checkbox("Console", &window_console->enabled);
+			ImGui::Checkbox("Hierarchy", &window_hierarchy->enabled);
+			ImGui::Checkbox("Demo Window", &demo);
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("About", "ALT+A")) { window_about->Show_NotShow(); }
+			ImGui::Checkbox("Hierarchy", &window_about->enabled);
 			ImGui::EndMenu();
 		}
 
@@ -151,12 +145,22 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 	for (uint i = 0; i < windows_engine.size(); ++i)
 	{
-		if (windows_engine[i]->IsEnabled())	windows_engine[i]->Draw();
+		if (windows_engine[i]->enabled)	windows_engine[i]->Draw();
 	}
 
 	if (demo)
 		ImGui::ShowDemoWindow(&demo);
 
 	return UPDATE_CONTINUE;
+}
+
+void ModuleGUI::LogInput(int key, const char* state, bool mouse)
+{
+	window_config->LogInput(key, state, mouse);
+}
+
+void ModuleGUI::LogDebug(const char* text)
+{
+	window_console->LogDebug(text);
 }
 

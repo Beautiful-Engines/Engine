@@ -3,6 +3,7 @@
 
 
 #include "ImGui\imgui.h"
+#include "glew\glew.h"
 
 class WindowEngine
 {
@@ -12,12 +13,9 @@ public:
 	virtual ~WindowEngine();
 
 	virtual bool Draw() = 0;
-	virtual bool IsEnabled() const;
-	virtual void Show_NotShow();
-
-protected:
 
 	bool enabled = false;
+
 };
 
 #endif // !__WindowEngine_H__

@@ -7,6 +7,7 @@ class WindowEngine;
 class WindowHierarchy;
 class WindowConfig;
 class WindowAbout;
+class WindowConsole;
 
 class ModuleGUI : public Module
 {
@@ -20,6 +21,9 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void LogInput(int key, const char* state, bool mouse = false);
+	void LogDebug(const char* text);
+
 private:
 	update_status CreateMainMenuBar();
 
@@ -27,6 +31,7 @@ public:
 	WindowHierarchy* window_hierarchy = nullptr;
 	WindowConfig* window_config = nullptr;
 	WindowAbout* window_about = nullptr;
+	WindowConsole* window_console = nullptr;
 
 private:
 

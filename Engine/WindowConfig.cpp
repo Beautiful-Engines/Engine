@@ -6,7 +6,6 @@
 #include "WindowConfig.h"
 
 #include "ImGui\imgui_stdlib.h"
-#include "glew\glew.h"
 
 WindowConfig::WindowConfig() : WindowEngine() 
 {
@@ -115,15 +114,13 @@ bool WindowConfig::Draw()
 			ImGui::TextColored({ 255, 255, 0, 255 }, "%i", App->input->GetMouseZ());
 
 			ImGui::Separator();
-			ImGui::Text("Input LOGS:");
+			ImGui::BeginChild("Input LOGS:");
 
-			ImGuiWindowFlags scrollFlags = 0;
-			scrollFlags |= ImGuiWindowFlags_AlwaysVerticalScrollbar;
-
-			if (ImGui::BeginChild("scroll", ImVec2(0, 0), false, scrollFlags))
+			ImGui::TextUnformatted(buff_input.begin());
+			if (scrolling)
 			{
-				ImGui::TextUnformatted(buff.begin());
-				ImGui::SetScrollHere(1.0f);
+				ImGui::SetScrollHereY(1.0f);
+				scrolling = false;
 			}
 			ImGui::EndChild();
 		}
@@ -192,5 +189,21 @@ bool WindowConfig::Draw()
 	
 	return true;
 }
+
+void WindowConfig::LogInput(int key, const char* state, bool mouse)
+{
+	std::string temp_string;
+
+	if (mouse)
+		temp_string = "Mouse: " + std::to_string(key) + " " + state + "\n";
+	else
+		temp_string = "Keyboard: " + std::to_string(key) + " " + state + "\n";
+
+	buff_input.appendf(temp_string.c_str());
+	scrolling = true;
+}
+
+
+
 
 

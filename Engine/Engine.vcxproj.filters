@@ -286,6 +286,9 @@
     <ClInclude Include="WindowConfig.h">
       <Filter>Sources\EngineWindows</Filter>
     </ClInclude>
+    <ClInclude Include="WindowConsole.h">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -454,6 +457,9 @@
       <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
     <ClCompile Include="WindowConfig.cpp">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowConsole.cpp">
       <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
   </ItemGroup>

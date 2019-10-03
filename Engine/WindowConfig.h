@@ -12,6 +12,8 @@ public:
 
 	bool Draw();
 
+	void LogInput(int key, const char* state, bool mouse = false);
+
 private:
 
 	int width = SCREEN_WIDTH * SCREEN_SIZE;
@@ -36,7 +38,9 @@ private:
 	int total_alloc_unity_count = 0;
 	int peak_alloc_unit_count = 0;
 
-	ImGuiTextBuffer buff;
+	bool scrolling = false;
+	ImGuiTextBuffer buff_input;
+	
 
 	SDL_version compiled_version;
 };

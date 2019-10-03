@@ -1,7 +1,6 @@
 #include "Application.h"
 #include "WindowAbout.h"
 
-#include "glew\glew.h"
 
 WindowAbout::WindowAbout() : WindowEngine() {}
 

@@ -133,6 +133,7 @@
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="WindowConfig.h" />
+    <ClInclude Include="WindowConsole.h" />
     <ClInclude Include="WindowHierarchy.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="WindowAbout.cpp" />
     <ClCompile Include="WindowConfig.cpp" />
+    <ClCompile Include="WindowConsole.cpp" />
     <ClCompile Include="WindowHierarchy.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
