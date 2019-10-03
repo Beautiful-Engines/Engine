@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_DEPRECATE
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
@@ -11,6 +12,7 @@
 #include "PCG\pcg_random.hpp"
 #include "PCG\pcg_uint128.hpp"
 #include "MathGeoLib\include\MathGeoLib.h"
+#define PAR_SHAPES_IMPLEMENTATION
 #include "par_shapes.h"
 #include <random>
 
@@ -30,24 +32,22 @@ bool ModuleScene::Init()
 {
 	// Initialize ImGUi
 	LOG("Creating Scene");
-
 	sphere = par_shapes_create_subdivided_sphere(5);
-
-	s_id = 0;
-	glGenBuffers(1, (GLuint*) &(s_id));
-	glBindBuffer(GL_ARRAY_BUFFER, s_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*sphere->npoints * 3, sphere->points, GL_STATIC_DRAW);
-
-	glGenBuffers(1, (GLuint*) &(s_indices));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s_indices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*sphere->ntriangles * 3, sphere->tcoords, GL_STATIC_DRAW);
+	
 
 	return true;
 }
 
 update_status ModuleScene::PreUpdate(float dt)
 {
+	s_vertex = 0;
+	glGenBuffers(1, &s_vertex);
+	glBindBuffer(GL_ARRAY_BUFFER, s_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * sphere->npoints * 3, sphere->points, GL_STATIC_DRAW);
 
+	glGenBuffers(1, &s_index);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*sphere->ntriangles * 3, sphere->triangles, GL_STATIC_DRAW);
 	return UPDATE_CONTINUE;
 }
 
@@ -57,10 +57,45 @@ update_status ModuleScene::Update(float dt)
 	IntersectionTest();
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, s_id);
+	glBindBuffer(GL_ARRAY_BUFFER, s_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glDrawElements(GL_TRIANGLES, sphere->ntriangles * 3, GL_UNSIGNED_INT, NULL);
+	// draw a cube
+	glDrawElements(GL_TRIANGLES, sphere->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
+
+	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	/*float vertices[] = {
+		0.f, 0.f, 0.f,
+		-5.f, 0.f, 0.f,
+		-5.f, -5.f, 0.f,
+		0, -5.f, 0,
+		0, -5, -5,
+		0, 0, -5,
+		-5, 0, -5,
+		-5, -5, -5 };
+	int indices[] = { 0,1,2, 2,3,0,   // 36 of indices
+					 0,3,4, 4,5,0,
+					 0,5,6, 6,1,0,
+					 1,6,7, 7,2,1,
+					 7,4,3, 3,2,7,
+					 4,7,6, 6,5,4 };
+	uint my_id = 0;
+	glGenBuffers(1, (GLuint*) &(my_id));
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*8 * 3, vertices, GL_STATIC_DRAW);
+	uint my_indices = 0;
+	glGenBuffers(1, (GLuint*) &(my_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*36, indices, GL_STATIC_DRAW);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	// … draw other buffers
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);*/
+
 
 	return UPDATE_CONTINUE;
 }

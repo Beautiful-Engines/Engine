@@ -21,8 +21,8 @@ private:
 	void IntersectionTest();
 
 private:
-	uint s_id = 0;
-	uint s_indices = 0;
+	uint s_vertex = 0;
+	uint s_index = 0;
 	par_shapes_mesh* sphere = nullptr;
 };
 
