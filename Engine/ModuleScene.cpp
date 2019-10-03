@@ -4,12 +4,18 @@
 #include "ModuleScene.h"
 
 
+#include "glew\glew.h"
 #include <gl/GL.h>
+#include "SDL\include\SDL_opengl.h"
 #include "PCG\pcg_extras.hpp"
 #include "PCG\pcg_random.hpp"
 #include "PCG\pcg_uint128.hpp"
 #include "MathGeoLib\include\MathGeoLib.h"
+#include "par_shapes.h"
 #include <random>
+
+#pragma comment (lib, "glew/glew32.lib")    /* link OpenGL Utility lib     */
+#pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
 ModuleScene::ModuleScene(bool start_enabled) : Module(start_enabled)
 {
@@ -25,6 +31,17 @@ bool ModuleScene::Init()
 	// Initialize ImGUi
 	LOG("Creating Scene");
 
+	sphere = par_shapes_create_subdivided_sphere(5);
+
+	s_id = 0;
+	glGenBuffers(1, (GLuint*) &(s_id));
+	glBindBuffer(GL_ARRAY_BUFFER, s_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*sphere->npoints * 3, sphere->points, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*) &(s_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*sphere->ntriangles * 3, sphere->tcoords, GL_STATIC_DRAW);
+
 	return true;
 }
 
@@ -39,6 +56,12 @@ update_status ModuleScene::Update(float dt)
 	// TESTING INTERSECTION
 	IntersectionTest();
 
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, s_id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_TRIANGLES, sphere->ntriangles * 3, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -51,7 +74,7 @@ update_status ModuleScene::PostUpdate(float dt)
 bool ModuleScene::CleanUp()
 {
 	LOG("Cleaning Scene");
-
+	par_shapes_free_mesh(sphere);
 	return true;
 }
 

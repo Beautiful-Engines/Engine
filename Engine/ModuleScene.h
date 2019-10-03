@@ -3,6 +3,8 @@
 
 #include "Module.h"
 
+typedef struct par_shapes_mesh_s par_shapes_mesh;
+
 class ModuleScene : public Module
 {
 public:
@@ -19,7 +21,9 @@ private:
 	void IntersectionTest();
 
 private:
-
+	uint s_id = 0;
+	uint s_indices = 0;
+	par_shapes_mesh* sphere = nullptr;
 };
 
 #endif // !__ModuleScene_H__
