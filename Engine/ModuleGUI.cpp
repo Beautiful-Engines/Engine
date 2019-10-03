@@ -15,8 +15,8 @@
 
 ModuleGUI::ModuleGUI(bool start_enabled) : Module(start_enabled)
 {
+	name = "gui";
 }
-
 
 ModuleGUI::~ModuleGUI()
 {
@@ -81,7 +81,11 @@ bool ModuleGUI::CleanUp()
 {
 	LOG("Cleaning GUI");
 
-	for (uint i = 0; i < windows_engine.size(); ++i) { RELEASE(windows_engine[i]) };
+	while( windows_engine.size() > 0) 
+	{ 
+		windows_engine[windows_engine.size() - 1] = nullptr;
+		windows_engine.pop_back();
+	}
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
