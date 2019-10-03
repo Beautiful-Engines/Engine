@@ -39,6 +39,13 @@ private:
 
 	bool demo = false;
 
+	bool depth_test = false;
+	bool cull_face = false;
+	bool lighting = false;
+	bool color_material = false;
+	bool texture_2D = false;
+	bool wireframe_mode = false;
+
 };
 
 #endif // !__ModuleGUI_H__

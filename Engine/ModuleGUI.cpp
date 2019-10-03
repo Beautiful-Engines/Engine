@@ -95,6 +95,9 @@ update_status ModuleGUI::CreateMainMenuBar()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
+		ImGuiWindowFlags aboutFlags = 0;
+		aboutFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
+
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Quit", "ALT+F4")) { return UPDATE_STOP; }
@@ -107,9 +110,33 @@ update_status ModuleGUI::CreateMainMenuBar()
 			if (ImGui::MenuItem("Cut", "Ctrl+X"))	{ /*TODO put cut function*/ }
 			if (ImGui::MenuItem("Copy", "Ctrl+C"))	{ /*TODO put copy function*/}
 			if (ImGui::MenuItem("Paste", "Ctrl+V"))	{ /*TODO put paste function*/}
+
+
+			if (ImGui::BeginMenu("Render Mode"))
+			{
+				if (ImGui::Checkbox("Depth Test", &depth_test))
+					if(depth_test)
+						glEnable(GL_DEPTH_TEST);
+					else
+						glDisable(GL_DEPTH_TEST);
+
+				if (ImGui::Checkbox("Cull Face", &cull_face))
+					glEnable(GL_CULL_FACE);
+				if (ImGui::Checkbox("Lighting", &lighting))
+					glEnable(GL_LIGHTING);
+				if (ImGui::Checkbox("Color Material", &color_material))
+					glEnable(GL_COLOR_MATERIAL);
+				if (ImGui::Checkbox("Texture 2D", &texture_2D))
+					glEnable(GL_TEXTURE_2D);
+				if (ImGui::Checkbox("Wireframe Mode", &wireframe_mode))
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				
+				ImGui::EndMenu();
+
+			}
 			ImGui::EndMenu();
 		}
-
+		
 		if (ImGui::BeginMenu("Assets"))
 		{
 			ImGui::EndMenu();
@@ -136,7 +163,7 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 		if (ImGui::BeginMenu("Help"))
 		{
-			ImGui::Checkbox("Hierarchy", &window_about->enabled);
+			ImGui::Checkbox("About", &window_about->enabled);
 			ImGui::EndMenu();
 		}
 

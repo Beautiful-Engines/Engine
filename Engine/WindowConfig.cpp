@@ -34,8 +34,9 @@ bool WindowConfig::Draw()
 			{
 				App->SaveConfig();
 			}
-			ImGui::End();
+			ImGui::EndMenu();
 		}
+
 		if (ImGui::CollapsingHeader("Application"))
 		{
 			if (ImGui::InputText("Name", app_name, 20, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
@@ -43,15 +44,15 @@ bool WindowConfig::Draw()
 
 			if (ImGui::InputText("Organization", org_name, 20, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
 				App->SetOrganization(org_name);
-			
+
 			if (ImGui::SliderInt("Cap FPS", &fpscap, 0, 144))
 				App->SetFPSCap(fpscap);
 
 			ImGui::Text("Framerate Cap:");
 			ImGui::SameLine();
-			ImGui::TextColored({ 255,255,0,255 }, "%i",App->GetFPSCap());
+			ImGui::TextColored({ 255,255,0,255 }, "%i", App->GetFPSCap());
 
-			
+
 			char title[25];
 			sprintf_s(title, 25, "Framerate %.1f", App->GetFPSVector()[App->GetFPSVector().size() - 1]);
 			ImGui::PlotHistogram("##framerate", &App->GetFPSVector()[0], App->GetFPSVector().size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
@@ -75,7 +76,7 @@ bool WindowConfig::Draw()
 
 			ImGui::Text("Refresh rate");
 			ImGui::SameLine();
-			ImGui::TextColored({ 255, 255, 0, 255 },"%i", App->window->GetRefreshRate());
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i", App->window->GetRefreshRate());
 
 			if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
 				App->window->SetScreenMode(FULLSCREEN, fullscreen);
@@ -102,15 +103,15 @@ bool WindowConfig::Draw()
 		if (ImGui::CollapsingHeader("Input"))
 		{
 			ImGui::Text("Mouse Position:");
-			ImGui::SameLine(); 
+			ImGui::SameLine();
 			ImGui::TextColored({ 255, 255, 0, 255 }, "%i, %i", App->input->GetMouseX(), App->input->GetMouseY());
 
 			ImGui::Text("Mouse Motion:");
-			ImGui::SameLine(); 
+			ImGui::SameLine();
 			ImGui::TextColored({ 255, 255, 0, 255 }, "%i, %i", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
 
 			ImGui::Text("Mouse Wheel:");
-			ImGui::SameLine(); 
+			ImGui::SameLine();
 			ImGui::TextColored({ 255, 255, 0, 255 }, "%i", App->input->GetMouseZ());
 
 			ImGui::Separator();
@@ -139,9 +140,9 @@ bool WindowConfig::Draw()
 
 			ImGui::Text("System RAM:");
 			ImGui::SameLine();
-			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Gb", SDL_GetSystemRAM()/1024);
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Gb", SDL_GetSystemRAM() / 1024);
 
-			ImGui::Text("Caps:"); 
+			ImGui::Text("Caps:");
 			ImGui::SameLine();
 			ImGui::TextColored({ 255, 255, 0, 255 }, "%s%s%s%s%s%s%s%s%s%s%s", (SDL_HasAVX()) ? "AVX " : "", (SDL_HasAVX2()) ? "AVX2 " : "", (SDL_HasAltiVec()) ? "AltiVec " : "",
 				(SDL_Has3DNow()) ? "3DNow " : "", (SDL_HasMMX()) ? "MMX " : "", (SDL_HasRDTSC()) ? "RDTSC " : "", (SDL_HasSSE()) ? "SEE " : "",
@@ -157,12 +158,12 @@ bool WindowConfig::Draw()
 			ImGui::Text("Brand:");
 			ImGui::SameLine();
 			ImGui::TextColored({ 255, 255, 0, 255 }, (const char*)glGetString(GL_RENDERER));
-			
+
 			ImGui::Text("VRAM Budget: ");
 			ImGui::SameLine();
 			int temp = 0;
 			glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &temp);
-			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Mb", temp/1024);
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Mb", temp / 1024);
 
 			ImGui::Text("VRAM Usage: ");
 			ImGui::SameLine();
@@ -179,13 +180,10 @@ bool WindowConfig::Draw()
 			glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTED_MEMORY_NVX, &temp);
 			ImGui::TextColored({ 255, 255, 0, 255 }, "%i Mb", temp / 1024);
 
-
 		}
-
-		ImGui::End();
-
 	}
 	
+	ImGui::End();
 	
 	return true;
 }
