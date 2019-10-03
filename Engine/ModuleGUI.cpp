@@ -121,15 +121,34 @@ update_status ModuleGUI::CreateMainMenuBar()
 						glDisable(GL_DEPTH_TEST);
 
 				if (ImGui::Checkbox("Cull Face", &cull_face))
-					glEnable(GL_CULL_FACE);
+					if (cull_face)
+						glEnable(GL_CULL_FACE);
+					else
+						glDisable(GL_CULL_FACE);
+
 				if (ImGui::Checkbox("Lighting", &lighting))
-					glEnable(GL_LIGHTING);
+					if (lighting)
+						glEnable(GL_LIGHTING);
+					else
+						glDisable(GL_LIGHTING);
+
 				if (ImGui::Checkbox("Color Material", &color_material))
-					glEnable(GL_COLOR_MATERIAL);
+					if (color_material)
+						glEnable(GL_COLOR_MATERIAL);
+					else
+						glDisable(GL_COLOR_MATERIAL);
+
 				if (ImGui::Checkbox("Texture 2D", &texture_2D))
-					glEnable(GL_TEXTURE_2D);
+					if (texture_2D)
+						glEnable(GL_TEXTURE_2D);
+					else
+						glDisable(GL_TEXTURE_2D);
+
 				if (ImGui::Checkbox("Wireframe Mode", &wireframe_mode))
-					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+					if (wireframe_mode)
+						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+					else
+						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				
 				ImGui::EndMenu();
 
@@ -167,8 +186,9 @@ update_status ModuleGUI::CreateMainMenuBar()
 			ImGui::EndMenu();
 		}
 
-		ImGui::EndMainMenuBar();
+		
 	}
+	ImGui::EndMainMenuBar();
 
 	for (uint i = 0; i < windows_engine.size(); ++i)
 	{
@@ -191,4 +211,3 @@ void ModuleGUI::LogDebug(const char* text)
 	if(window_console)
 		window_console->LogDebug(text);
 }
-

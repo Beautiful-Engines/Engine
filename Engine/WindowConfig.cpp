@@ -182,7 +182,7 @@ bool WindowConfig::Draw()
 
 		}
 	}
-	
+
 	ImGui::End();
 	
 	return true;
@@ -200,8 +200,3 @@ void WindowConfig::LogInput(int key, const char* state, bool mouse)
 	buff_input.appendf(temp_string.c_str());
 	scrolling = true;
 }
-
-
-
-
-
