@@ -14,9 +14,9 @@
 Application::Application()
 {
 	window = new ModuleWindow();
-	input = new ModuleInput();
 	camera = new ModuleCamera3D();
 	gui = new ModuleGUI();
+	input = new ModuleInput();
 	scene = new ModuleScene();
 	renderer3D = new ModuleRenderer3D();
 
@@ -26,9 +26,9 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
-	AddModule(input);
 	AddModule(camera);
 	AddModule(gui);
+	AddModule(input);
 	AddModule(scene);
 
 	// Renderer last!

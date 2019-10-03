@@ -161,6 +161,7 @@ void ModuleGUI::LogInput(int key, const char* state, bool mouse)
 
 void ModuleGUI::LogDebug(const char* text)
 {
-	window_console->LogDebug(text);
+	if(window_console)
+		window_console->LogDebug(text);
 }
 
