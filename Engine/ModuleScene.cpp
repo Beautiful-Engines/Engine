@@ -32,14 +32,16 @@ bool ModuleScene::Init()
 {
 	// Initialize ImGUi
 	LOG("Creating Scene");
-	sphere = par_shapes_create_subdivided_sphere(5);
 	
 
 	return true;
 }
 
-update_status ModuleScene::PreUpdate(float dt)
+
+bool ModuleScene::Start()
 {
+	sphere = par_shapes_create_subdivided_sphere(5);
+
 	s_vertex = 0;
 	glGenBuffers(1, &s_vertex);
 	glBindBuffer(GL_ARRAY_BUFFER, s_vertex);
@@ -48,6 +50,11 @@ update_status ModuleScene::PreUpdate(float dt)
 	glGenBuffers(1, &s_index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*sphere->ntriangles * 3, sphere->triangles, GL_STATIC_DRAW);
+	return true;
+}
+
+update_status ModuleScene::PreUpdate(float dt)
+{
 	return UPDATE_CONTINUE;
 }
 
