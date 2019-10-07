@@ -78,8 +78,28 @@ bool ModuleImport::LoadFile(const char* _path)
 			}
 
 			if (ai_mesh->HasNormals()) {
-				mymesh->normals = new float[mymesh->n_vertices * 3];
-				memcpy(mymesh->normals, ai_mesh->mNormals, sizeof(float) * mymesh->n_vertices * 3);
+				mymesh->normals = new aiVector3D[mymesh->n_vertices];
+				memcpy(mymesh->normals, ai_mesh->mNormals, sizeof(aiVector3D) * mymesh->n_vertices);
+
+				mymesh->face_normal = new float[ai_mesh->mNumFaces * 3];
+				uint j = 0;
+				for (uint i = 0; i < mymesh->n_indexes; i += 9)
+				{
+					vec3 x0(mymesh->vertices[i], mymesh->vertices[i + 1], mymesh->vertices[i + 2]);
+					vec3 x1(mymesh->vertices[i + 3], mymesh->vertices[i + 4], mymesh->vertices[i + 5]);
+					vec3 x2(mymesh->vertices[i + 6], mymesh->vertices[i + 7], mymesh->vertices[i + 8]);
+
+					vec3 v0 = x0 - x2;
+					vec3 v1 = x1 - x2;
+					vec3 n = cross(v0, v1);
+
+					vec3 normalized = normalize(n);
+
+					mymesh->face_normal[j] = normalized.x;
+					mymesh->face_normal[j + 1] = normalized.y;
+					mymesh->face_normal[j + 2] = normalized.z;
+					j += 3;
+				}
 			}
 
 			App->renderer3D->GLBuffer(mymesh);

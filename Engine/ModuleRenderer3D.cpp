@@ -262,6 +262,7 @@ void ModuleRenderer3D::GLBuffer(CustomMesh *mesh)
 
 void ModuleRenderer3D::Draw(CustomMesh *mesh)
 {
+	glColor3f(1.f, 0.f, 0.f);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 
@@ -272,21 +273,38 @@ void ModuleRenderer3D::Draw(CustomMesh *mesh)
 
 void ModuleRenderer3D::DrawNormals(CustomMesh *mesh)
 {
-	if (mesh->normals != nullptr) {
+	if (mesh->normals != nullptr) 
+	{
 		glColor3f(0.f, 1.f, 0.f);
 		glBegin(GL_LINES);
-		if (vertex_normals) {
-			for (int i = 0; (i + 2) < mesh->n_vertices; i += 3) {
+
+		if (vertex_normals) 
+		{
+			int j = 0;
+			for (int i = 0; i < mesh->n_vertices*3; i += 3) {
 				glVertex3f(mesh->vertices[i], mesh->vertices[i + 1], mesh->vertices[i + 2]);
-				glVertex3f(mesh->vertices[i] + mesh->normals[i], mesh->vertices[i + 1] + mesh->normals[i + 1], mesh->vertices[i + 2] + mesh->normals[i + 2]);
+				glVertex3f(mesh->vertices[i] + mesh->normals[j].x, mesh->vertices[i + 1] + mesh->normals[j].y, mesh->vertices[i + 2] + mesh->normals[j].z);
+				++j;
 			}
 		}
 		else {
-			for (int i = 0; (i + 2) < mesh->n_vertices; i += 3) {
+			/*uint j = 0;
+			for (uint i = 0; i < mesh->n_indexes; i += 9)
+			{
+				float centered_x = (mesh->vertices[i] + mesh->vertices[i + 3] + mesh->vertices[i + 6]) / 3;
+				float centered_y = (mesh->vertices[i + 1] + mesh->vertices[i + 4] + mesh->vertices[i + 7]) / 3;
+				float centered_z = (mesh->vertices[i + 2] + mesh->vertices[i + 5] + mesh->vertices[i + 8]) / 3;
+
+				glVertex3f(centered_x, centered_y, centered_z);
+				glVertex3f(centered_x + mesh->face_normal[j], centered_y + mesh->face_normal[j + 1], centered_z + mesh->face_normal[j + 2]);
+				j += 9;
+			}*/
+			/*for (int i = 0; i < mesh->n_vertices; i += 3) {
 				glVertex3f(mesh->face_normal[i], mesh->face_normal[i + 1], mesh->face_normal[i + 2]);
-				glVertex3f(mesh->face_normal[i] + mesh->normals[i], mesh->face_normal[i + 1] + mesh->normals[i + 1], mesh->face_normal[i + 2] + mesh->normals[i + 2]);
-			}
+				glVertex3f(mesh->face_normal[i] + mesh->normals[i].x, mesh->face_normal[i + 1] + mesh->normals[i + 1].y, mesh->face_normal[i + 2] + mesh->normals[i + 2].z);
+			}*/
 		}
+
 		glEnd();
 	}
 }

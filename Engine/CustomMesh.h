@@ -1,6 +1,8 @@
 #ifndef __CustomMesh_H__
 #define __CustomMesh_H__
 
+#include "Assimp/include/vector3.h"
+
 class CustomMesh
 {
 public:
@@ -27,7 +29,7 @@ public:
 	float *vertices = nullptr;
 
 	uint id_normal = 0;
-	float *normals = nullptr;
+	aiVector3D *normals;
 
 	float *face_normal = nullptr;
 
