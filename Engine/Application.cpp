@@ -6,6 +6,7 @@
 #include "ModuleGUI.h"
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleImport.h"
 
 #include "nlohmann\json.hpp"
 #include <fstream>
@@ -19,6 +20,7 @@ Application::Application()
 	input = new ModuleInput();
 	scene = new ModuleScene();
 	renderer3D = new ModuleRenderer3D();
+	import = new ModuleImport();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -30,6 +32,7 @@ Application::Application()
 	AddModule(gui);
 	AddModule(input);
 	AddModule(scene);
+	AddModule(import);
 
 	// Renderer last!
 	AddModule(renderer3D);

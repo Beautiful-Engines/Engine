@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleInput.h"
 #include "ImGui\imgui.h"
 #include "ImGui\imgui_impl_sdl.h"
 #include "ImGui\imgui_impl_opengl3.h"
@@ -148,11 +149,35 @@ update_status ModuleGUI::CreateMainMenuBar()
 					else
 						glDisable(GL_TEXTURE_2D);
 
-				if (ImGui::Checkbox("Wireframe Mode", &wireframe_mode))
-					if (wireframe_mode)
-						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-					else
+				if (ImGui::BeginMenu("Wireframe"))
+				{
+					if (ImGui::MenuItem("Fill"))
 						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+					if (ImGui::MenuItem("Line"))
+						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+					if (ImGui::MenuItem("Point"))
+						glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+					if (ImGui::Checkbox("Normals", &normals))
+						App->renderer3D->normals = true;
+					
+					ImGui::Separator();
+					if (normals)
+					{
+						if (ImGui::BeginMenu("Normals"))
+						{
+							if (ImGui::MenuItem("Vertex Normals"))
+								App->renderer3D->vertex_normals = true;
+							if (ImGui::MenuItem("Face Normals"))
+								App->renderer3D->vertex_normals = false;
+
+							ImGui::EndMenu();
+						}
+					}
+						
+						
+
+					ImGui::EndMenu();
+				}
 				
 				ImGui::EndMenu();
 
@@ -207,6 +232,7 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 void ModuleGUI::LogInput(int key, const char* state, bool mouse)
 {
+	
 	window_config->LogInput(key, state, mouse);
 }
 

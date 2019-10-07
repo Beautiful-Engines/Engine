@@ -139,6 +139,30 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+update_status ModuleRenderer3D::Update(float dt)
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+	
+	if (!meshes.empty())
+	{
+		for (uint i = 0; i < meshes.size(); ++i)
+		{
+			Draw(meshes[i]);
+			if (normals)
+				DrawNormals(meshes[i]);
+		}
+		
+
+		
+	}
+	
+
+	// deactivate vertex arrays after drawing
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	return UPDATE_CONTINUE;
+}
+
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
@@ -208,5 +232,61 @@ void ModuleRenderer3D::SetVSync(bool VSync)
 	else 
 	{
 		SDL_GL_SetSwapInterval(0);
+	}
+}
+
+void ModuleRenderer3D::GLBuffer(CustomMesh *mesh)
+{
+	glGenBuffers(1, &mesh->id_vertex);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->n_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &mesh->id_index);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->n_indexes, mesh->indexes, GL_STATIC_DRAW);
+
+	//NORMALS
+	mesh->face_normal = new float[mesh->n_indexes];
+	for (int i = 0; i < mesh->n_indexes; ++i) {
+		mesh->face_normal[i] = (mesh->vertices[i] + mesh->vertices[i + 1] + mesh->vertices[i + 2]) / 3;
+	}
+
+	if (mesh->normals != nullptr) {
+		glGenBuffers(1, &mesh->id_normal);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normal);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->n_vertices * 3, mesh->normals, GL_STATIC_DRAW);
+	}
+
+	meshes.push_back(mesh);
+}
+
+void ModuleRenderer3D::Draw(CustomMesh *mesh)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_TRIANGLES, mesh->n_indexes, GL_UNSIGNED_INT, NULL);
+
+}
+
+void ModuleRenderer3D::DrawNormals(CustomMesh *mesh)
+{
+	if (mesh->normals != nullptr) {
+		glColor3f(0.f, 1.f, 0.f);
+		glBegin(GL_LINES);
+		if (vertex_normals) {
+			for (int i = 0; (i + 2) < mesh->n_vertices; i += 3) {
+				glVertex3f(mesh->vertices[i], mesh->vertices[i + 1], mesh->vertices[i + 2]);
+				glVertex3f(mesh->vertices[i] + mesh->normals[i], mesh->vertices[i + 1] + mesh->normals[i + 1], mesh->vertices[i + 2] + mesh->normals[i + 2]);
+			}
+		}
+		else {
+			for (int i = 0; (i + 2) < mesh->n_vertices; i += 3) {
+				glVertex3f(mesh->face_normal[i], mesh->face_normal[i + 1], mesh->face_normal[i + 2]);
+				glVertex3f(mesh->face_normal[i] + mesh->normals[i], mesh->face_normal[i + 1] + mesh->normals[i + 1], mesh->face_normal[i + 2] + mesh->normals[i + 2]);
+			}
+		}
+		glEnd();
 	}
 }

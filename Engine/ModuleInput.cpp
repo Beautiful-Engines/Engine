@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleGUI.h"
+#include "ModuleImport.h"
 #include "ModuleInput.h"
 #include "ImGui\imgui.h"
 #include "ImGui\imgui_impl_sdl.h"
@@ -9,6 +10,7 @@
 
 ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 {
+	name = "Input";
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
 	memset(mouse_buttons, KEY_IDLE, sizeof(KEY_STATE) * MAX_MOUSE_BUTTONS);
@@ -128,12 +130,20 @@ update_status ModuleInput::PreUpdate(float dt)
 		{
 			if (e.window.event == SDL_WINDOWEVENT_RESIZED)
 				App->renderer3D->OnResize(e.window.data1, e.window.data2);
+			break;
 		}
+		case SDL_DROPFILE:
+			char* file = e.drop.file;
+			App->import->LoadFile(file);
+			SDL_free(file);
+			break;
 		}
 	}
 
 	if (quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)
 		return UPDATE_STOP;
+
+
 
 	return UPDATE_CONTINUE;
 }

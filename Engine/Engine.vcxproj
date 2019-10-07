@@ -127,6 +127,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CustomMesh.h" />
+    <ClInclude Include="ModuleImport.h" />
     <ClInclude Include="WindowAbout.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
@@ -216,6 +218,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="glmath.cpp" />
+    <ClCompile Include="ModuleImport.cpp" />
     <ClCompile Include="WindowAbout.cpp" />
     <ClCompile Include="WindowConfig.cpp" />
     <ClCompile Include="WindowConsole.cpp" />

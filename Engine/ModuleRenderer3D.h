@@ -4,8 +4,10 @@
 #include "Module.h"
 #include "glmath.h"
 #include "Light.h"
+#include "CustomMesh.h"
 
 #define MAX_LIGHTS 8
+#define MAX_MESHES 200
 
 class ModuleRenderer3D : public Module
 {
@@ -15,6 +17,7 @@ public:
 
 	bool Init();
 	update_status PreUpdate(float dt);
+	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
@@ -25,6 +28,10 @@ public:
 	bool Load(nlohmann::json &load_json);
 	bool Save(nlohmann::json &save_json);
 
+	void GLBuffer(CustomMesh *mesh);
+	void Draw(CustomMesh *mesh);
+	void DrawNormals(CustomMesh *mesh);
+
 
 public:
 
@@ -33,9 +40,14 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	bool VSync = true;
-
+	
 	bool GetVSync();
 	void SetVSync(bool VSync);
+
+	std::vector<CustomMesh*> meshes;
+	bool normals = false;
+	bool vertex_normals = false;
+
 };
 
 #endif // !__ModuleRenderer3D_H__
