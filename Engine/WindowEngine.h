@@ -9,8 +9,8 @@ class WindowEngine
 {
 public:
 
-	WindowEngine();
-	virtual ~WindowEngine();
+	WindowEngine() {};
+	virtual ~WindowEngine() {};
 
 	virtual bool Draw() = 0;
 

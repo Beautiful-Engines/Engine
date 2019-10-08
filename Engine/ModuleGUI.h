@@ -39,11 +39,11 @@ private:
 
 	bool demo = false;
 
-	bool depth_test = false;
-	bool cull_face = false;
-	bool lighting = false;
-	bool color_material = false;
-	bool texture_2D = false;
+	bool depth_test = true;
+	bool cull_face = true;
+	bool lighting = true;
+	bool color_material = true;
+	bool texture_2D = true;
 	bool normals = false;
 	bool vertex_normals = false;
 

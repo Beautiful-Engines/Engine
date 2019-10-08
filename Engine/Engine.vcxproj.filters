@@ -454,9 +454,6 @@
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="WindowEngine.cpp">
-      <Filter>Sources\EngineWindows</Filter>
-    </ClCompile>
     <ClCompile Include="WindowHierarchy.cpp">
       <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
