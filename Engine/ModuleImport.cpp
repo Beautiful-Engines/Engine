@@ -81,24 +81,31 @@ bool ModuleImport::LoadFile(const char* _path)
 				mymesh->normals = new aiVector3D[mymesh->n_vertices];
 				memcpy(mymesh->normals, ai_mesh->mNormals, sizeof(aiVector3D) * mymesh->n_vertices);
 
+				mymesh->face_center_point = new float[ai_mesh->mNumFaces * 3];
 				mymesh->face_normal = new float[ai_mesh->mNumFaces * 3];
-				uint j = 0;
-				for (uint i = 0; i < mymesh->n_indexes; i += 9)
-				{
-					vec3 x0(mymesh->vertices[i], mymesh->vertices[i + 1], mymesh->vertices[i + 2]);
-					vec3 x1(mymesh->vertices[i + 3], mymesh->vertices[i + 4], mymesh->vertices[i + 5]);
-					vec3 x2(mymesh->vertices[i + 6], mymesh->vertices[i + 7], mymesh->vertices[i + 8]);
 
-					vec3 v0 = x0 - x2;
-					vec3 v1 = x1 - x2;
-					vec3 n = cross(v0, v1);
+				for (uint i = 0; i < mymesh->n_indexes; i += 3)
+				{
+					uint aux2 = i + 3;
+					uint aux3 = i + 6;
+
+					vec3 x0(mymesh->vertices[i], mymesh->vertices[i + 1], mymesh->vertices[i + 2]);
+					vec3 x1(mymesh->vertices[aux2], mymesh->vertices[aux2 + 1], mymesh->vertices[aux2 + 2]);
+					vec3 x2(mymesh->vertices[aux3], mymesh->vertices[aux3 + 1], mymesh->vertices[aux3 + 2]);
+
+					vec3 v0 = x1 - x0;
+					vec3 v1 = x2 - x0;
+					vec3 n = cross(v1, v0);
 
 					vec3 normalized = normalize(n);
 
-					mymesh->face_normal[j] = normalized.x;
-					mymesh->face_normal[j + 1] = normalized.y;
-					mymesh->face_normal[j + 2] = normalized.z;
-					j += 3;
+					mymesh->face_center_point[i] = (x0.x + x1.x + x2.x) / 3;
+					mymesh->face_center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
+					mymesh->face_center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
+
+					mymesh->face_normal[i] = normalized.x;
+					mymesh->face_normal[i + 1] = normalized.y;
+					mymesh->face_normal[i + 2] = normalized.z;
 				}
 			}
 

@@ -288,21 +288,11 @@ void ModuleRenderer3D::DrawNormals(CustomMesh *mesh)
 			}
 		}
 		else {
-			uint j = 0;
-			for (uint i = 0; i < mesh->n_indexes; i += 9)
-			{
-				float centered_x = (mesh->vertices[i] + mesh->vertices[i + 3] + mesh->vertices[i + 6]) / 3;
-				float centered_y = (mesh->vertices[i + 1] + mesh->vertices[i + 4] + mesh->vertices[i + 7]) / 3;
-				float centered_z = (mesh->vertices[i + 2] + mesh->vertices[i + 5] + mesh->vertices[i + 8]) / 3;
 
-				glVertex3f(centered_x, centered_y, centered_z);
-				glVertex3f(centered_x + mesh->face_normal[j], centered_y + mesh->face_normal[j + 1], centered_z + mesh->face_normal[j + 2]);
-				j += 9;
+			for (int i = 0; i < mesh->n_indexes; i += 3) {
+				glVertex3f(mesh->face_center_point[i], mesh->face_center_point[i + 1], mesh->face_center_point[i + 2]);
+				glVertex3f(mesh->face_center_point[i] + mesh->face_normal[i], mesh->face_center_point[i + 1] + mesh->face_normal[i + 1], mesh->face_center_point[i + 2] + mesh->face_normal[i + 2]);
 			}
-			/*for (int i = 0; i < mesh->n_vertices; i += 3) {
-				glVertex3f(mesh->face_normal[i], mesh->face_normal[i + 1], mesh->face_normal[i + 2]);
-				glVertex3f(mesh->face_normal[i] + mesh->normals[i].x, mesh->face_normal[i + 1] + mesh->normals[i + 1].y, mesh->face_normal[i + 2] + mesh->normals[i + 2].z);
-			}*/
 		}
 
 		glEnd();

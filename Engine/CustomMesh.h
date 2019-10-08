@@ -31,6 +31,7 @@ public:
 	uint id_normal = 0;
 	aiVector3D *normals;
 
+	float *face_center_point = nullptr;
 	float *face_normal = nullptr;
 
 }; 
