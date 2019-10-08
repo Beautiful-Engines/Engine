@@ -295,6 +295,7 @@
     <ClInclude Include="CustomMesh.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleFileSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -471,6 +472,7 @@
     <ClCompile Include="ModuleImport.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleFileSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
