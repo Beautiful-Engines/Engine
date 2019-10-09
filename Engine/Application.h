@@ -17,6 +17,7 @@ class ModuleCamera3D;
 class ModuleGUI;
 class ModuleScene;
 class ModuleImport;
+class ModuleFileSystem;
 
 
 
@@ -29,7 +30,8 @@ public:
 	ModuleCamera3D* camera;
 	ModuleGUI* gui;
 	ModuleScene* scene;
-	ModuleImport* import;
+	ModuleImport* importer;
+	ModuleFileSystem* file_system;
 
 private:
 

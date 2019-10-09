@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_DEPRECATE
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
@@ -6,13 +5,8 @@
 
 #include "glew\glew.h"
 #include <gl/GL.h>
-#include "SDL\include\SDL_opengl.h"
-#include "PCG\pcg_extras.hpp"
-#include "PCG\pcg_random.hpp"
-#include "PCG\pcg_uint128.hpp"
-#include "MathGeoLib\include\MathGeoLib.h"
 #define PAR_SHAPES_IMPLEMENTATION
-#include "par_shapes.h"
+#include "Par/par_shapes.h"
 #include <random>
 
 #pragma comment (lib, "glew/glew32.lib")    /* link OpenGL Utility lib     */

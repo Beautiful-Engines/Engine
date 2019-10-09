@@ -3,9 +3,9 @@
 
 #include "Assimp/include/vector3.h"
 
-class CustomMesh
+struct CustomMesh
 {
-public:
+
 	CustomMesh() {};
 	~CustomMesh()
 	{
@@ -19,7 +19,6 @@ public:
 	};
 
 
-public:
 	uint id_index = 0;  // index in VRAM
 	uint n_indexes = 0;
 	uint *indexes = nullptr;

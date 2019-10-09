@@ -1,16 +1,15 @@
 #include "Application.h"
-#include "CustomMesh.h"
 #include "ModuleRenderer3D.h"
+#include "CustomMesh.h"
+#include "ModuleImport.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h" 
-#include "SDL/include/SDL_config.h"
-
-#include "ModuleImport.h"
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
+
 
 ModuleImport::ModuleImport(bool start_enabled) : Module(start_enabled)
 {
@@ -86,16 +85,16 @@ bool ModuleImport::LoadFile(const char* _path)
 
 				for (uint i = 0; i < mymesh->n_indexes; i += 3)
 				{
-					uint aux2 = i + 3;
-					uint aux3 = i + 6;
-
-					vec3 x0(mymesh->vertices[i], mymesh->vertices[i + 1], mymesh->vertices[i + 2]);
-					vec3 x1(mymesh->vertices[aux2], mymesh->vertices[aux2 + 1], mymesh->vertices[aux2 + 2]);
-					vec3 x2(mymesh->vertices[aux3], mymesh->vertices[aux3 + 1], mymesh->vertices[aux3 + 2]);
+					uint index = mymesh->indexes[i];
+					vec3 x0(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
+					index = mymesh->indexes[i + 1];
+					vec3 x1(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
+					index = mymesh->indexes[i + 2];
+					vec3 x2(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
 
 					vec3 v0 = x1 - x0;
 					vec3 v1 = x2 - x0;
-					vec3 n = cross(v1, v0);
+					vec3 n = cross(v0, v1);
 
 					vec3 normalized = normalize(n);
 
@@ -123,5 +122,3 @@ bool ModuleImport::LoadFile(const char* _path)
 
 	return ret;
 }
-
-

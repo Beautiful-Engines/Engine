@@ -2075,7 +2075,6 @@ void par_shapes_remove_degenerate(par_shapes_mesh* mesh, float mintriarea)
     PAR_FREE(mesh->triangles);
     mesh->triangles = triangles;
 }
-
 #endif // PAR_SHAPES_IMPLEMENTATION
 #endif // PAR_SHAPES_H
 
