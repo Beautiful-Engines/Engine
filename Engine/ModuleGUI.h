@@ -8,6 +8,8 @@ class WindowHierarchy;
 class WindowConfig;
 class WindowAbout;
 class WindowConsole;
+class WindowProperties;
+class WindowPrimitives;
 
 class ModuleGUI : public Module
 {
@@ -32,6 +34,8 @@ public:
 	WindowConfig* window_config = nullptr;
 	WindowAbout* window_about = nullptr;
 	WindowConsole* window_console = nullptr;
+	WindowPrimitives* window_primitives = nullptr;
+	WindowProperties* window_properties = nullptr;
 
 private:
 

@@ -13,6 +13,8 @@
 #include "WindowConfig.h"
 #include "WindowAbout.h"
 #include "WindowConsole.h"
+#include "WindowPrimitives.h"
+#include "WindowProperties.h"
 
 ModuleGUI::ModuleGUI(bool start_enabled) : Module(start_enabled)
 {
@@ -30,12 +32,16 @@ bool ModuleGUI::Init()
 	window_config = new WindowConfig();
 	window_about = new WindowAbout();
 	window_console = new WindowConsole();
+	window_primitives = new WindowPrimitives();
+	window_properties = new WindowProperties();
 
 	// Push windows into vector
 	windows_engine.push_back(window_hierarchy);
 	windows_engine.push_back(window_config);
 	windows_engine.push_back(window_about);
 	windows_engine.push_back(window_console);
+	windows_engine.push_back(window_primitives);
+	windows_engine.push_back(window_properties);
 
 	// Initialize ImGUi
 	LOG("Creating ImGui context");
@@ -193,6 +199,8 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 		if (ImGui::BeginMenu("GameObject"))
 		{
+			ImGui::Checkbox("3D Objects", &window_primitives->enabled);
+			ImGui::Checkbox("Object Properties", &window_properties->enabled);
 			ImGui::EndMenu();
 		}
 

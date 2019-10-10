@@ -328,6 +328,12 @@
     <ClInclude Include="Texture.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="WindowPrimitives.h">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowProperties.h">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -503,6 +509,12 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Sources\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowPrimitives.cpp">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowProperties.cpp">
+      <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
