@@ -3,6 +3,8 @@
 
 #include "Assimp/include/vector3.h"
 
+#include "Texture.h"
+
 struct CustomMesh
 {
 
@@ -19,19 +21,22 @@ struct CustomMesh
 	};
 
 
-	uint id_index = 0;  // index in VRAM
-	uint n_indexes = 0;
+	uint id_index = 0u;  // index in VRAM
+	uint n_indexes = 0u;
 	uint *indexes = nullptr;
 
-	uint id_vertex = 0;  // unique vertex in VRAM
-	uint n_vertices = 0;
+	uint id_vertex = 0u;  // unique vertex in VRAM
+	uint n_vertices = 0u;
 	float *vertices = nullptr;
 
-	uint id_normal = 0;
+	uint id_normal = 0u;
 	aiVector3D *normals;
 
 	float *face_center_point = nullptr;
 	float *face_normal = nullptr;
+
+	Texture* texture = nullptr;
+	uint id_texture = 0u;
 
 }; 
 
