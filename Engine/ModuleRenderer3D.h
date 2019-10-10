@@ -8,6 +8,8 @@
 
 #define MAX_LIGHTS 8
 #define MAX_MESHES 200
+#define CHECKERS_HEIGHT 5
+#define CHECKERS_WIDTH 5
 
 class ModuleRenderer3D : public Module
 {
@@ -48,6 +50,8 @@ public:
 	bool normals = false;
 	bool vertex_normals = false;
 
+	byte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	uint id_texture;
 };
 
 #endif // !__ModuleRenderer3D_H__
