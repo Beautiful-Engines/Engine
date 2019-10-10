@@ -46,6 +46,13 @@ bool ModuleImport::LoadFile(const char* _path)
 	{
 		aiMesh *ai_mesh = nullptr;
 		CustomMesh *mymesh = new CustomMesh();
+		std::string name_mesh = _path;
+		uint pos = name_mesh.find("\\");
+		
+		while (pos > 0 && pos < 1000) {
+			name_mesh = name_mesh.substr(pos + 1);
+			pos = name_mesh.find("\\");
+		}
 
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
@@ -55,7 +62,8 @@ bool ModuleImport::LoadFile(const char* _path)
 			mymesh->n_vertices = ai_mesh->mNumVertices;
 			mymesh->vertices = new float[mymesh->n_vertices * 3];
 			memcpy(mymesh->vertices, ai_mesh->mVertices, sizeof(float) * mymesh->n_vertices * 3);
-			LOG("New mesh with %d vertices", mymesh->n_vertices);
+			LOG("New mesh %s added", name_mesh.c_str());
+			LOG("%s has %d vertices", name_mesh.c_str(), mymesh->n_vertices);
 
 			if (ai_mesh->HasFaces())
 			{
@@ -73,7 +81,7 @@ bool ModuleImport::LoadFile(const char* _path)
 						memcpy(&mymesh->indexes[j * 3], ai_mesh->mFaces[j].mIndices, sizeof(uint) * 3);
 					}
 				}
-				LOG("New mesh with %i faces", mymesh->n_indexes / 3);
+				LOG("%s has %i faces", name_mesh.c_str(), mymesh->n_indexes / 3);
 			}
 
 			if (ai_mesh->HasNormals()) {
