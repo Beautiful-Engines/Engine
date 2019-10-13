@@ -2,9 +2,7 @@
 #define __ModuleRenderer3D_H__
 
 #include "Module.h"
-#include "glmath.h"
 #include "Light.h"
-#include "CustomMesh.h"
 
 #define MAX_LIGHTS 8
 #define MAX_MESHES 200
@@ -19,7 +17,6 @@ public:
 
 	bool Init();
 	update_status PreUpdate(float dt);
-	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
@@ -29,11 +26,7 @@ public:
 	bool LoadDefault(nlohmann::json &load_default_json);
 	bool Load(nlohmann::json &load_json);
 	bool Save(nlohmann::json &save_json);
-
-	void GLBuffer(CustomMesh *mesh);
-	void Draw(CustomMesh *mesh);
-	void DrawNormals(CustomMesh *mesh);
-
+	
 
 public:
 
@@ -46,12 +39,9 @@ public:
 	bool GetVSync();
 	void SetVSync(bool VSync);
 
-	std::vector<CustomMesh*> meshes;
 	bool normals = false;
 	bool vertex_normals = false;
 
-	byte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
-	uint id_texture;
 };
 
 #endif // !__ModuleRenderer3D_H__

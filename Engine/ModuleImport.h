@@ -3,6 +3,8 @@
 
 #include "Module.h"
 
+class ComponentMesh;
+
 class ModuleImport : public Module
 {
 public:
@@ -14,6 +16,8 @@ public:
 
 
 	bool LoadFile(const char* path);
+	void GLBuffer(ComponentMesh *mesh);
+
 };
 
 

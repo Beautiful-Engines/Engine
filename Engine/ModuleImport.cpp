@@ -1,7 +1,11 @@
 #include "Application.h"
-#include "ModuleRenderer3D.h"
-#include "CustomMesh.h"
+#include "ComponentMesh.h"
+#include "GameObject.h"
+#include "ModuleScene.h"
 #include "ModuleImport.h"
+
+#include "glmath.h"
+#include "glew\glew.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -45,7 +49,9 @@ bool ModuleImport::LoadFile(const char* _path)
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		aiMesh *ai_mesh = nullptr;
-		CustomMesh *mymesh = new CustomMesh();
+		GameObject *go = new GameObject();
+		
+		ComponentMesh *mymesh = new ComponentMesh(go);
 		std::string name_mesh = _path;
 		uint pos = name_mesh.find("\\");
 		
@@ -62,8 +68,6 @@ bool ModuleImport::LoadFile(const char* _path)
 			mymesh->n_vertices = ai_mesh->mNumVertices;
 			mymesh->vertices = new float[mymesh->n_vertices * 3];
 			memcpy(mymesh->vertices, ai_mesh->mVertices, sizeof(float) * mymesh->n_vertices * 3);
-			LOG("New mesh %s added", name_mesh.c_str());
-			LOG("%s has %d vertices", name_mesh.c_str(), mymesh->n_vertices);
 
 			if (ai_mesh->HasFaces())
 			{
@@ -81,10 +85,12 @@ bool ModuleImport::LoadFile(const char* _path)
 						memcpy(&mymesh->indexes[j * 3], ai_mesh->mFaces[j].mIndices, sizeof(uint) * 3);
 					}
 				}
-				LOG("%s has %i faces", name_mesh.c_str(), mymesh->n_indexes / 3);
+				LOG("New mesh %s, with %i vertices and %i faces has been added", name_mesh.c_str(), mymesh->n_vertices, mymesh->n_indexes / 3);
 			}
 
-			if (ai_mesh->HasNormals()) {
+			// Normals
+			if (ai_mesh->HasNormals()) 
+			{
 				mymesh->normals = new aiVector3D[mymesh->n_vertices];
 				memcpy(mymesh->normals, ai_mesh->mNormals, sizeof(aiVector3D) * mymesh->n_vertices);
 
@@ -116,10 +122,24 @@ bool ModuleImport::LoadFile(const char* _path)
 				}
 			}
 
-			App->renderer3D->GLBuffer(mymesh);
+			// UVs
+			if (ai_mesh->HasTextureCoords(0))
+			{
+				mymesh->id_uv = ai_mesh->mNumUVComponents[0];
+				mymesh->uv_coords = new float[mymesh->n_vertices * mymesh->id_uv];
+
+				for (uint i = 0; i < mymesh->n_vertices; i++)
+				{
+					memcpy(&mymesh->uv_coords[i * mymesh->id_uv], &ai_mesh->mTextureCoords[0][i], sizeof(float) * mymesh->id_uv);
+				}
+			}
+
+			GLBuffer(mymesh);
+
 			ai_mesh = nullptr;
 		}
 
+		App->scene->AddGameObject(go);
 		aiReleaseImport(scene);
 	}
 	else
@@ -129,4 +149,28 @@ bool ModuleImport::LoadFile(const char* _path)
 	}
 
 	return ret;
+}
+
+void ModuleImport::GLBuffer(ComponentMesh *mesh)
+{
+	glGenBuffers(1, &mesh->id_vertex);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->n_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &mesh->id_index);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->n_indexes, mesh->indexes, GL_STATIC_DRAW);
+
+	//NORMALS
+	mesh->face_normal = new float[mesh->n_indexes];
+	for (int i = 0; i < mesh->n_indexes; ++i) {
+		mesh->face_normal[i] = (mesh->vertices[i] + mesh->vertices[i + 1] + mesh->vertices[i + 2]) / 3;
+	}
+
+	if (mesh->normals != nullptr) {
+		glGenBuffers(1, &mesh->id_normal);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normal);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->n_vertices * 3, mesh->normals, GL_STATIC_DRAW);
+	}
+
 }

@@ -1,26 +1,21 @@
-#ifndef __CustomMesh_H__
-#define __CustomMesh_H__
+#ifndef __ComponentMesh_H__
+#define __ComponentMesh_H__
 
+#include "Component.h"
 #include "Assimp/include/vector3.h"
 
-#include "Texture.h"
-
-struct CustomMesh
+class ComponentMesh : public Component
 {
+public:
+	ComponentMesh(GameObject* _game_object);
+	~ComponentMesh();
 
-	CustomMesh() {};
-	~CustomMesh()
-	{
-		delete[] vertices;
-		delete[] indexes;
-		delete[] normals;
+	void Update(float dt);
 
-		vertices = nullptr;
-		indexes = nullptr;
-		normals = nullptr;
-	};
+	void Draw();
+	void DrawNormals();
 
-
+public:
 	uint id_index = 0u;  // index in VRAM
 	uint n_indexes = 0u;
 	uint *indexes = nullptr;
@@ -32,12 +27,12 @@ struct CustomMesh
 	uint id_normal = 0u;
 	aiVector3D *normals;
 
+	uint id_uv = 0u;
+	float *uv_coords = nullptr;
+
 	float *face_center_point = nullptr;
 	float *face_normal = nullptr;
 
-	Texture* texture = nullptr;
-	uint id_texture = 0u;
-
 }; 
 
-#endif // !__CustomMesh_H__
+#endif // !__ComponentMesh_H__

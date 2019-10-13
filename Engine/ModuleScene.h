@@ -3,7 +3,7 @@
 
 #include "Module.h"
 
-typedef struct par_shapes_mesh_s par_shapes_mesh;
+class GameObject;
 
 class ModuleScene : public Module
 {
@@ -18,10 +18,11 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	GameObject* CreateGameObject();
+	void AddGameObject(GameObject* game_object);
+
 private:
-	uint s_vertex = 0;
-	uint s_index = 0;
-	par_shapes_mesh* sphere = nullptr;
+	std::vector<GameObject*> game_objects;
 };
 
 #endif // !__ModuleScene_H__

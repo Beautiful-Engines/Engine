@@ -41,6 +41,9 @@
     <Filter Include="Sources\Containers\ExtLibraries\DeviL">
       <UniqueIdentifier>{2763f563-d544-4ee6-8ac8-3bd7e8caedf9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Components">
+      <UniqueIdentifier>{ce7c10b9-dfcd-4a5d-bcb4-e0eaded3db8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -295,9 +298,6 @@
     <ClInclude Include="ModuleImport.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="CustomMesh.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -333,6 +333,18 @@
     </ClInclude>
     <ClInclude Include="WindowProperties.h">
       <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Sources\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Sources\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMesh.h">
+      <Filter>Sources\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive.h">
+      <Filter>Sources\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -515,6 +527,18 @@
     </ClCompile>
     <ClCompile Include="WindowProperties.cpp">
       <Filter>Sources\EngineWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMesh.cpp">
+      <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive.cpp">
+      <Filter>Sources\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
