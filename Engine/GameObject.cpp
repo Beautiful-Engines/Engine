@@ -1,6 +1,8 @@
 #include "Application.h"
-#include "GameObject.h"
 #include "ComponentMesh.h"
+#include "Primitive.h"
+#include "GameObject.h"
+
 
 GameObject::GameObject()
 {
@@ -29,9 +31,11 @@ void GameObject::Update()
 {
 	std::vector<Component*>::iterator iterator_component = components.begin();
 	
-	ComponentMesh* mesh;
+	
 	for (; iterator_component != components.end(); ++iterator_component) {
-		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MESH) {
+		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MESH)
+		{
+			ComponentMesh* mesh;
 			mesh = (ComponentMesh*)*iterator_component;
 			mesh->Update();
 		}
@@ -86,6 +90,11 @@ const std::vector<Component*> GameObject::GetComponents() const
 const GameObject* GameObject::GetParent() const
 {
 	return parent;
+}
+
+void GameObject::SetParent(GameObject* game_object)
+{
+	parent = game_object;
 }
 
 const std::vector<GameObject*> GameObject::GetChildren() const

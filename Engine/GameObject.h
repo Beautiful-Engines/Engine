@@ -10,7 +10,7 @@ public:
 	GameObject();
 	virtual ~GameObject();
 
-	void Update();
+	virtual void Update();
 
 	void Enable();
 	void Disable();
@@ -24,6 +24,7 @@ public:
 	const std::vector<Component*> GetComponents() const;
 
 	const GameObject* GetParent() const;
+	void SetParent(GameObject* game_object);
 	const std::vector<GameObject*> GetChildren() const;
 
 	const bool IsFocused() const;

@@ -1,4 +1,5 @@
-#include "Globals.h"
+#include "Application.h"
+#include "ModuleRenderer3D.h"
 #include "Primitive.h"
 
 #include "glew/glew.h"
@@ -7,9 +8,10 @@
 #define PAR_SHAPES_IMPLEMENTATION
 #include "Par/par_shapes.h"
 
-Primitive::Primitive(PrimitiveType _type, uint _subdivisions) : GameObject()
+Primitive::Primitive(PrimitiveType _primitive_type, uint _subdivisions) : GameObject()
 {
-	switch (type)
+	
+	switch (_primitive_type)
 	{
 	case PrimitiveType::SPHERE:
 		CreateSphere(_subdivisions);
@@ -19,11 +21,62 @@ Primitive::Primitive(PrimitiveType _type, uint _subdivisions) : GameObject()
 	default:
 		break;
 	}
+	
 }
 
 Primitive::~Primitive()
 {
 	par_shapes_free_mesh(shape);
+}
+
+void Primitive::Update()
+{
+	if(shape != nullptr)
+		Draw();
+	if (App->renderer3D->normals)
+		DrawNormals();
+}
+
+void Primitive::Draw()
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glColor3f(1.f, 1.f, 1.f);
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_TRIANGLES, shape->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+
+void Primitive::DrawNormals()
+{
+	if (normals != nullptr)
+	{
+		glColor3f(0.f, 1.f, 0.f);
+		glBegin(GL_LINES);
+
+		if (App->renderer3D->vertex_normals)
+		{
+			int j = 0;
+			for (int i = 0; i < n_vertices * 3; i += 3) {
+				glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
+				glVertex3f(vertices[i] + normals[j].x, vertices[i + 1] + normals[j].y, vertices[i + 2] + normals[j].z);
+				++j;
+			}
+		}
+		else {
+
+			for (int i = 0; i < n_indexes; i += 3) {
+				glVertex3f(face_center_point[i], face_center_point[i + 1], face_center_point[i + 2]);
+				glVertex3f(face_center_point[i] + face_normal[i], face_center_point[i + 1] + face_normal[i + 1], face_center_point[i + 2] + face_normal[i + 2]);
+			}
+		}
+
+		glEnd();
+	}
 }
 
 void Primitive::GLBuffers()
@@ -68,13 +121,13 @@ void Primitive::MemCpy()
 	// Normals
 	if (shape->normals != nullptr)
 	{
-		normals = new aiVector3D[n_vertices];
-		memcpy(normals, shape->normals, sizeof(aiVector3D) * n_vertices);
+		normals = new aiVector3D[n_vertices * 3];
+		memcpy(normals, shape->normals, sizeof(aiVector3D) * n_vertices * 3);
 
 		face_center_point = new float[shape->ntriangles * 3];
 		face_normal = new float[shape->ntriangles * 3];
 
-		for (uint i = 0; i < n_indexes; i += 3)
+		/*for (uint i = 0; i < n_indexes; i += 3)
 		{
 			uint index = indexes[i];
 			vec3 x0(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
@@ -96,7 +149,7 @@ void Primitive::MemCpy()
 			face_normal[i] = normalized.x;
 			face_normal[i + 1] = normalized.y;
 			face_normal[i + 2] = normalized.z;
-		}
+		}*/
 	}
 
 }
@@ -131,7 +184,7 @@ void Primitive::SetSubdivisions(const int& _subdivisions)
 	par_shapes_free_mesh(shape);
 	subdivisions = _subdivisions;
 
-	switch (type)
+	switch (primitive_type)
 	{
 	case PrimitiveType::SPHERE:
 		par_shapes_create_subdivided_sphere(_subdivisions);
@@ -145,9 +198,12 @@ void Primitive::SetSubdivisions(const int& _subdivisions)
 	RestartBuffers();
 }
 
+
+
 void Primitive::CreateSphere(const uint& _subdivisions)
 {
 	shape = par_shapes_create_subdivided_sphere(_subdivisions);
 	MemCpy();
 	GLBuffers();
 }
+

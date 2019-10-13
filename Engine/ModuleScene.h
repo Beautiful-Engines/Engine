@@ -23,6 +23,16 @@ public:
 
 private:
 	std::vector<GameObject*> game_objects;
+	uint grid_size = 100;
+	uint id_grid = 0;
+	uint grid_vertices = 0;
+	
+
+private:
+	void CreateGrid();
+	void DrawGrid();
+	
+
 };
 
 #endif // !__ModuleScene_H__

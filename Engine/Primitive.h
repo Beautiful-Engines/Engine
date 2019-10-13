@@ -15,10 +15,15 @@ typedef struct par_shapes_mesh_s par_shapes_mesh;
 class Primitive : public GameObject
 {
 public:
-	Primitive(PrimitiveType _type, uint _subdivisions);
+	Primitive(PrimitiveType _primitive_type, uint _subdivisions);
 	virtual ~Primitive();
 
-	PrimitiveType type = PrimitiveType::OTHER;
+	void Update();
+
+	void Draw();
+	void DrawNormals();
+
+	PrimitiveType primitive_type = PrimitiveType::OTHER;
 
 	void SetPosition(const float& _x, const float& _y, const float& _z);
 
@@ -31,7 +36,8 @@ private:
 	void RestartBuffers();
 	void CreateSphere(const uint& _subdivisions);
 
-private:
+
+public:
 	uint id_index = 0u;  // index in VRAM
 	uint n_indexes = 0u;
 	uint *indexes = nullptr;
