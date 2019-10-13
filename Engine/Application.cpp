@@ -22,7 +22,7 @@ Application::Application()
 	scene = new ModuleScene();
 	renderer3D = new ModuleRenderer3D();
 	importer = new ModuleImport();
-	file_system = new ModuleFileSystem();
+	file_system = new ModuleFileSystem(ASSETS_FOLDER);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -255,6 +255,10 @@ void Application::LoadDefaultConfig()
 }
 bool Application::LoadConfig()
 {
+	/*char* buffer;
+	std::string path = "Settings/Config.json";
+	file_system->Load(path.c_str(), &buffer);*/
+	
 	std::ifstream i("Settings/Config.json");
 	
 	if (!i.is_open())
@@ -275,7 +279,6 @@ bool Application::LoadConfig()
 			(*iterator)->Load(load_json);
 		}
 	}
-	
 	return true;
 }
 void Application::SaveConfig()

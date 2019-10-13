@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "ModuleScene.h"
 #include "ModuleImport.h"
+#include "ModuleFileSystem.h"
 
 #include "glmath.h"
 #include "glew\glew.h"
@@ -45,16 +46,41 @@ bool ModuleImport::LoadFile(const char* _path)
 	bool ret = true;
 
 	const aiScene * scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
+	
+	//copy file
+	std::string normalized_path = _path;
+	App->file_system->NormalizePath(normalized_path);
+	std::string file;
+	App->file_system->SplitFilePath(normalized_path.c_str(), nullptr, &file, nullptr);
+	std::string final_path = ASSETS_FOLDER+file;
 
+	if (App->file_system->CopyFromOutsideFS(normalized_path.c_str(), final_path.c_str()))
+	{
+		std::string extension;
+		App->file_system->SplitFilePath(final_path.c_str(), nullptr, nullptr, &extension);
+
+		if (extension == "fbx")
+		{
+			LoadMesh(_path);
+		}
+	}
+	return ret;
+}
+
+bool ModuleImport::LoadMesh(const char* _path)
+{
+	const aiScene * scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
+
+	bool ret = true;
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		aiMesh *ai_mesh = nullptr;
 		GameObject *go = new GameObject();
-		
+
 		ComponentMesh *mymesh = new ComponentMesh(go);
 		std::string name_mesh = _path;
 		uint pos = name_mesh.find("\\");
-		
+
 		while (pos > 0 && pos < 1000) {
 			name_mesh = name_mesh.substr(pos + 1);
 			pos = name_mesh.find("\\");
@@ -89,7 +115,7 @@ bool ModuleImport::LoadFile(const char* _path)
 			}
 
 			// Normals
-			if (ai_mesh->HasNormals()) 
+			if (ai_mesh->HasNormals())
 			{
 				mymesh->normals = new aiVector3D[mymesh->n_vertices];
 				memcpy(mymesh->normals, ai_mesh->mNormals, sizeof(aiVector3D) * mymesh->n_vertices);
