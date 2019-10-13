@@ -27,11 +27,16 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
-	for (uint i = 0; i < components.size(); ++i)
-	{
-		if (components[i]->IsEnabled())
-			components[i]->Update();
+	std::vector<Component*>::iterator iterator_component = components.begin();
+	
+	ComponentMesh* mesh;
+	for (; iterator_component != components.end(); ++iterator_component) {
+		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MESH) {
+			mesh = (ComponentMesh*)*iterator_component;
+			mesh->Update();
+		}
 	}
+
 }
 
 void GameObject::Enable()

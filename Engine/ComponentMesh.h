@@ -10,7 +10,7 @@ public:
 	ComponentMesh(GameObject* _game_object);
 	~ComponentMesh();
 
-	void Update(float dt);
+	void Update();
 
 	void Draw();
 	void DrawNormals();

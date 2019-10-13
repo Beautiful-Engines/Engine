@@ -39,6 +39,7 @@ private:
 	std::vector<GameObject*> children;
 
 	bool focused = false;
+
 };
 
 #endif // !__GameObject_H__

@@ -36,7 +36,7 @@ ComponentMesh::~ComponentMesh()
 	face_normal = nullptr;
 }
 
-void ComponentMesh::Update(float dt)
+void ComponentMesh::Update()
 {
 	Draw();
 	if (App->renderer3D->normals)
