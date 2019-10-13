@@ -2,7 +2,6 @@
 #define __ComponentMesh_H__
 
 #include "Component.h"
-#include "Assimp/include/vector3.h"
 
 class ComponentMesh : public Component
 {

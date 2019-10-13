@@ -3,6 +3,9 @@
 
 class GameObject;
 
+#include "Assimp/include/vector3.h"
+#include "Globals.h"
+
 enum class ComponentType {
 	MESH,
 	MATERIAL,

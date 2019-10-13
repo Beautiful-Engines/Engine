@@ -156,7 +156,7 @@ update_status ModuleGUI::CreateMainMenuBar()
 						glDisable(GL_TEXTURE_2D);
 
 				if (ImGui::Checkbox("Normals", &normals))
-					App->renderer3D->normals = true;
+					App->renderer3D->normals = normals;
 
 				
 				if (normals)

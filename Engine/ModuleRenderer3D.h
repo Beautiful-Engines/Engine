@@ -40,7 +40,9 @@ public:
 	void SetVSync(bool VSync);
 
 	bool normals = false;
-	bool vertex_normals = false;
+	bool vertex_normals = true;
+
+	bool grid = true;
 
 };
 

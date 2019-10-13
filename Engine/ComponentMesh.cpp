@@ -1,13 +1,11 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
-#include "GameObject.h"
 #include "ComponentMesh.h"
 
 #include "glew/glew.h"
 
 ComponentMesh::ComponentMesh(GameObject* _game_object) : Component(_game_object, ComponentType::MESH)
 {
-	_game_object->AddComponent(this);
 }
 
 ComponentMesh::~ComponentMesh()
