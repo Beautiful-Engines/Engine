@@ -25,6 +25,12 @@
 #pragma comment (lib, "DeviL/lib/ILU.lib")
 #pragma comment (lib, "DeviL/lib/ILUT.lib")
 
+void LogCallback(const char* text, char* data)
+{
+	std::string temp_string = text;
+	temp_string.erase(std::remove(temp_string.begin(), temp_string.end(), '%'), temp_string.end());
+	LOG(temp_string.c_str());
+}
 
 ModuleImport::ModuleImport(bool start_enabled) : Module(start_enabled)
 {
@@ -41,6 +47,7 @@ bool ModuleImport::Start()
 	// Stream log messages to Debug window
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
+	stream.callback = LogCallback;
 	aiAttachLogStream(&stream);
 
 	ilInit();
@@ -69,16 +76,16 @@ bool ModuleImport::LoadFile(const char* _path)
 
 	App->file_system->CopyFromOutsideFS(normalized_path.c_str(), final_path.c_str());
 	
-		std::string extension;
-		App->file_system->SplitFilePath(final_path.c_str(), nullptr, nullptr, &extension);
-		if (extension == "fbx")
-		{
-			LoadMesh(_path);
-		}
-		else if (extension == "png" || extension == "dds")
-		{
-			LoadTexture(_path);
-		}
+	std::string extension;
+	App->file_system->SplitFilePath(final_path.c_str(), nullptr, nullptr, &extension);
+	if (extension == "fbx")
+	{
+		LoadMesh(_path);
+	}
+	else if (extension == "png" || extension == "dds")
+	{
+		LoadTexture(_path);
+	}
 
 	return ret;
 }
@@ -201,7 +208,7 @@ bool ModuleImport::LoadTexture(const char* _path)
 
 	// Name
 	std::string name_path = _path;
-	uint pos = name_path.find_last_of("/");
+	uint pos = name_path.find_last_of("\\/");
 	name_path = (name_path.substr(pos + 1)).c_str();
 
 	ComponentMaterial *component_material = nullptr;
@@ -210,62 +217,65 @@ bool ModuleImport::LoadTexture(const char* _path)
 	for (uint i = 0; i < game_objects.size(); ++i)
 	{
 		if (game_objects[i]->IsFocused())
+		{
 			component_material = new ComponentMaterial(game_objects[i]);
+			uint id_texture;
+
+			ilGenImages(1, &id_texture);
+			ilBindImage(id_texture);
+
+			ilutRenderer(ILUT_OPENGL);
+
+			if (ilLoad(IL_DDS, _path))
+			{
+				component_material->id_texture = ilutGLBindTexImage();
+				component_material->path = _path;
+				component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
+				component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+				glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+				glBindTexture(GL_TEXTURE_2D, 0);
+
+			}
+			else if (ilLoadImage(_path))
+			{
+				component_material->id_texture = ilutGLBindTexImage();
+				component_material->path = _path;
+				component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
+				component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+				glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+				glBindTexture(GL_TEXTURE_2D, 0);
+
+				LOG("Added %s to %s", name_path.c_str(), game_objects[i]->GetName().c_str());
+			}
+			else
+			{
+				auto error = ilGetError();
+				LOG("Error loading texture %s. Error: %s", name_path, ilGetString(error));
+				ret = false;
+			}
+
+			ilDeleteImages(1, &id_texture);
+		}
+			
 	}
-
-	uint id_texture;
-
-	ilGenImages(1, &id_texture);
-	ilBindImage(id_texture);
-
-	ilutRenderer(ILUT_OPENGL); 
-
-	if (ilLoad(IL_DDS, _path)) 
-	{
-		component_material->id_texture = ilutGLBindTexImage();
-		component_material->path = _path;
-		component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
-		component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-	}
-	else if(ilLoadImage(_path))
-	{
-		component_material->id_texture = ilutGLBindTexImage();
-		component_material->path = _path;
-		component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
-		component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-	else
-	{
-		auto error = ilGetError();
-		LOG("Error loading texture %s. Error: %s", name_path, ilGetString(error));
-		ret = false;
-	}
-
-	ilDeleteImages(1, &id_texture);
 
 	return ret;
-	
 }
 
 void ModuleImport::GLBuffer(ComponentMesh *mesh)
