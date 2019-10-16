@@ -65,11 +65,10 @@ bool ModuleImport::LoadFile(const char* _path)
 	App->file_system->SplitFilePath(normalized_path.c_str(), nullptr, &file, nullptr);
 	std::string final_path = ASSETS_FOLDER+file;
 
-	if (App->file_system->CopyFromOutsideFS(normalized_path.c_str(), final_path.c_str()))
-	{
+	App->file_system->CopyFromOutsideFS(normalized_path.c_str(), final_path.c_str());
+	
 		std::string extension;
 		App->file_system->SplitFilePath(final_path.c_str(), nullptr, nullptr, &extension);
-
 		if (extension == "fbx")
 		{
 			LoadMesh(_path);
@@ -78,7 +77,7 @@ bool ModuleImport::LoadFile(const char* _path)
 		{
 			LoadTexture(_path);
 		}
-	}
+
 	return ret;
 }
 

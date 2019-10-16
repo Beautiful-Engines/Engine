@@ -148,7 +148,9 @@ bool ModuleFileSystem::CopyFromOutsideFS(const char * full_path, const char * de
 		LOG("File System copied file [%s] to [%s]", full_path, destination);
 	}
 	else
+	{
 		LOG("File System error while copy from [%s] to [%s]", full_path, destination);
+	}
 
 	return ret;
 }
