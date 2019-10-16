@@ -79,11 +79,11 @@ void GameObject::AddComponent(Component* component)
 }
 
 // Name
-const const char* GameObject::GetName() const
+const std::string GameObject::GetName() const
 {
 	return name;
 }
-void GameObject::SetName(const char* _name) 
+void GameObject::SetName(std::string _name)
 {
 	name = _name;
 }
@@ -111,5 +111,10 @@ const std::vector<GameObject*> GameObject::GetChildren() const
 
 const bool GameObject::IsFocused() const
 {
-	return focused;
+	return focus;
+}
+
+void GameObject::SetFocus(bool _focus)
+{
+	focus = _focus;
 }

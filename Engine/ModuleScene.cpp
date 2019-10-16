@@ -38,7 +38,12 @@ bool ModuleScene::Start()
 	sphere->SetParent(root);
 	game_objects.push_back(sphere);
 
-	//App->importer->LoadMesh("assets/cube.fbx");
+	App->importer->LoadMesh("assets/BakerHouse.fbx");
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i]->GetName() == "BakerHouse")
+			game_objects[i]->SetFocus(true);
+	}
 
 	return true;
 }
@@ -75,7 +80,7 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
-GameObject* ModuleScene::CreateGameObject(const char* _name)
+GameObject* ModuleScene::CreateGameObject(std::string _name)
 {
 	GameObject *game_object = new GameObject();
 	for (uint i = 0; i < game_objects.size(); ++i)

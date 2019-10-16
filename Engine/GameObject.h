@@ -19,8 +19,8 @@ public:
 	Component* CreateComponent(ComponentType type);
 	void AddComponent(Component* component);
 
-	const const char* GetName() const;
-	void SetName(const char* _name);
+	const std::string GetName() const;
+	void SetName(std::string _name);
 	const std::vector<Component*> GetComponents() const;
 
 	const GameObject* GetParent() const;
@@ -28,18 +28,19 @@ public:
 	const std::vector<GameObject*> GetChildren() const;
 
 	const bool IsFocused() const;
+	void SetFocus(bool focus);
 
 
 private:
 	bool enabled = true;
 
-	const char* name;
+	std::string name;
 	std::vector<Component*> components;
 
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> children;
 
-	bool focused = false;
+	bool focus = false;
 
 };
 

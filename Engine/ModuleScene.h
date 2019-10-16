@@ -18,7 +18,7 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	GameObject* CreateGameObject(const char* name);
+	GameObject* CreateGameObject(std::string name);
 	void AddGameObject(GameObject* game_object);
 	const std::vector<GameObject*> GetGameObjects() const;
 

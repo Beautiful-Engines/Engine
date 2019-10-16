@@ -91,7 +91,7 @@ bool ModuleImport::LoadMesh(const char* _path)
 	uint pos = name_path.find_last_of("/");
 	name_path = (name_path.substr(pos + 1)).c_str();
 	pos = name_path.find(".");
-	std::string name_object = (name_path.substr(0,pos)).c_str();
+	std::string name_object = name_path.substr(0,pos);
 	
 	// Scene
 	const aiScene * scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -101,7 +101,7 @@ bool ModuleImport::LoadMesh(const char* _path)
 	{
 		aiMesh *ai_mesh = nullptr;
 			
-		GameObject *go = App->scene->CreateGameObject(name_object.c_str());
+		GameObject *go = App->scene->CreateGameObject(name_object);
 		ComponentMesh *mymesh = new ComponentMesh(go);
 
 		for (int i = 0; i < scene->mNumMeshes; ++i)
@@ -182,7 +182,6 @@ bool ModuleImport::LoadMesh(const char* _path)
 			ai_mesh = nullptr;
 		}
 
-		App->scene->AddGameObject(go);
 		aiReleaseImport(scene);
 	}
 	else
@@ -202,14 +201,66 @@ bool ModuleImport::LoadTexture(const char* _path)
 	std::string name_path = _path;
 	uint pos = name_path.find_last_of("/");
 	name_path = (name_path.substr(pos + 1)).c_str();
-	pos = name_path.find(".");
-	std::string name_object = (name_path.substr(0, pos)).c_str();
 
-	/*for (uint i = 0; i < App->scene->game_objects.size(); ++i)
+	ComponentMaterial *component_material = nullptr;
+
+	std::vector<GameObject*> game_objects = App->scene->GetGameObjects();
+	for (uint i = 0; i < game_objects.size(); ++i)
 	{
-		if (game_objects[i]->IsEnabled())
-			game_objects[i]->Update();
-	}*/
+		if (game_objects[i]->IsFocused())
+			component_material = new ComponentMaterial(game_objects[i]);
+	}
+
+	uint id_texture;
+
+	ilGenImages(1, &id_texture);
+	ilBindImage(id_texture);
+
+	ilutRenderer(ILUT_OPENGL); 
+
+	if (ilLoad(IL_DDS, _path)) 
+	{
+		component_material->id_texture = ilutGLBindTexImage();
+		component_material->path = _path;
+		component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
+		component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+	}
+	else if(ilLoadImage(_path))
+	{
+		component_material->id_texture = ilutGLBindTexImage();
+		component_material->path = _path;
+		component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
+		component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	else
+	{
+		auto error = ilGetError();
+		LOG("Error loading texture %s. Error: %s", name_path, ilGetString(error));
+		ret = false;
+	}
+
+	ilDeleteImages(1, &id_texture);
 
 	return ret;
 	

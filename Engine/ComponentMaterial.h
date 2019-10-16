@@ -13,7 +13,9 @@ public:
 
 public:
 	uint id_texture = 0u;  
-	uint indexes = 0u;
+	int width = -1;
+	int height = -1;
+	const char* path;
 
 };
 
