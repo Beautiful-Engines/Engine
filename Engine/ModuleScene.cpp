@@ -3,7 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "GameObject.h"
 #include "Primitive.h"
-
+#include "ComponentTransform.h"
 #include "ModuleImport.h"
 
 #include "ModuleScene.h"
@@ -36,6 +36,9 @@ bool ModuleScene::Start()
 
 	Primitive *sphere = new Primitive(PrimitiveType::SPHERE, 5);
 	sphere->SetParent(root);
+	sphere->SetName("bola");
+	ComponentTransform *trans = new ComponentTransform(sphere);
+	sphere->AddComponent(trans);
 	game_objects.push_back(sphere);
 
 	App->importer->LoadMesh("assets/BakerHouse.fbx");

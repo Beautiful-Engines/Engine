@@ -1,6 +1,9 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleScene.h"
+#include "ComponentTransform.h"
+#include "GameObject.h"
 #include "ModuleInput.h"
 #include "ModuleGUI.h"
 #include "WindowProperties.h"
@@ -19,6 +22,23 @@ WindowProperties::~WindowProperties()
 
 bool WindowProperties::Draw()
 {
+	GameObject *go;
+	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
+	{
+		if (App->scene->GetGameObjects()[i]->IsFocused())
+		{
+			go = App->scene->GetGameObjects()[i];
+		}
+	}
+	ComponentTransform *trans;
+	for (uint i = 0; i < go->GetComponents().size(); ++i)
+	{
+		if (go->GetComponents()[i]->GetType() == ComponentType::TRANSFORM)
+		{
+			trans = (ComponentTransform*)go->GetComponents()[i];
+		}
+	}
+
 	ImGuiWindowFlags aboutFlags = 0;
 	aboutFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
 
@@ -29,27 +49,27 @@ bool WindowProperties::Draw()
 		{
 			ImGui::Text("Position"); ImGui::SameLine();
 			ImGui::Text("X:"); ImGui::SameLine();  ImGui::PushItemWidth(60);
-			ImGui::InputFloat("", new float(0.0f)); ImGui::SameLine();
+			ImGui::InputFloat("",&trans->local_position.x); ImGui::SameLine();
 			ImGui::Text("Y:"); ImGui::SameLine();
-			ImGui::InputFloat("", new float(0.0f)); ImGui::SameLine();
+			ImGui::InputFloat("", &trans->local_position.y); ImGui::SameLine();
 			ImGui::Text("Z:"); ImGui::SameLine();
-			ImGui::InputFloat("", new float(0.0f));
+			ImGui::InputFloat("", &trans->local_position.z);
 
 			ImGui::Text("Rotation"); ImGui::SameLine();
 			ImGui::Text("X:"); ImGui::SameLine();  ImGui::PushItemWidth(60);
-			ImGui::InputFloat("", new float(0.0f)); ImGui::SameLine();
+			ImGui::InputFloat("", &trans->rotation.x); ImGui::SameLine();
 			ImGui::Text("Y:"); ImGui::SameLine();
-			ImGui::InputFloat("", new float(0.0f)); ImGui::SameLine();
+			ImGui::InputFloat("", &trans->rotation.y); ImGui::SameLine();
 			ImGui::Text("Z:"); ImGui::SameLine();
-			ImGui::InputFloat("", new float(0.0f));
+			ImGui::InputFloat("", &trans->rotation.z);
 
 			ImGui::Text("Size"); ImGui::SameLine();
 			ImGui::Text("X:"); ImGui::SameLine();  ImGui::PushItemWidth(60);
-			ImGui::InputFloat("", new float(1.0f)); ImGui::SameLine();
+			ImGui::InputFloat("", &trans->scale.x); ImGui::SameLine();
 			ImGui::Text("Y:"); ImGui::SameLine();
-			ImGui::InputFloat("", new float(1.0f)); ImGui::SameLine();
+			ImGui::InputFloat("", &trans->scale.y); ImGui::SameLine();
 			ImGui::Text("Z:"); ImGui::SameLine();
-			ImGui::InputFloat("", new float(1.0f));
+			ImGui::InputFloat("", &trans->scale.z);
 		}
 		if (ImGui::CollapsingHeader("Mesh"))
 		{

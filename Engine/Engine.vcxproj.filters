@@ -349,6 +349,9 @@
     <ClInclude Include="ComponentMaterial.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentTransform.h">
+      <Filter>Sources\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -544,6 +547,9 @@
       <Filter>Sources\Components</Filter>
     </ClCompile>
     <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTransform.cpp">
       <Filter>Sources\Components</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentTransform.h"
 #include "GameObject.h"
 #include "ModuleScene.h"
 #include "ModuleImport.h"
@@ -103,6 +104,7 @@ bool ModuleImport::LoadMesh(const char* _path)
 			
 		GameObject *go = App->scene->CreateGameObject(name_object);
 		ComponentMesh *mymesh = new ComponentMesh(go);
+		ComponentTransform *trans = new ComponentTransform(go);
 
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{

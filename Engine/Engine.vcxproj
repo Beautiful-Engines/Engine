@@ -132,6 +132,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="ComponentMaterial.h" />
+    <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="DeviL\include\devil_internal_exports.h" />
     <ClInclude Include="DeviL\include\il.h" />
     <ClInclude Include="DeviL\include\ilu.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
+    <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="ModuleFileSystem.cpp" />
