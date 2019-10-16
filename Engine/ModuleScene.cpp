@@ -3,6 +3,9 @@
 #include "ModuleRenderer3D.h"
 #include "GameObject.h"
 #include "Primitive.h"
+
+#include "ModuleImport.h"
+
 #include "ModuleScene.h"
 
 #include "glew\glew.h"
@@ -29,13 +32,13 @@ bool ModuleScene::Start()
 {
 	CreateGrid();
 
-	GameObject *root = new GameObject();
-	root->SetName("root");
-	game_objects.push_back(root);
+	GameObject *root = CreateGameObject("root");
 
 	Primitive *sphere = new Primitive(PrimitiveType::SPHERE, 5);
 	sphere->SetParent(root);
 	game_objects.push_back(sphere);
+
+	//App->importer->LoadMesh("assets/cube.fbx");
 
 	return true;
 }
@@ -72,9 +75,18 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
-GameObject* ModuleScene::CreateGameObject()
+GameObject* ModuleScene::CreateGameObject(const char* _name)
 {
-	return new GameObject();
+	GameObject *game_object = new GameObject();
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i]->GetParent() == nullptr)
+			game_object->SetParent(game_objects[i]);
+	}
+	game_object->SetName(_name);
+	game_objects.push_back(game_object);
+
+	return game_object;
 }
 
 void ModuleScene::AddGameObject(GameObject* game_object)

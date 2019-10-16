@@ -18,7 +18,7 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	GameObject* CreateGameObject();
+	GameObject* CreateGameObject(const char* name);
 	void AddGameObject(GameObject* game_object);
 
 private:

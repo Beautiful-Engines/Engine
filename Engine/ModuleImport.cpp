@@ -40,6 +40,9 @@ bool ModuleImport::Start()
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
+
+	ilInit();
+
 	return true;
 }
 
@@ -53,7 +56,7 @@ bool ModuleImport::LoadFile(const char* _path)
 {
 	bool ret = true;
 
-	//const aiScene * scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene * scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	//copy file
 	std::string normalized_path = _path;
@@ -71,6 +74,10 @@ bool ModuleImport::LoadFile(const char* _path)
 		{
 			LoadMesh(_path);
 		}
+		else if (extension == "png" || extension == "dds")
+		{
+			LoadTexture(_path);
+		}
 	}
 	return ret;
 }
@@ -79,124 +86,128 @@ bool ModuleImport::LoadMesh(const char* _path)
 {
 	bool ret = true;
 
-	std::string name_mesh = _path;
-	uint pos = name_mesh.find("\\");
+	// Name
+	std::string name_path = _path;
+	uint pos = name_path.find_last_of("/");
+	name_path = (name_path.substr(pos + 1)).c_str();
+	pos = name_path.find(".");
+	std::string name_object = (name_path.substr(0,pos)).c_str();
+	
+	// Scene
+	const aiScene * scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
-	while (pos > 0 && pos < 1000)
+	// Mesh
+	if (scene != nullptr && scene->HasMeshes())
 	{
-		name_mesh = name_mesh.substr(pos + 1);
-		pos = name_mesh.find("\\");
-	}
-	pos = name_mesh.find("fbx");
+		aiMesh *ai_mesh = nullptr;
+			
+		GameObject *go = App->scene->CreateGameObject(name_object.c_str());
+		ComponentMesh *mymesh = new ComponentMesh(go);
 
-	if (pos > 0 && pos < 1000)
-	{
-		const aiScene * scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
-
-		if (scene != nullptr && scene->HasMeshes())
+		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
-			aiMesh *ai_mesh = nullptr;
-			GameObject *go = new GameObject();
+			ai_mesh = scene->mMeshes[i];
 
-			ComponentMesh *mymesh = new ComponentMesh(go);
+			mymesh->n_vertices = ai_mesh->mNumVertices;
+			mymesh->vertices = new float[mymesh->n_vertices * 3];
+			memcpy(mymesh->vertices, ai_mesh->mVertices, sizeof(float) * mymesh->n_vertices * 3);
 
-
-
-			for (int i = 0; i < scene->mNumMeshes; ++i)
+			if (ai_mesh->HasFaces())
 			{
-				ai_mesh = scene->mMeshes[i];
+				mymesh->n_indexes = ai_mesh->mNumFaces * 3;
+				mymesh->indexes = new uint[mymesh->n_indexes];
 
-				//copy vertices
-				mymesh->n_vertices = ai_mesh->mNumVertices;
-				mymesh->vertices = new float[mymesh->n_vertices * 3];
-				memcpy(mymesh->vertices, ai_mesh->mVertices, sizeof(float) * mymesh->n_vertices * 3);
-
-				if (ai_mesh->HasFaces())
+				for (uint j = 0; j < ai_mesh->mNumFaces; ++j)
 				{
-					mymesh->n_indexes = ai_mesh->mNumFaces * 3;
-					mymesh->indexes = new uint[mymesh->n_indexes];
-
-					for (uint j = 0; j < ai_mesh->mNumFaces; ++j)
+					if (ai_mesh->mFaces[j].mNumIndices != 3)
 					{
-						if (ai_mesh->mFaces[j].mNumIndices != 3)
-						{
-							LOG("WARNING, geometry face with != 3 indices!");
-						}
-						else
-						{
-							memcpy(&mymesh->indexes[j * 3], ai_mesh->mFaces[j].mIndices, sizeof(uint) * 3);
-						}
+						LOG("WARNING, geometry face with != 3 indices!");
 					}
-					LOG("New mesh %s, with %i vertices and %i faces has been added", name_mesh.c_str(), mymesh->n_vertices, mymesh->n_indexes / 3);
-				}
-
-				// Normals
-				if (ai_mesh->HasNormals())
-				{
-					mymesh->normals = new aiVector3D[mymesh->n_vertices];
-					memcpy(mymesh->normals, ai_mesh->mNormals, sizeof(aiVector3D) * mymesh->n_vertices);
-
-					mymesh->face_center_point = new float[ai_mesh->mNumFaces * 3];
-					mymesh->face_normal = new float[ai_mesh->mNumFaces * 3];
-
-					for (uint i = 0; i < mymesh->n_indexes; i += 3)
+					else
 					{
-						uint index = mymesh->indexes[i];
-						vec3 x0(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
-						index = mymesh->indexes[i + 1];
-						vec3 x1(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
-						index = mymesh->indexes[i + 2];
-						vec3 x2(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
-
-						vec3 v0 = x1 - x0;
-						vec3 v1 = x2 - x0;
-						vec3 n = cross(v0, v1);
-
-						vec3 normalized = normalize(n);
-
-						mymesh->face_center_point[i] = (x0.x + x1.x + x2.x) / 3;
-						mymesh->face_center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
-						mymesh->face_center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
-
-						mymesh->face_normal[i] = normalized.x;
-						mymesh->face_normal[i + 1] = normalized.y;
-						mymesh->face_normal[i + 2] = normalized.z;
+						memcpy(&mymesh->indexes[j * 3], ai_mesh->mFaces[j].mIndices, sizeof(uint) * 3);
 					}
 				}
-
-				// UVs
-				if (ai_mesh->HasTextureCoords(0))
-				{
-					mymesh->id_uv = ai_mesh->mNumUVComponents[0];
-					mymesh->uv_coords = new float[mymesh->n_vertices * mymesh->id_uv];
-
-					for (uint i = 0; i < mymesh->n_vertices; i++)
-					{
-						memcpy(&mymesh->uv_coords[i * mymesh->id_uv], &ai_mesh->mTextureCoords[0][i], sizeof(float) * mymesh->id_uv);
-					}
-				}
-
-				GLBuffer(mymesh);
-
-				ai_mesh = nullptr;
+				LOG("New mesh %s, with %i vertices and %i faces has been added", name_path.c_str(), mymesh->n_vertices, mymesh->n_indexes / 3);
 			}
 
-			App->scene->AddGameObject(go);
-			aiReleaseImport(scene);
+			// Normals
+			if (ai_mesh->HasNormals())
+			{
+				mymesh->normals = new aiVector3D[mymesh->n_vertices];
+				memcpy(mymesh->normals, ai_mesh->mNormals, sizeof(aiVector3D) * mymesh->n_vertices);
+
+				mymesh->face_center_point = new float[ai_mesh->mNumFaces * 3];
+				mymesh->face_normal = new float[ai_mesh->mNumFaces * 3];
+
+				for (uint i = 0; i < mymesh->n_indexes; i += 3)
+				{
+					uint index = mymesh->indexes[i];
+					vec3 x0(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
+					index = mymesh->indexes[i + 1];
+					vec3 x1(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
+					index = mymesh->indexes[i + 2];
+					vec3 x2(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
+
+					vec3 v0 = x1 - x0;
+					vec3 v1 = x2 - x0;
+					vec3 n = cross(v0, v1);
+
+					vec3 normalized = normalize(n);
+
+					mymesh->face_center_point[i] = (x0.x + x1.x + x2.x) / 3;
+					mymesh->face_center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
+					mymesh->face_center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
+
+					mymesh->face_normal[i] = normalized.x;
+					mymesh->face_normal[i + 1] = normalized.y;
+					mymesh->face_normal[i + 2] = normalized.z;
+				}
+			}
+
+			// UVs
+			if (ai_mesh->HasTextureCoords(0))
+			{
+				mymesh->id_uv = ai_mesh->mNumUVComponents[0];
+				mymesh->uv_coords = new float[mymesh->n_vertices * mymesh->id_uv];
+
+				for (uint i = 0; i < mymesh->n_vertices; i++)
+				{
+					memcpy(&mymesh->uv_coords[i * mymesh->id_uv], &ai_mesh->mTextureCoords[0][i], sizeof(float) * mymesh->id_uv);
+				}
+			}
+
+			GLBuffer(mymesh);
+
+			ai_mesh = nullptr;
 		}
-		else
-		{
-			LOG("Error loading scene %s", aiGetErrorString());
-			ret = false;
-		}
+
+		App->scene->AddGameObject(go);
+		aiReleaseImport(scene);
 	}
 	else
 	{
-		// TODO TEXTURES IMPORT
+		LOG("Error loading scene %s", aiGetErrorString());
+		ret = false;
 	}
+	
+	return ret;
+}
+
+bool ModuleImport::LoadTexture(const char* _path)
+{
+	bool ret = true;
+
+	// Name
+	std::string name_path = _path;
+	uint pos = name_path.find_last_of("/");
+	name_path = (name_path.substr(pos + 1)).c_str();
+	pos = name_path.find(".");
+	std::string name_object = (name_path.substr(0, pos)).c_str();
 
 
 	return ret;
+	
 }
 
 void ModuleImport::GLBuffer(ComponentMesh *mesh)

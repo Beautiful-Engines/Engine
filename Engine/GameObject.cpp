@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ComponentMesh.h"
+#include "ComponentMaterial.h"
 #include "Primitive.h"
 #include "GameObject.h"
 
@@ -38,6 +39,12 @@ void GameObject::Update()
 			ComponentMesh* mesh;
 			mesh = (ComponentMesh*)*iterator_component;
 			mesh->Update();
+		}
+		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MATERIAL)
+		{
+			ComponentMaterial* material;
+			material = (ComponentMaterial*)*iterator_component;
+			material->Texture();
 		}
 	}
 

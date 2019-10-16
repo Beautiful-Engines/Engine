@@ -17,6 +17,7 @@ public:
 
 	bool LoadFile(const char* path);
 	bool LoadMesh(const char* path);
+	bool LoadTexture(const char* path);
 	void GLBuffer(ComponentMesh *mesh);
 
 };
