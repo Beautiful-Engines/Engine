@@ -20,6 +20,7 @@ public:
 
 	GameObject* CreateGameObject(const char* name);
 	void AddGameObject(GameObject* game_object);
+	const std::vector<GameObject*> GetGameObjects() const;
 
 private:
 	std::vector<GameObject*> game_objects;

@@ -94,6 +94,11 @@ void ModuleScene::AddGameObject(GameObject* game_object)
 	game_objects.push_back(game_object);
 }
 
+const std::vector<GameObject*> ModuleScene::GetGameObjects() const
+{
+	return game_objects;
+}
+
 void ModuleScene::DrawGrid()
 {
 	glColor3f(1.f, 1.f, 1.f);

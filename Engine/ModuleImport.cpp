@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ComponentMesh.h"
+#include "ComponentMaterial.h"
 #include "GameObject.h"
 #include "ModuleScene.h"
 #include "ModuleImport.h"
@@ -204,6 +205,11 @@ bool ModuleImport::LoadTexture(const char* _path)
 	pos = name_path.find(".");
 	std::string name_object = (name_path.substr(0, pos)).c_str();
 
+	/*for (uint i = 0; i < App->scene->game_objects.size(); ++i)
+	{
+		if (game_objects[i]->IsEnabled())
+			game_objects[i]->Update();
+	}*/
 
 	return ret;
 	
