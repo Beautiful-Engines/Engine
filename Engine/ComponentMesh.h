@@ -28,6 +28,7 @@ public:
 	aiVector3D *normals;
 
 	uint id_uv = 0u;
+	uint n_uv = 0u;
 	float *uv_coords = nullptr;
 
 	float *face_center_point = nullptr;

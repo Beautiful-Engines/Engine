@@ -182,12 +182,12 @@ bool ModuleImport::LoadMesh(const char* _path)
 			// UVs
 			if (ai_mesh->HasTextureCoords(0))
 			{
-				mymesh->id_uv = ai_mesh->mNumUVComponents[0];
-				mymesh->uv_coords = new float[mymesh->n_vertices * mymesh->id_uv];
+				mymesh->n_uv = ai_mesh->mNumUVComponents[0];
+				mymesh->uv_coords = new float[mymesh->n_vertices * mymesh->n_uv];
 
 				for (uint i = 0; i < mymesh->n_vertices; i++)
 				{
-					memcpy(&mymesh->uv_coords[i * mymesh->id_uv], &ai_mesh->mTextureCoords[0][i], sizeof(float) * mymesh->id_uv);
+					memcpy(&mymesh->uv_coords[i * mymesh->n_uv], &ai_mesh->mTextureCoords[0][i], sizeof(float) * mymesh->n_uv);
 				}
 			}
 
@@ -282,5 +282,9 @@ void ModuleImport::GLBuffer(ComponentMesh *mesh)
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normal);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->n_vertices * 3, mesh->normals, GL_STATIC_DRAW);
 	}
+
+	glGenBuffers(1, &mesh->id_uv);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->n_uv * mesh->n_vertices, mesh->uv_coords, GL_STATIC_DRAW);
 
 }
