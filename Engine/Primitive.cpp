@@ -121,30 +121,33 @@ void Primitive::MemCpy()
 	// Normals
 	if (shape->normals != nullptr)
 	{
-		normals = new aiVector3D[n_vertices * 3];
-		memcpy(normals, shape->normals, sizeof(aiVector3D) * n_vertices * 3);
+		normals = new aiVector3D[n_vertices];
+		memcpy(normals, shape->normals, sizeof(aiVector3D) * n_vertices);
 
 		face_center_point = new float[shape->ntriangles * 3];
 		face_normal = new float[shape->ntriangles * 3];
 
+		// TODO
 		/*for (uint i = 0; i < n_indexes; i += 3)
 		{
 			uint index = indexes[i];
-			vec3 x0(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
-			index = indexes[i + 1];
-			vec3 x1(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
-			index = indexes[i + 2];
-			vec3 x2(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
+			vec3 vertex0(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
 
-			vec3 v0 = x0 - x2;
-			vec3 v1 = x1 - x2;
+			index = indexes[i + 1];
+			vec3 vertex1(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
+
+			index = indexes[i + 2];
+			vec3 vertex2(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
+
+			vec3 v0 = vertex0 - vertex2;
+			vec3 v1 = vertex1 - vertex2;
 			vec3 n = cross(v0, v1);
 
 			vec3 normalized = normalize(n);
 
-			face_center_point[i] = (x0.x + x1.x + x2.x) / 3;
-			face_center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
-			face_center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
+			face_center_point[i] = (vertex0.x + vertex1.x + vertex2.x) / 3;
+			face_center_point[i + 1] = (vertex0.y + vertex1.y + vertex2.y) / 3;
+			face_center_point[i + 2] = (vertex0.z + vertex1.z + vertex2.z) / 3;
 
 			face_normal[i] = normalized.x;
 			face_normal[i + 1] = normalized.y;
@@ -198,8 +201,7 @@ void Primitive::SetSubdivisions(const int& _subdivisions)
 	RestartBuffers();
 }
 
-
-
+// PRIMITIVE FORMS
 void Primitive::CreateSphere(const uint& _subdivisions)
 {
 	shape = par_shapes_create_subdivided_sphere(_subdivisions);
