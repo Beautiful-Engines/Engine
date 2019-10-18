@@ -1,5 +1,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "GameObject.h"
+#include "ComponentMaterial.h"
 #include "ComponentMesh.h"
 
 #include "glew/glew.h"
@@ -36,12 +38,24 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::Update()
 {
-	Draw();
+	std::vector<Component*> components = my_game_object->GetComponents();
+	std::vector<Component*>::iterator iterator_component = components.begin();
+
+	ComponentMaterial *component_material = nullptr;
+	for (; iterator_component != components.end(); ++iterator_component) 
+	{
+		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MATERIAL)
+		{
+			component_material = (ComponentMaterial*)*iterator_component;
+		}
+	}
+
+	Draw(component_material);
 	if (App->renderer3D->normals)
 		DrawNormals();
 }
 
-void ComponentMesh::Draw()
+void ComponentMesh::Draw(ComponentMaterial *component_material)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -49,8 +63,16 @@ void ComponentMesh::Draw()
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	if (component_material != nullptr)
+	{
+		component_material->Texture(this);
+	}
+
 	glDrawElements(GL_TRIANGLES, n_indexes, GL_UNSIGNED_INT, NULL);
 
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 

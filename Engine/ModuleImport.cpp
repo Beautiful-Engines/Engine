@@ -51,6 +51,11 @@ bool ModuleImport::Start()
 	aiAttachLogStream(&stream);
 
 	ilInit();
+	iluInit();
+	ilutInit();
+	ilEnable(IL_CONV_PAL);
+	ilutEnable(ILUT_OPENGL_CONV);
+	ilutRenderer(ILUT_OPENGL);
 
 	return true;
 }
@@ -158,8 +163,8 @@ bool ModuleImport::LoadMesh(const char* _path)
 					index = mymesh->indexes[i + 2];
 					vec3 x2(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
 
-					vec3 v0 = x1 - x0;
-					vec3 v1 = x2 - x0;
+					vec3 v0 = x0 - x2;
+					vec3 v1 = x1 - x2;
 					vec3 n = cross(v0, v1);
 
 					vec3 normalized = normalize(n);
@@ -219,12 +224,10 @@ bool ModuleImport::LoadTexture(const char* _path)
 		if (game_objects[i]->IsFocused())
 		{
 			component_material = new ComponentMaterial(game_objects[i]);
-			uint id_texture;
+			uint id_tex;
 
-			ilGenImages(1, &id_texture);
-			ilBindImage(id_texture);
-
-			ilutRenderer(ILUT_OPENGL);
+			ilGenImages(1, &id_tex);
+			ilBindImage(id_tex);
 
 			if (ilLoad(IL_DDS, _path))
 			{
@@ -233,16 +236,6 @@ bool ModuleImport::LoadTexture(const char* _path)
 				component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
 				component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
 
-				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-				glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-				glBindTexture(GL_TEXTURE_2D, 0);
-
 			}
 			else if (ilLoadImage(_path))
 			{
@@ -250,16 +243,6 @@ bool ModuleImport::LoadTexture(const char* _path)
 				component_material->path = _path;
 				component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
 				component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-				glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-				glBindTexture(GL_TEXTURE_2D, 0);
 
 				LOG("Added %s to %s", name_path.c_str(), game_objects[i]->GetName().c_str());
 			}
@@ -270,7 +253,7 @@ bool ModuleImport::LoadTexture(const char* _path)
 				ret = false;
 			}
 
-			ilDeleteImages(1, &id_texture);
+			ilDeleteImages(1, &id_tex);
 		}
 			
 	}

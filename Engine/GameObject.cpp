@@ -40,12 +40,12 @@ void GameObject::Update()
 			mesh = (ComponentMesh*)*iterator_component;
 			mesh->Update();
 		}
-		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MATERIAL)
+		/*if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MATERIAL)
 		{
 			ComponentMaterial* material;
 			material = (ComponentMaterial*)*iterator_component;
 			material->Texture();
-		}
+		}*/
 	}
 
 }

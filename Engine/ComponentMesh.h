@@ -2,6 +2,7 @@
 #define __ComponentMesh_H__
 
 #include "Component.h"
+class ComponentMaterial;
 
 class ComponentMesh : public Component
 {
@@ -11,7 +12,7 @@ public:
 
 	void Update();
 
-	void Draw();
+	void Draw(ComponentMaterial *component_material);
 	void DrawNormals();
 
 public:
