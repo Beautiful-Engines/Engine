@@ -34,12 +34,13 @@ bool ModuleScene::Start()
 
 	GameObject *root = CreateGameObject("root");
 
-	Primitive *sphere = new Primitive(PrimitiveType::SPHERE, 5);
+	Primitive *sphere = new Primitive(PrimitiveType::SPHERE, 1);
 	sphere->SetParent(root);
-	sphere->SetName("bola");
+	game_objects.push_back(sphere);
+
 	ComponentTransform *trans = new ComponentTransform(sphere);
 	sphere->AddComponent(trans);
-	game_objects.push_back(sphere);
+	
 
 	App->importer->LoadMesh("assets/BakerHouse.fbx");
 	for (uint i = 0; i < game_objects.size(); ++i)
@@ -53,8 +54,6 @@ bool ModuleScene::Start()
 
 update_status ModuleScene::PreUpdate(float dt)
 {
-	
-
 	return UPDATE_CONTINUE;
 }
 

@@ -101,7 +101,7 @@ bool ModuleImport::LoadMesh(const char* _path)
 
 	// Name
 	std::string name_path = _path;
-	uint pos = name_path.find_last_of("/");
+	uint pos = name_path.find_last_of("\\/");
 	name_path = (name_path.substr(pos + 1)).c_str();
 	pos = name_path.find(".");
 	std::string name_object = name_path.substr(0,pos);

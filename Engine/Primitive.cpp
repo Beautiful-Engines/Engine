@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleScene.h"
 #include "Primitive.h"
 
 #include "glew/glew.h"
@@ -57,13 +58,14 @@ void Primitive::DrawNormals()
 	{
 		glColor3f(0.f, 1.f, 0.f);
 		glBegin(GL_LINES);
+		float lenght = 0.4f;
 
 		if (App->renderer3D->vertex_normals)
 		{
 			int j = 0;
 			for (int i = 0; i < n_vertices * 3; i += 3) {
 				glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
-				glVertex3f(vertices[i] + normals[j].x, vertices[i + 1] + normals[j].y, vertices[i + 2] + normals[j].z);
+				glVertex3f(vertices[i] + normals[j].x  * lenght, vertices[i + 1] + normals[j].y  * lenght, vertices[i + 2] + normals[j].z  * lenght);
 				++j;
 			}
 		}
@@ -71,7 +73,7 @@ void Primitive::DrawNormals()
 
 			for (int i = 0; i < n_indexes; i += 3) {
 				glVertex3f(face_center_point[i], face_center_point[i + 1], face_center_point[i + 2]);
-				glVertex3f(face_center_point[i] + face_normal[i], face_center_point[i + 1] + face_normal[i + 1], face_center_point[i + 2] + face_normal[i + 2]);
+				glVertex3f(face_center_point[i] + face_normal[i] * lenght, face_center_point[i + 1] + face_normal[i + 1] * lenght, face_center_point[i + 2] + face_normal[i + 2] * lenght);
 			}
 		}
 
@@ -102,16 +104,15 @@ void Primitive::GLBuffers()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) *n_vertices * 3, &normals[0], GL_STATIC_DRAW);
 }
 
-void Primitive::MemCpy()
+void Primitive::NormalsCalc()
 {
 	n_vertices = shape->npoints;
-	n_indexes = shape->ntriangles * 3;
-
 	vertices = new float[n_vertices * 3];
-	indexes = new uint[n_indexes * 3];
-
 	memcpy(vertices, shape->points, sizeof(float) * n_vertices * 3);
-	memcpy(indexes, shape->triangles, sizeof(PAR_SHAPES_T) * n_indexes);
+
+	n_indexes = shape->ntriangles * 3;
+	indexes = new uint[n_indexes * 3];
+	memcpy(indexes, shape->triangles, sizeof(uint) * n_indexes);
 
 	if (shape->tcoords != nullptr) {
 		uv_coords = new float[n_vertices * 3];
@@ -121,8 +122,8 @@ void Primitive::MemCpy()
 	// Normals
 	if (shape->normals != nullptr)
 	{
-		normals = new aiVector3D[n_vertices];
-		memcpy(normals, shape->normals, sizeof(aiVector3D) * n_vertices);
+		normals = new aiVector3D[n_vertices * 3];
+		memcpy(normals, shape->normals, sizeof(aiVector3D) * n_vertices * 3);
 
 		face_center_point = new float[shape->ntriangles * 3];
 		face_normal = new float[shape->ntriangles * 3];
@@ -131,13 +132,13 @@ void Primitive::MemCpy()
 		/*for (uint i = 0; i < n_indexes; i += 3)
 		{
 			uint index = indexes[i];
-			vec3 vertex0(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
+			vec3 vertex0(vertices[index], vertices[index + 1], vertices[index + 2]);
 
 			index = indexes[i + 1];
-			vec3 vertex1(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
+			vec3 vertex1(vertices[index], vertices[index + 1], vertices[index+ 2]);
 
 			index = indexes[i + 2];
-			vec3 vertex2(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
+			vec3 vertex2(vertices[index], vertices[index+ 1], vertices[index + 2]);
 
 			vec3 v0 = vertex0 - vertex2;
 			vec3 v1 = vertex1 - vertex2;
@@ -173,7 +174,7 @@ void Primitive::RestartBuffers()
 	delete[] vertices;
 	delete[] indexes;
 
-	MemCpy();
+	NormalsCalc();
 	GLBuffers();
 }
 
@@ -204,8 +205,23 @@ void Primitive::SetSubdivisions(const int& _subdivisions)
 // PRIMITIVE FORMS
 void Primitive::CreateSphere(const uint& _subdivisions)
 {
+	std::string name = "Sphere";
+	std::vector<GameObject*> game_object = App->scene->GetGameObjects();
+	uint cont = 1;
+	for (uint i = 0; i < game_object.size(); ++i)
+	{
+		name = name + std::to_string(cont);
+		if (game_object[i] != nullptr && game_object[i]->GetName() == name)
+		{
+			cont++;
+			i = 0;
+		}
+	}
+
 	shape = par_shapes_create_subdivided_sphere(_subdivisions);
-	MemCpy();
+	NormalsCalc();
 	GLBuffers();
+	
+	SetName(name);
 }
 

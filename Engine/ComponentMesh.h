@@ -16,11 +16,11 @@ public:
 	void DrawNormals();
 
 public:
-	uint id_index = 0u;  // index in VRAM
+	uint id_index = 0u;
 	uint n_indexes = 0u;
 	uint *indexes = nullptr;
 
-	uint id_vertex = 0u;  // unique vertex in VRAM
+	uint id_vertex = 0u;
 	uint n_vertices = 0u;
 	float *vertices = nullptr;
 

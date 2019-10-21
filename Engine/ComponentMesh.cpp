@@ -83,13 +83,14 @@ void ComponentMesh::DrawNormals()
 	{
 		glColor3f(0.f, 1.f, 0.f);
 		glBegin(GL_LINES);
+		float lenght = 0.4f;
 
 		if (App->renderer3D->vertex_normals)
 		{
 			int j = 0;
 			for (int i = 0; i < n_vertices * 3; i += 3) {
 				glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
-				glVertex3f(vertices[i] + normals[j].x, vertices[i + 1] + normals[j].y, vertices[i + 2] + normals[j].z);
+				glVertex3f(vertices[i] + normals[j].x  * lenght, vertices[i + 1] + normals[j].y  * lenght, vertices[i + 2] + normals[j].z  * lenght);
 				++j;
 			}
 		}
@@ -97,7 +98,7 @@ void ComponentMesh::DrawNormals()
 
 			for (int i = 0; i < n_indexes; i += 3) {
 				glVertex3f(face_center_point[i], face_center_point[i + 1], face_center_point[i + 2]);
-				glVertex3f(face_center_point[i] + face_normal[i], face_center_point[i + 1] + face_normal[i + 1], face_center_point[i + 2] + face_normal[i + 2]);
+				glVertex3f(face_center_point[i] + face_normal[i] * lenght, face_center_point[i + 1] + face_normal[i + 1] * lenght, face_center_point[i + 2] + face_normal[i + 2] * lenght);
 			}
 		}
 

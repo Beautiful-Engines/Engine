@@ -6,14 +6,19 @@
 
 #include "ImGui\imgui_stdlib.h"
 
-WindowHierarchy::WindowHierarchy() : WindowEngine() {}
+WindowHierarchy::WindowHierarchy() : WindowEngine() 
+{
+	enabled = true;
+}
 
 WindowHierarchy::~WindowHierarchy() {}
 
 bool WindowHierarchy::Draw()
 {
+	ImGuiWindowFlags aboutFlags = 0;
+	aboutFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
 
-	if (ImGui::Begin("Hierarchy"))
+	if (ImGui::Begin("Hierarchy", &enabled, aboutFlags))
 	{
 		static int selected = 0;
 		
@@ -24,8 +29,7 @@ bool WindowHierarchy::Draw()
 				ImGui::Selectable(App->scene->GetGameObjects()[i]->GetName().c_str());
 			}
 		}
-
-		ImGui::End();
 	}
+	ImGui::End();
 	return true;
 }
