@@ -77,27 +77,27 @@ bool WindowProperties::Draw()
 			{
 				ImGui::Text("Position"); ImGui::SameLine();
 				ImGui::Text("X:"); ImGui::SameLine();  ImGui::PushItemWidth(60);
-				ImGui::InputFloat("", &trans->local_position.x); ImGui::SameLine();
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->local_position.x); ImGui::SameLine();
 				ImGui::Text("Y:"); ImGui::SameLine();
-				ImGui::InputFloat("", &trans->local_position.y); ImGui::SameLine();
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->local_position.y); ImGui::SameLine();
 				ImGui::Text("Z:"); ImGui::SameLine();
-				ImGui::InputFloat("", &trans->local_position.z);
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->local_position.z);
 
 				ImGui::Text("Rotation"); ImGui::SameLine();
 				ImGui::Text("X:"); ImGui::SameLine();  ImGui::PushItemWidth(60);
-				ImGui::InputFloat("", &trans->rotation.x); ImGui::SameLine();
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->rotation.x); ImGui::SameLine();
 				ImGui::Text("Y:"); ImGui::SameLine();
-				ImGui::InputFloat("", &trans->rotation.y); ImGui::SameLine();
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->rotation.y); ImGui::SameLine();
 				ImGui::Text("Z:"); ImGui::SameLine();
-				ImGui::InputFloat("", &trans->rotation.z);
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->rotation.z);
 
 				ImGui::Text("Size"); ImGui::SameLine();
 				ImGui::Text("X:"); ImGui::SameLine();  ImGui::PushItemWidth(60);
-				ImGui::InputFloat("", &trans->scale.x); ImGui::SameLine();
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.x); ImGui::SameLine();
 				ImGui::Text("Y:"); ImGui::SameLine();
-				ImGui::InputFloat("", &trans->scale.y); ImGui::SameLine();
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.y); ImGui::SameLine();
 				ImGui::Text("Z:"); ImGui::SameLine();
-				ImGui::InputFloat("", &trans->scale.z);
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.z);
 			}
 			
 		}
@@ -116,7 +116,15 @@ bool WindowProperties::Draw()
 			{
 				ImGui::Text("Texture Size:");
 				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 }, "%i * %i", material->width, material->height);
+				ImGui::TextColored({ 255, 255, 0, 255 },"%i * %i", material->width, material->height);
+				ImGui::Text("Texture Path:");
+				ImGui::SameLine();
+				ImGui::TextColored({ 255, 255, 0, 255 }, ("%i",material->path));
+
+				ImGui::Image((void*)(intptr_t)material->id_texture, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
+
+
+				ImGui::Checkbox("Checker texture", &material->checkered);
 			}
 			
 		}

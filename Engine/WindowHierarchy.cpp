@@ -27,9 +27,18 @@ bool WindowHierarchy::Draw()
 			if (App->scene->GetGameObjects()[i]->GetName() != "root")
 			{
 				ImGui::Selectable(App->scene->GetGameObjects()[i]->GetName().c_str());
+				if (ImGui::IsItemClicked(0))
+				{
+					App->scene->GetGameObjects()[i]->SetFocus(true);
+					for (int j = 0; j < App->scene->GetGameObjects().size(); ++j)
+					{
+						if(j != i)App->scene->GetGameObjects()[j]->SetFocus(false);
+					}
+				}
 			}
 		}
 	}
+	
 	ImGui::End();
 	return true;
 }

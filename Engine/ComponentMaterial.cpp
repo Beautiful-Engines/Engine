@@ -16,12 +16,17 @@ ComponentMaterial::~ComponentMaterial()
 void ComponentMaterial::Texture(ComponentMesh* _component_mesh)
 {
 	if (id_texture > 0) {
-		
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBindBuffer(GL_ARRAY_BUFFER, _component_mesh->id_uv);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-		glBindTexture(GL_TEXTURE_2D, id_texture);
+		if (checkered == false)
+		{
+			glBindTexture(GL_TEXTURE_2D, id_texture);
+		}
+		else
+		{
+			glBindTexture(GL_TEXTURE_2D, 1);
+		}
 	}
 }
