@@ -45,6 +45,8 @@ Primitive::Primitive(PrimitiveType _primitive_type) : GameObject()
 	default:
 		break;
 	}
+
+	SetParent(App->scene->GetGameObjects()[0]);
 	
 }
 
