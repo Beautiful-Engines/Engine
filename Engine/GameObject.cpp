@@ -1,12 +1,14 @@
 #include "Application.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentTransform.h"
 #include "Primitive.h"
 #include "GameObject.h"
 
 
 GameObject::GameObject()
 {
+	new ComponentTransform(this);
 }
 
 GameObject::~GameObject()

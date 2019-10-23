@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleScene.h"
+#include "ComponentTransform.h"
 #include "Primitive.h"
 
 #include "glew/glew.h"
@@ -9,13 +10,35 @@
 #define PAR_SHAPES_IMPLEMENTATION
 #include "Par/par_shapes.h"
 
-Primitive::Primitive(PrimitiveType _primitive_type, uint _subdivisions) : GameObject()
+Primitive::Primitive(PrimitiveType _primitive_type) : GameObject()
 {
-	
+	primitive_type = _primitive_type;
+
 	switch (_primitive_type)
 	{
 	case PrimitiveType::SPHERE:
-		CreateSphere(_subdivisions);
+		CreateSphere(5);
+		break;
+	case PrimitiveType::CUBE:
+		CreateCube();
+		break;
+	case PrimitiveType::TORUS:
+		CreateTorus(10, 20, 0.5f);
+		break;
+	case PrimitiveType::OCTAHEDRON:
+		CreateOctahedron();
+		break;
+	case PrimitiveType::DODECAHEDRON:
+		CreateDodecahedron();
+		break;
+	case PrimitiveType::ICOSAHEDRON:
+		CreateIcosahedron();
+		break;
+	case PrimitiveType::ROCK:
+		CreateRock(5, 5);
+		break;
+	case PrimitiveType::KLEIN_BOTTLE:
+		CreateKleinBottle(20, 20);
 		break;
 	case PrimitiveType::OTHER:
 		break;
@@ -32,10 +55,10 @@ Primitive::~Primitive()
 
 void Primitive::Update()
 {
-	if(shape != nullptr)
-		Draw();
-	if (App->renderer3D->normals)
+	if (shape != nullptr && App->renderer3D->normals)
 		DrawNormals();
+	else if (shape != nullptr)
+		Draw();
 }
 
 void Primitive::Draw()
@@ -99,9 +122,13 @@ void Primitive::GLBuffers()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T) * n_vertices * 3, uv_coords, GL_STATIC_DRAW);
 
 	// normals
-	glGenBuffers(1, &id_normal);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_normal);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) *n_vertices * 3, &normals[0], GL_STATIC_DRAW);
+	if (primitive_type != PrimitiveType::CUBE && primitive_type != PrimitiveType::OCTAHEDRON && primitive_type != PrimitiveType::DODECAHEDRON && primitive_type != PrimitiveType::ICOSAHEDRON)
+	{
+		glGenBuffers(1, &id_normal);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_normal);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) *n_vertices * 3, &normals[0], GL_STATIC_DRAW);
+	}
+	
 }
 
 void Primitive::NormalsCalc()
@@ -206,22 +233,120 @@ void Primitive::SetSubdivisions(const int& _subdivisions)
 void Primitive::CreateSphere(const uint& _subdivisions)
 {
 	std::string name = "Sphere";
-	std::vector<GameObject*> game_object = App->scene->GetGameObjects();
-	uint cont = 1;
-	for (uint i = 0; i < game_object.size(); ++i)
-	{
-		name = name + std::to_string(cont);
-		if (game_object[i] != nullptr && game_object[i]->GetName() == name)
-		{
-			cont++;
-			i = 0;
-		}
-	}
+	std::string namecount = name + "1";
+	namecount = PutFirstName(name, namecount);
 
 	shape = par_shapes_create_subdivided_sphere(_subdivisions);
 	NormalsCalc();
 	GLBuffers();
 	
-	SetName(name);
+	SetName(namecount);
 }
 
+void Primitive::CreateCube()
+{
+	std::string name = "Cube";
+	std::string namecount = name + "1";
+	namecount = PutFirstName(name, namecount);
+
+	shape = par_shapes_create_cube();
+	NormalsCalc();
+	GLBuffers();
+
+	SetName(namecount);
+}
+
+void Primitive::CreateTorus(const uint& slices, const uint& stacks, const float& radius)
+{
+	std::string name = "Torus";
+	std::string namecount = name + "1";
+	namecount = PutFirstName(name, namecount);
+
+	shape = par_shapes_create_torus(slices, stacks, radius);
+	NormalsCalc();
+	GLBuffers();
+
+	SetName(namecount);
+}
+
+void Primitive::CreateOctahedron()
+{
+	std::string name = "Octahedron";
+	std::string namecount = name + "1";
+	namecount = PutFirstName(name, namecount);
+
+	shape = par_shapes_create_octahedron();
+	NormalsCalc();
+	GLBuffers();
+
+	SetName(namecount);
+}
+
+void Primitive::CreateDodecahedron()
+{
+	std::string name = "Dodecahedron";
+	std::string namecount = name + "1";
+	namecount = PutFirstName(name, namecount);
+
+	shape = par_shapes_create_dodecahedron();
+	NormalsCalc();
+	GLBuffers();
+
+	SetName(namecount);
+}
+
+void Primitive::CreateIcosahedron()
+{
+	std::string name = "Icosahedron";
+	std::string namecount = name + "1";
+	namecount = PutFirstName(name, namecount);
+
+	shape = par_shapes_create_icosahedron();
+	NormalsCalc();
+	GLBuffers();
+
+	SetName(namecount);
+}
+
+void Primitive::CreateRock(const uint& _seed, const uint& _subdivisions)
+{
+	std::string name = "Rock";
+	std::string namecount = name + "1";
+	namecount = PutFirstName(name, namecount);
+
+	shape = par_shapes_create_rock(_seed, _subdivisions);
+	NormalsCalc();
+	GLBuffers();
+
+	SetName(namecount);
+}
+
+void Primitive::CreateKleinBottle(const uint& _slices, const uint& _stacks)
+{
+	std::string name = "Klein_Bottle";
+	std::string namecount = name + "1";
+	namecount = PutFirstName(name, namecount);
+
+	shape = par_shapes_create_klein_bottle(_slices, _stacks);
+	NormalsCalc();
+	GLBuffers();
+
+	SetName(namecount);
+}
+
+std::string Primitive::PutFirstName(const std::string& _name, std::string _namecount)
+{
+	std::vector<GameObject*> game_object = App->scene->GetGameObjects();
+	uint count = 1;
+	for (uint i = 0; i < game_object.size(); ++i)
+	{
+		if (game_object[i] != nullptr && game_object[i]->GetName() == _namecount)
+		{
+			count++;
+			_namecount = _name + std::to_string(count);
+			i = 0;
+		}
+	}
+
+	return _namecount;
+}

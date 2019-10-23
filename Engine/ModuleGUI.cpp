@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
+#include "ModuleScene.h"
 #include "ImGui\imgui.h"
 #include "ImGui\imgui_impl_sdl.h"
 #include "ImGui\imgui_impl_opengl3.h"
@@ -15,6 +16,8 @@
 #include "WindowConsole.h"
 #include "WindowPrimitives.h"
 #include "WindowProperties.h"
+
+#include "Primitive.h"
 
 ModuleGUI::ModuleGUI(bool start_enabled) : Module(start_enabled)
 {
@@ -199,7 +202,27 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 		if (ImGui::BeginMenu("GameObject"))
 		{
-			ImGui::Checkbox("3D Objects", &window_primitives->enabled);
+			if (ImGui::BeginMenu("3D Objects"))
+			{
+				if (ImGui::MenuItem("Sphere"))
+					App->scene->AddGameObject(new Primitive(PrimitiveType::SPHERE));
+				if (ImGui::MenuItem("Cube"))
+					App->scene->AddGameObject(new Primitive(PrimitiveType::CUBE));
+				if (ImGui::MenuItem("Torus"))
+					App->scene->AddGameObject(new Primitive(PrimitiveType::TORUS));
+				if (ImGui::MenuItem("Octahedron"))
+					App->scene->AddGameObject(new Primitive(PrimitiveType::OCTAHEDRON));
+				if (ImGui::MenuItem("Dodecahedron"))
+					App->scene->AddGameObject(new Primitive(PrimitiveType::DODECAHEDRON));
+				if (ImGui::MenuItem("Icosahedron"))
+					App->scene->AddGameObject(new Primitive(PrimitiveType::ICOSAHEDRON));
+				if (ImGui::MenuItem("Rock"))
+					App->scene->AddGameObject(new Primitive(PrimitiveType::ROCK));
+				if (ImGui::MenuItem("Klein Bottle"))
+					App->scene->AddGameObject(new Primitive(PrimitiveType::KLEIN_BOTTLE));
+					
+				ImGui::EndMenu();
+			}
 			ImGui::Checkbox("Object Properties", &window_properties->enabled);
 			ImGui::EndMenu();
 		}

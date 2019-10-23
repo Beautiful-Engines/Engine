@@ -33,15 +33,7 @@ bool ModuleScene::Start()
 	CreateGrid();
 
 	GameObject *root = CreateGameObject("root");
-
-	Primitive *sphere = new Primitive(PrimitiveType::SPHERE, 1);
-	sphere->SetParent(root);
-	game_objects.push_back(sphere);
-
-	ComponentTransform *trans = new ComponentTransform(sphere);
-	sphere->AddComponent(trans);
 	
-
 	App->importer->LoadMesh("assets/BakerHouse.fbx");
 	for (uint i = 0; i < game_objects.size(); ++i)
 	{
@@ -96,9 +88,10 @@ GameObject* ModuleScene::CreateGameObject(std::string _name)
 	return game_object;
 }
 
-void ModuleScene::AddGameObject(GameObject* game_object)
+void ModuleScene::AddGameObject(GameObject* _game_object)
 {
-	game_objects.push_back(game_object);
+	_game_object->SetParent(game_objects[0]);
+	game_objects.push_back(_game_object);
 }
 
 const std::vector<GameObject*> ModuleScene::GetGameObjects() const

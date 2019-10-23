@@ -7,6 +7,14 @@
 enum class PrimitiveType
 {
 	SPHERE,
+	CUBE,
+	TORUS,
+	OCTAHEDRON,
+	DODECAHEDRON,
+	ICOSAHEDRON,
+	ROCK,
+	KLEIN_BOTTLE,
+
 	OTHER
 };
 
@@ -15,7 +23,7 @@ typedef struct par_shapes_mesh_s par_shapes_mesh;
 class Primitive : public GameObject
 {
 public:
-	Primitive(PrimitiveType _primitive_type, uint _subdivisions);
+	Primitive(PrimitiveType _primitive_type);
 	virtual ~Primitive();
 
 	void Update();
@@ -35,6 +43,14 @@ private:
 	void NormalsCalc();
 	void RestartBuffers();
 	void CreateSphere(const uint& _subdivisions);
+	void CreateCube();
+	void CreateTorus(const uint& _slices, const uint& _stacks, const float& _radius);
+	void CreateOctahedron();
+	void CreateDodecahedron();
+	void CreateIcosahedron();
+	void CreateRock(const uint& _seed, const uint& _subdivisions);
+	void CreateKleinBottle(const uint& _slices, const uint& _stacks);
+	std::string PutFirstName(const std::string& _name, std::string _namecount);
 
 
 public:
