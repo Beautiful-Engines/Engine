@@ -21,7 +21,6 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Init()
 {
-	// Initialize ImGUi
 	LOG("Creating Scene");
 
 	return true;
@@ -34,12 +33,7 @@ bool ModuleScene::Start()
 
 	GameObject *root = CreateGameObject("root");
 	
-	App->importer->LoadMesh("assets/BakerHouse.fbx");
-	for (uint i = 0; i < game_objects.size(); ++i)
-	{
-		if (game_objects[i]->GetName() == "BakerHouse")
-			game_objects[i]->SetFocus(true);
-	}
+	App->importer->LoadFile("assets/BakerHouse.fbx");
 
 	return true;
 }
@@ -54,11 +48,8 @@ update_status ModuleScene::Update(float dt)
 	if (App->renderer3D->grid)
 		DrawGrid();
 
-	for (uint i = 0; i < game_objects.size(); ++i)
-	{
-		if (game_objects[i]->IsEnabled()) 
-			game_objects[i]->Update();
-	}
+	game_objects[0]->Update();
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -90,7 +81,6 @@ GameObject* ModuleScene::CreateGameObject(std::string _name)
 
 void ModuleScene::AddGameObject(GameObject* _game_object)
 {
-	_game_object->SetParent(game_objects[0]);
 	game_objects.push_back(_game_object);
 }
 

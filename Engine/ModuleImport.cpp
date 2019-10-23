@@ -19,11 +19,12 @@
 #include "DeviL/include/ilu.h"
 #include "DeviL/include/ilut.h"
 
-
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 #pragma comment (lib, "DeviL/lib/DevIL.lib")
 #pragma comment (lib, "DeviL/lib/ILU.lib")
 #pragma comment (lib, "DeviL/lib/ILUT.lib")
+
+
 
 void LogCallback(const char* text, char* data)
 {
@@ -42,7 +43,7 @@ ModuleImport::~ModuleImport()
 {
 }
 
-bool ModuleImport::Start()
+bool ModuleImport::Init()
 {
 	// Stream log messages to Debug window
 	struct aiLogStream stream;
@@ -57,6 +58,10 @@ bool ModuleImport::Start()
 	ilutEnable(ILUT_OPENGL_CONV);
 	ilutRenderer(ILUT_OPENGL);
 
+	return true;
+}
+bool ModuleImport::Start()
+{
 	return true;
 }
 
@@ -85,11 +90,11 @@ bool ModuleImport::LoadFile(const char* _path)
 	App->file_system->SplitFilePath(final_path.c_str(), nullptr, nullptr, &extension);
 	if (extension == "fbx")
 	{
-		LoadMesh(_path);
+		LoadMesh(final_path.c_str());
 	}
 	else if (extension == "png" || extension == "dds")
 	{
-		LoadTexture(_path);
+		LoadTexture(final_path.c_str());
 	}
 
 	return ret;
@@ -105,6 +110,8 @@ bool ModuleImport::LoadMesh(const char* _path)
 	name_path = (name_path.substr(pos + 1)).c_str();
 	pos = name_path.find(".");
 	std::string name_object = name_path.substr(0,pos);
+
+	GameObject *go = App->scene->CreateGameObject(name_object);
 	
 	// Scene
 	const aiScene * scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -114,12 +121,15 @@ bool ModuleImport::LoadMesh(const char* _path)
 	{
 		aiMesh *ai_mesh = nullptr;
 			
-		GameObject *go = App->scene->CreateGameObject(name_object);
-		ComponentMesh *mymesh = new ComponentMesh(go);
-		ComponentTransform *trans = new ComponentTransform(go);
-
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
+			name_object = name_object + std::to_string(i);
+			GameObject *meshgameobject = new GameObject();
+			meshgameobject->SetName(name_object);
+			meshgameobject->SetParent(go);
+			App->scene->AddGameObject(meshgameobject);
+			ComponentMesh *mymesh = new ComponentMesh(meshgameobject);
+
 			ai_mesh = scene->mMeshes[i];
 
 			mymesh->n_vertices = ai_mesh->mNumVertices;
@@ -193,6 +203,17 @@ bool ModuleImport::LoadMesh(const char* _path)
 				}
 			}
 
+			// Materials
+			if (ai_mesh->mMaterialIndex >= 0)
+			{
+				aiString texture_path;
+				scene->mMaterials[ai_mesh->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, 0, &texture_path);
+				if (texture_path.length > 0)
+				{
+					LoadTexture(texture_path.C_Str(), meshgameobject);
+				}
+			}
+
 			GLBuffer(mymesh);
 
 			ai_mesh = nullptr;
@@ -209,7 +230,7 @@ bool ModuleImport::LoadMesh(const char* _path)
 	return ret;
 }
 
-bool ModuleImport::LoadTexture(const char* _path)
+bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 {
 	bool ret = true;
 
@@ -220,45 +241,72 @@ bool ModuleImport::LoadTexture(const char* _path)
 
 	ComponentMaterial *component_material = nullptr;
 
-	std::vector<GameObject*> game_objects = App->scene->GetGameObjects();
-	for (uint i = 0; i < game_objects.size(); ++i)
+	if (go_fromfbx != nullptr)
 	{
-		if (game_objects[i]->IsFocused())
+		component_material = new ComponentMaterial(go_fromfbx);
+		uint id_tex;
+		ilGenImages(1, &id_tex);
+		ilBindImage(id_tex);
+
+		std::string final_path = ASSETS_FOLDER + std::string(_path);
+		if (ilLoadImage(final_path.c_str()))
 		{
-			component_material = new ComponentMaterial(game_objects[i]);
-			uint id_tex;
+			component_material->id_texture = ilutGLBindTexImage();
+			component_material->path = _path;
+			component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
+			component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
 
-			ilGenImages(1, &id_tex);
-			ilBindImage(id_tex);
-
-			if (ilLoad(IL_DDS, _path))
-			{
-				component_material->id_texture = ilutGLBindTexImage();
-				component_material->path = _path;
-				component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
-				component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-			}
-			else if (ilLoadImage(_path))
-			{
-				component_material->id_texture = ilutGLBindTexImage();
-				component_material->path = _path;
-				component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
-				component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-				LOG("Added %s to %s", name_path.c_str(), game_objects[i]->GetName().c_str());
-			}
-			else
-			{
-				auto error = ilGetError();
-				LOG("Error loading texture %s. Error: %s", name_path, ilGetString(error));
-				ret = false;
-			}
-
-			ilDeleteImages(1, &id_tex);
+			LOG("Added %s to %s", name_path.c_str(), go_fromfbx->GetName().c_str());
 		}
-			
+		else
+		{
+			auto error = ilGetError();
+			LOG("Error loading texture %s. Error: %s", name_path.c_str(), ilGetString(error));
+			ret = false;
+		}
+
+		ilDeleteImages(1, &id_tex);
 	}
+	else
+	{
+		std::vector<GameObject*> game_objects = App->scene->GetGameObjects();
+
+		for (uint i = 0; i < game_objects.size(); ++i)
+		{
+			if (game_objects[i]->IsFocused())
+			{
+				std::vector<GameObject*> children_game_objects = game_objects[i]->GetChildren();
+
+				for (uint j = 0; j < children_game_objects.size(); ++j)
+				{
+					component_material = new ComponentMaterial(children_game_objects[j]);
+					uint id_tex;
+
+					ilGenImages(1, &id_tex);
+					ilBindImage(id_tex);
+					if (ilLoadImage(_path))
+					{
+						component_material->id_texture = ilutGLBindTexImage();
+						component_material->path = _path;
+						component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
+						component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+						LOG("Added %s to %s", name_path.c_str(), game_objects[i]->GetName().c_str());
+					}
+					else
+					{
+						auto error = ilGetError();
+						LOG("Error loading texture %s. Error: %s", name_path, ilGetString(error));
+						ret = false;
+					}
+
+					ilDeleteImages(1, &id_tex);
+				}
+			}
+		}
+	}
+	
+	
 
 	return ret;
 }

@@ -34,7 +34,6 @@ void GameObject::Update()
 {
 	std::vector<Component*>::iterator iterator_component = components.begin();
 	
-	
 	for (; iterator_component != components.end(); ++iterator_component) {
 		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MESH)
 		{
@@ -43,6 +42,19 @@ void GameObject::Update()
 			mesh->Update();
 		}
 	}
+
+	if (children.size() > 0)
+	{
+		std::vector<GameObject*>::iterator iterator_go = children.begin();
+
+		for (; iterator_go != children.end(); ++iterator_go) {
+			if (*iterator_go != nullptr && (*iterator_go)->IsEnabled())
+			{
+				(*iterator_go)->Update();
+			}
+		}
+	}
+	
 
 }
 
@@ -98,6 +110,7 @@ const GameObject* GameObject::GetParent() const
 void GameObject::SetParent(GameObject* game_object)
 {
 	parent = game_object;
+	game_object->children.push_back(this);
 }
 
 const std::vector<GameObject*> GameObject::GetChildren() const
