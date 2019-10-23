@@ -1,4 +1,6 @@
+#include "Application.h"
 #include "GameObject.h"
+#include "ModuleImport.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 
@@ -13,8 +15,11 @@ ComponentMaterial::~ComponentMaterial()
 	glDeleteBuffers(1, &id_texture);
 }
 
-void ComponentMaterial::Texture(ComponentMesh* _component_mesh)
+void ComponentMaterial::DrawTexture(ComponentMesh* _component_mesh)
 {
+	if (checkered)
+	{
+	}
 	if (id_texture > 0) {
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 

@@ -212,6 +212,10 @@ bool ModuleImport::LoadMesh(const char* _path)
 				{
 					LoadTexture(texture_path.C_Str(), meshgameobject);
 				}
+				else
+				{
+					DefaultTexture(meshgameobject);
+				}
 			}
 
 			GLBuffer(mymesh);
@@ -308,6 +312,37 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 	}
 
 	return ret;
+}
+
+void ModuleImport::DefaultTexture(GameObject* go_texturedefault)
+{
+	ComponentMaterial *component_material = new ComponentMaterial(go_texturedefault);
+
+	component_material->path = "DefaultTexture";
+	component_material->width = 128;
+	component_material->height = 128;
+	GLubyte checkImage[128][128][4];
+	for (int i = 0; i < 128; i++)
+	{
+		for (int j = 0; j < 128; j++)
+		{
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &component_material->id_texture);
+	glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 }
 
 void ModuleImport::GLBuffer(ComponentMesh *mesh)

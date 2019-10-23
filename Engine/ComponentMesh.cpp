@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleImport.h"
 #include "GameObject.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
@@ -66,7 +67,7 @@ void ComponentMesh::Draw(ComponentMaterial *component_material)
 
 	if (component_material != nullptr)
 	{
-		component_material->Texture(this);
+		component_material->DrawTexture(this);
 	}
 
 	glDrawElements(GL_TRIANGLES, n_indexes, GL_UNSIGNED_INT, NULL);
