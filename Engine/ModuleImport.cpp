@@ -252,7 +252,7 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 		if (ilLoadImage(final_path.c_str()))
 		{
 			component_material->id_texture = ilutGLBindTexImage();
-			component_material->path = final_path.c_str();
+			component_material->path = final_path;
 			component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
 			component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
 
@@ -288,7 +288,7 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 					if (ilLoadImage(final_path.c_str()))
 					{
 						component_material->id_texture = ilutGLBindTexImage();
-						component_material->path = final_path.c_str();
+						component_material->path = final_path;
 						component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
 						component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
 

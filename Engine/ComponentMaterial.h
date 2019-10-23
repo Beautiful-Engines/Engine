@@ -17,7 +17,7 @@ public:
 	uint width = 0;
 	uint height = 0;
 	bool checkered = false;
-	const char* path;
+	std::string path;
 
 };
 

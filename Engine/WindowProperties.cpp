@@ -121,7 +121,7 @@ bool WindowProperties::Draw()
 					ImGui::TextColored({ 255, 255, 0, 255 },"%i * %i", material->width, material->height);
 					ImGui::Text("Texture Path:");
 					ImGui::SameLine();
-					ImGui::TextColored({ 255, 255, 0, 255 }, ("%s", material->path));
+					ImGui::TextColored({ 255, 255, 0, 255 }, ("%s", material->path.c_str()));
 
 					ImGui::Image((void*)(intptr_t)material->id_texture, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
 
