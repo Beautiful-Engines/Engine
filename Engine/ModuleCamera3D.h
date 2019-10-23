@@ -12,12 +12,15 @@ public:
 
 	bool Start();
 	update_status Update(float dt);
+	void Focus(float speed);
 	bool CleanUp();
 
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
+	bool focus = false;
+	vec3 newPos = { 0, 0, 0 };
 
 private:
 

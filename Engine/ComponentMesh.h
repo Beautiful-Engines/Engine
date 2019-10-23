@@ -2,6 +2,7 @@
 #define __ComponentMesh_H__
 
 #include "Component.h"
+#include "MathGeoLib\include\Math\float3.h"
 class ComponentMaterial;
 
 class ComponentMesh : public Component
@@ -11,6 +12,9 @@ public:
 	~ComponentMesh();
 
 	void Update();
+
+	float3 GetMinPoint();
+	float3 GetMaxPoint();
 
 	void Draw(ComponentMaterial *component_material);
 	void DrawNormals();

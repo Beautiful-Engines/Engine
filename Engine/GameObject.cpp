@@ -1,7 +1,5 @@
 #include "Application.h"
-#include "ComponentMesh.h"
 #include "ComponentMaterial.h"
-#include "ComponentTransform.h"
 #include "Primitive.h"
 #include "GameObject.h"
 
@@ -127,6 +125,18 @@ ComponentTransform * GameObject::GetTransform()
 			return (ComponentTransform*)this->GetComponents()[i];
 		}
 	}
+}
+
+ComponentMesh * GameObject::GetMesh()
+{
+	for (uint i = 0; i < this->GetComponents().size(); ++i)
+	{
+		if (this->GetComponents()[i]->GetType() == ComponentType::MESH)
+		{
+			return (ComponentMesh*)this->GetComponents()[i];
+		}
+	}
+	return false;
 }
 
 const bool GameObject::IsFocused() const

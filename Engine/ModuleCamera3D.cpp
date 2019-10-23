@@ -3,6 +3,7 @@
 #include "ModuleScene.h"
 #include "GameObject.h"
 #include "ComponentTransform.h"
+#include "ComponentMesh.h"
 #include "ModuleCamera3D.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
@@ -42,8 +43,7 @@ bool ModuleCamera3D::CleanUp()
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
-
-	vec3 newPos(0, 0, 0);
+	newPos = { 0, 0, 0 };
 	float speed = 25.0f * dt;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = speed * 2;
@@ -96,9 +96,25 @@ update_status ModuleCamera3D::Update(float dt)
 		Position = Reference + Z * length(Position);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	{
+		for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
+		{
+			if (App->scene->GetGameObjects()[i]->IsFocused())
+			{
+				LookAt({ App->scene->GetGameObjects()[i]->GetTransform()->local_position.x, App->scene->GetGameObjects()[i]->GetTransform()->local_position.y, App->scene->GetGameObjects()[i]->GetTransform()->local_position.z });
+			}
+		}
+		focus = true;
+	}
+	if (focus)
+	{
+		Focus(speed);
+	}
+
 	Position += newPos;
 	Reference += newPos;
-
+	
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
 		for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
@@ -146,7 +162,29 @@ update_status ModuleCamera3D::Update(float dt)
 
 	return UPDATE_CONTINUE;
 }
+void ModuleCamera3D::Focus(float speed)
+{
+	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
+	{
+		if (App->scene->GetGameObjects()[i]->IsFocused() && App->scene->GetGameObjects()[i]->GetMesh())
+		{
+			float go_height = App->scene->GetGameObjects()[i]->GetMesh()->GetMaxPoint().y - App->scene->GetGameObjects()[i]->GetMesh()->GetMinPoint().y;
 
+			float3 end_position = { Reference.x, Reference.y, Reference.z };
+			float3 position = { Position.x, Position.y, Position.z };
+			float distance = position.Distance({ App->scene->GetGameObjects()[i]->GetTransform()->local_position.x, App->scene->GetGameObjects()[i]->GetTransform()->local_position.y, App->scene->GetGameObjects()[i]->GetTransform()->local_position.z });
+			speed = speed * distance;
+			if (go_height*7 > distance) {
+				focus = false;
+			}
+			else newPos -= Z * speed;
+		}
+		else
+		{
+			focus = false;
+		}
+	}
+}
 // -----------------------------------------------------------------
 void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)
 {

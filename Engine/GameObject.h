@@ -4,6 +4,7 @@
 #include <vector>
 #include "Component.h"
 #include "ComponentTransform.h"
+#include "ComponentMesh.h"
 
 class GameObject
 {
@@ -29,6 +30,8 @@ public:
 	const std::vector<GameObject*> GetChildren() const;
 
 	ComponentTransform* GetTransform();
+
+	ComponentMesh* GetMesh();
 
 	const bool IsFocused() const;
 	void SetFocus(bool focus);
