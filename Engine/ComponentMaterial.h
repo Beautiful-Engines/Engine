@@ -10,7 +10,7 @@ public:
 	ComponentMaterial(GameObject* _game_object);
 	~ComponentMaterial();
 
-	void Texture(ComponentMesh* _component_mesh);
+	void DrawTexture(ComponentMesh* _component_mesh);
 
 public:
 	uint id_texture = 0u;  

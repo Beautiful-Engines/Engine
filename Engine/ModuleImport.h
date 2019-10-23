@@ -20,6 +20,7 @@ public:
 	bool LoadFile(const char* path);
 	bool LoadMesh(const char* path);
 	bool LoadTexture(const char* path, GameObject* go_fromfbx = nullptr);
+	void DefaultTexture(GameObject* go_texturedefault);
 	void GLBuffer(ComponentMesh *mesh);
 
 	std::string final_path = "";
