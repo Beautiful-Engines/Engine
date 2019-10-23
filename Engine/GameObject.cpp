@@ -118,6 +118,17 @@ const std::vector<GameObject*> GameObject::GetChildren() const
 	return children;
 }
 
+ComponentTransform * GameObject::GetTransform()
+{
+	for (uint i = 0; i < this->GetComponents().size(); ++i)
+	{
+		if (this->GetComponents()[i]->GetType() == ComponentType::TRANSFORM)
+		{
+			return (ComponentTransform*)this->GetComponents()[i];
+		}
+	}
+}
+
 const bool GameObject::IsFocused() const
 {
 	return focus;

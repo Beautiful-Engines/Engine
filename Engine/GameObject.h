@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Component.h"
+#include "ComponentTransform.h"
 
 class GameObject
 {
@@ -26,6 +27,8 @@ public:
 	const GameObject* GetParent() const;
 	void SetParent(GameObject* game_object);
 	const std::vector<GameObject*> GetChildren() const;
+
+	ComponentTransform* GetTransform();
 
 	const bool IsFocused() const;
 	void SetFocus(bool focus);
