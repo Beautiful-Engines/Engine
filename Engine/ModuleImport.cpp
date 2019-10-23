@@ -238,6 +238,7 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 	std::string name_path = _path;
 	uint pos = name_path.find_last_of("\\/");
 	name_path = (name_path.substr(pos + 1)).c_str();
+	final_path = ASSETS_FOLDER + std::string(_path);
 
 	ComponentMaterial *component_material = nullptr;
 
@@ -247,12 +248,11 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 		uint id_tex;
 		ilGenImages(1, &id_tex);
 		ilBindImage(id_tex);
-
-		std::string final_path = ASSETS_FOLDER + std::string(_path);
+		
 		if (ilLoadImage(final_path.c_str()))
 		{
 			component_material->id_texture = ilutGLBindTexImage();
-			component_material->path = _path;
+			component_material->path = final_path.c_str();
 			component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
 			component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
 
@@ -284,10 +284,11 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 
 					ilGenImages(1, &id_tex);
 					ilBindImage(id_tex);
-					if (ilLoadImage(_path))
+					final_path = _path;
+					if (ilLoadImage(final_path.c_str()))
 					{
 						component_material->id_texture = ilutGLBindTexImage();
-						component_material->path = _path;
+						component_material->path = final_path.c_str();
 						component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
 						component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
 
@@ -305,8 +306,6 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 			}
 		}
 	}
-	
-	
 
 	return ret;
 }

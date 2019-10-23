@@ -22,6 +22,8 @@ public:
 	bool LoadTexture(const char* path, GameObject* go_fromfbx = nullptr);
 	void GLBuffer(ComponentMesh *mesh);
 
+	std::string final_path = "";
+
 };
 
 
