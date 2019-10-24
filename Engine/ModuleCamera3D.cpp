@@ -96,7 +96,7 @@ update_status ModuleCamera3D::Update(float dt)
 		Position = Reference + Z * length(Position);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
 		for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
 		{
