@@ -70,8 +70,15 @@ bool WindowProperties::Draw()
 	if (ImGui::Begin("Properties", &enabled, aboutFlags))
 	{
 		ImGui::SetWindowFontScale(1);
+		
 		if (trans != nullptr)
 		{
+			ImGui::Checkbox("Hide", &go->hide);
+			if (go->hide)
+				go->Disable();
+			else
+				go->Enable();
+
 			if (ImGui::CollapsingHeader("Transform"))
 			{
 			

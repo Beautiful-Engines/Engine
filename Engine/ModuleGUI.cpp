@@ -120,11 +120,6 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 		if (ImGui::BeginMenu("Edit"))
 		{
-			//TODO put strings at xml file
-			if (ImGui::MenuItem("Cut", "Ctrl+X"))	{ /*TODO put cut function*/ }
-			if (ImGui::MenuItem("Copy", "Ctrl+C"))	{ /*TODO put copy function*/}
-			if (ImGui::MenuItem("Paste", "Ctrl+V"))	{ /*TODO put paste function*/}
-
 
 			if (ImGui::BeginMenu("Render Mode"))
 			{
@@ -194,11 +189,6 @@ update_status ModuleGUI::CreateMainMenuBar()
 			}
 			ImGui::EndMenu();
 		}
-		
-		if (ImGui::BeginMenu("Assets"))
-		{
-			ImGui::EndMenu();
-		}
 
 		if (ImGui::BeginMenu("GameObject"))
 		{
@@ -224,11 +214,6 @@ update_status ModuleGUI::CreateMainMenuBar()
 				ImGui::EndMenu();
 			}
 			ImGui::Checkbox("Object Properties", &window_properties->enabled);
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Component"))
-		{
 			ImGui::EndMenu();
 		}
 

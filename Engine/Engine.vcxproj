@@ -147,7 +147,6 @@
     <ClInclude Include="ModuleImport.h" />
     <ClInclude Include="Par\par_shapes.h" />
     <ClInclude Include="Primitive.h" />
-    <ClInclude Include="Texture.h" />
     <ClInclude Include="WindowAbout.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
@@ -246,7 +245,6 @@
     <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImport.cpp" />
     <ClCompile Include="Primitive.cpp" />
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="WindowAbout.cpp" />
     <ClCompile Include="WindowConfig.cpp" />
     <ClCompile Include="WindowConsole.cpp" />

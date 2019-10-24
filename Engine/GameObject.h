@@ -36,6 +36,7 @@ public:
 	const bool IsFocused() const;
 	void SetFocus(bool focus);
 
+	bool hide = false;
 
 private:
 	bool enabled = true;

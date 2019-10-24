@@ -276,35 +276,19 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 	}
 	else if(App->scene->GetSelected() != nullptr)
 	{
-		std::vector<GameObject*> children_game_objects = App->scene->GetSelected()->GetChildren();
-
-		for (uint j = 0; j < children_game_objects.size(); ++j)
+		if (App->scene->GetSelected()->GetChildren().size() > 0)
 		{
-			
-			uint id_tex;
+			std::vector<GameObject*> children_game_objects = App->scene->GetSelected()->GetChildren();
 
-			ilGenImages(1, &id_tex);
-			ilBindImage(id_tex);
-			final_path = _path;
-			if (ilLoadImage(final_path.c_str()))
+
+			for (uint j = 0; j < children_game_objects.size(); ++j)
 			{
-				component_material = new ComponentMaterial(children_game_objects[j]);
-				component_material->id_texture = ilutGLBindTexImage();
-				component_material->path = final_path;
-				component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
-				component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
-				children_game_objects[j]->GetMesh()->id_texture = component_material->id_texture;
-
-				LOG("Added %s to %s", name_path.c_str(), App->scene->GetSelected()->GetName().c_str());
+				LoadTexture(name_path.c_str(), children_game_objects[j]);
 			}
-			else
-			{
-				auto error = ilGetError();
-				LOG("Error loading texture %s. Error: %s", name_path, ilGetString(error));
-				ret = false;
-			}
-
-			ilDeleteImages(1, &id_tex);
+		}
+		else
+		{
+			LoadTexture(name_path.c_str(), App->scene->GetSelected());
 		}
 	}
 

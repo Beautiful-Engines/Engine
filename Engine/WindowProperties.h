@@ -9,6 +9,7 @@ public:
 	WindowProperties();
 	~WindowProperties();
 	bool Draw();
+
 };
 
 #endif
