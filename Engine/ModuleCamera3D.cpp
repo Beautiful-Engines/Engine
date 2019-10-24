@@ -98,15 +98,19 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
-		LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
-		if (App->scene->GetSelected()->GetMesh())
+		if (App->scene->GetSelected() != nullptr)
 		{
-			focus = true;
+			LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
+			if (App->scene->GetSelected()->GetMesh())
+			{
+				focus = true;
+			}
+			else
+			{
+				focus = false;
+			}
 		}
-		else
-		{
-			focus = false;
-		}
+		
 	}
 	if (focus)
 	{
