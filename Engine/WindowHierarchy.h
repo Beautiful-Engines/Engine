@@ -15,7 +15,7 @@ public:
 
 	void DrawNode(GameObject * go);
 
-	int node_iterator = -1;
+	int select_iterator = -1;
 private:
 
 };

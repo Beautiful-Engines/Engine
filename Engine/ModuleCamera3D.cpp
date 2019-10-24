@@ -163,6 +163,8 @@ update_status ModuleCamera3D::Update(float dt)
 }
 void ModuleCamera3D::Focus(float speed)
 {
+	int go_height_ratio = 4;
+	int distance_ratio = 10;
 	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
 	{
 		if (App->scene->GetGameObjects()[i]->IsFocused() && App->scene->GetGameObjects()[i]->GetMesh())
@@ -173,14 +175,14 @@ void ModuleCamera3D::Focus(float speed)
 			float3 position = { Position.x, Position.y, Position.z };
 			float distance = position.Distance({ App->scene->GetGameObjects()[i]->GetTransform()->local_position.x, App->scene->GetGameObjects()[i]->GetTransform()->local_position.y, App->scene->GetGameObjects()[i]->GetTransform()->local_position.z });
 			speed = speed * distance;
-			if (go_height * 4 < distance - distance / 10) {
+			if (go_height * go_height_ratio < distance - distance / distance_ratio) {
 				newPos -= Z * speed;
 			}
-			else if (go_height * 4 > distance + distance / 10)
+			else if (go_height * go_height_ratio > distance + distance / distance_ratio)
 			{
-				newPos += Z * speed / 2;
+				newPos += Z * speed;
 			}
-			else if (go_height * 4 < distance + distance / 10 && go_height * 4 > distance - distance / 10)
+			else if (go_height * go_height_ratio < distance + distance / distance_ratio && go_height * go_height_ratio > distance - distance / distance_ratio)
 			{
 				focus = false;
 			}

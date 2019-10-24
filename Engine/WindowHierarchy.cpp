@@ -43,7 +43,7 @@ bool WindowHierarchy::Draw()
 
 	ImGui::Begin("Hierarchy");
 
-	node_iterator = 0;
+	select_iterator = 0;
 
 	for (int i = 0; i < App->scene->GetGameObjects()[0]->GetChildren().size(); i++)
 	{
@@ -61,17 +61,17 @@ void WindowHierarchy::DrawNode(GameObject * go)
 	static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 	static int selection_mask = (1 << 2);
 	static int node_clicked = -1;
-	node_iterator++;
+	select_iterator++;
 
 	ImGuiTreeNodeFlags node_flags = base_flags;
-	const bool is_selected = (selection_mask & (1 << node_iterator)) != 0;
+	const bool is_selected = (selection_mask & (1 << select_iterator)) != 0;
 	if (is_selected)
 		node_flags |= ImGuiTreeNodeFlags_Selected;
 	if (go->GetChildren().size() > 0)
 	{
 		bool node_open = ImGui::TreeNodeEx(go->GetName().c_str(), node_flags);
 		if (ImGui::IsItemClicked()) {
-			node_clicked = node_iterator;
+			node_clicked = select_iterator;
 			App->scene->SetSelected(go);
 			App->scene->ChangeSelected(go);
 		}
@@ -88,7 +88,7 @@ void WindowHierarchy::DrawNode(GameObject * go)
 		node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
 		ImGui::TreeNodeEx(go->GetName().c_str(), node_flags);
 		if (ImGui::IsItemClicked()) {
-			node_clicked = node_iterator;
+			node_clicked = select_iterator;
 			App->scene->SetSelected(go);
 			App->scene->ChangeSelected(go);
 		}
