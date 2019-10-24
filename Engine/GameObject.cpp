@@ -52,8 +52,6 @@ void GameObject::Update()
 			}
 		}
 	}
-	
-
 }
 
 void GameObject::Enable()

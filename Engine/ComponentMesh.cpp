@@ -52,6 +52,8 @@ void ComponentMesh::Update()
 				break;
 			else if (checkered && component_material->id_texture == this->id_default_texture)
 				break;
+			else
+				component_material = nullptr;
 		}
 	}
 

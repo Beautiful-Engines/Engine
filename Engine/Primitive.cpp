@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleScene.h"
+#include "ModuleImport.h"
 #include "ComponentTransform.h"
 #include "Primitive.h"
 
@@ -185,6 +186,27 @@ void Primitive::NormalsCalc()
 		}*/
 	}
 
+	AddToMesh();
+
+}
+
+void Primitive::AddToMesh()
+{
+	ComponentMesh* primitive_mesh = new ComponentMesh(this);
+	primitive_mesh->id_index = id_index;
+	primitive_mesh->n_indexes = n_indexes;
+	primitive_mesh->indexes = indexes;
+	primitive_mesh->id_vertex = id_vertex;
+	primitive_mesh->n_vertices = n_vertices;
+	primitive_mesh->id_normal = id_normal;
+	primitive_mesh->normals = normals;
+	primitive_mesh->id_uv = id_uv;
+	primitive_mesh->n_uv = n_uv;
+	primitive_mesh->uv_coords = uv_coords;
+	primitive_mesh->face_center_point = face_center_point;
+	primitive_mesh->face_normal = face_normal;
+
+	App->importer->DefaultTexture(this);
 }
 
 void Primitive::RestartBuffers()
@@ -220,9 +242,10 @@ void Primitive::SetSubdivisions(const int& _subdivisions)
 	switch (primitive_type)
 	{
 	case PrimitiveType::SPHERE:
-		par_shapes_create_subdivided_sphere(_subdivisions);
+		CreateSphere(_subdivisions);
 		break;
-	case PrimitiveType::OTHER:
+	case PrimitiveType::ROCK:
+		CreateRock(5, _subdivisions);
 		break;
 	default:
 		break;

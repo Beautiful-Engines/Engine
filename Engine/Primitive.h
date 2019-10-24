@@ -41,6 +41,7 @@ private:
 
 	void GLBuffers();
 	void NormalsCalc();
+	void AddToMesh();
 	void RestartBuffers();
 	void CreateSphere(const uint& _subdivisions);
 	void CreateCube();
@@ -66,6 +67,7 @@ public:
 	aiVector3D *normals;
 
 	uint id_uv = 0u;
+	uint n_uv = 0u;
 	float *uv_coords = nullptr;
 
 	float *face_center_point = nullptr;
