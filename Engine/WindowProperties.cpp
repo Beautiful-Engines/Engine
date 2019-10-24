@@ -30,13 +30,8 @@ bool WindowProperties::Draw()
 	ComponentMesh *mesh = nullptr;
 	ComponentMaterial *material = nullptr;
 
-	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
-	{
-		if (App->scene->GetGameObjects()[i]->IsFocused())
-		{
-			go = App->scene->GetGameObjects()[i];
-		}
-	}
+
+	go = App->scene->GetSelected();
 
 	if (go != nullptr)
 	{

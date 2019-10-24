@@ -98,14 +98,15 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
-		for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
+		LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
+		if (App->scene->GetSelected()->GetMesh())
 		{
-			if (App->scene->GetGameObjects()[i]->IsFocused())
-			{
-				LookAt({ App->scene->GetGameObjects()[i]->GetTransform()->local_position.x, App->scene->GetGameObjects()[i]->GetTransform()->local_position.y, App->scene->GetGameObjects()[i]->GetTransform()->local_position.z });
-			}
+			focus = true;
 		}
-		focus = true;
+		else
+		{
+			focus = false;
+		}
 	}
 	if (focus)
 	{
@@ -117,11 +118,7 @@ update_status ModuleCamera3D::Update(float dt)
 	
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
-		for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
-		{
-			if (App->scene->GetGameObjects()[i]->IsFocused())
-			{
-				LookAt({ App->scene->GetGameObjects()[i]->GetTransform()->local_position.x, App->scene->GetGameObjects()[i]->GetTransform()->local_position.y, App->scene->GetGameObjects()[i]->GetTransform()->local_position.z });
+				LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
 				
 				int dx = -App->input->GetMouseXMotion();
 				int dy = -App->input->GetMouseYMotion();
@@ -154,8 +151,6 @@ update_status ModuleCamera3D::Update(float dt)
 				}
 
 				Position = Reference + Z * length(Position);
-			}
-		}
 	}
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
@@ -174,20 +169,17 @@ void ModuleCamera3D::Focus(float speed)
 			float3 position = { Position.x, Position.y, Position.z };
 			float distance = position.Distance({ App->scene->GetGameObjects()[i]->GetTransform()->local_position.x, App->scene->GetGameObjects()[i]->GetTransform()->local_position.y, App->scene->GetGameObjects()[i]->GetTransform()->local_position.z });
 			speed = speed * distance;
-			if (go_height*4 > distance - distance / 10) {
-				focus = false;
+			if (go_height * 4 < distance - distance / 10) {
+				newPos -= Z * speed;
 			}
-			else newPos -= Z * speed;
-			if (go_height*4 < distance + distance / 10)
+			else if (go_height * 4 > distance + distance / 10)
+			{
+				newPos += Z * speed / 2;
+			}
+			else if (go_height * 4 < distance + distance / 10 && go_height * 4 > distance - distance / 10)
 			{
 				focus = false;
 			}
-			else newPos += Z * speed;
-			
-		}
-		else
-		{
-			focus = false;
 		}
 	}
 }

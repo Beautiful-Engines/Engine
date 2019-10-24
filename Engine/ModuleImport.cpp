@@ -277,11 +277,11 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 	{
 		std::vector<GameObject*> game_objects = App->scene->GetGameObjects();
 
-		for (uint i = 0; i < game_objects.size(); ++i)
+		/*for (uint i = 0; i < game_objects.size(); ++i)
 		{
 			if (game_objects[i]->IsFocused())
-			{
-				std::vector<GameObject*> children_game_objects = game_objects[i]->GetChildren();
+			{*/
+				std::vector<GameObject*> children_game_objects = App->scene->GetSelected()->GetChildren();
 
 				for (uint j = 0; j < children_game_objects.size(); ++j)
 				{
@@ -299,7 +299,7 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 						component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
 						children_game_objects[j]->GetMesh()->id_texture = component_material->id_texture;
 
-						LOG("Added %s to %s", name_path.c_str(), game_objects[i]->GetName().c_str());
+						LOG("Added %s to %s", name_path.c_str(), App->scene->GetSelected()->GetName().c_str());
 					}
 					else
 					{
@@ -310,8 +310,8 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 
 					ilDeleteImages(1, &id_tex);
 				}
-			}
-		}
+		/*	}
+		}*/
 	}
 
 	return ret;
