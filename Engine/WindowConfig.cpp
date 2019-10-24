@@ -4,6 +4,7 @@
 #include "ModuleInput.h"
 #include "ModuleGUI.h"
 #include "WindowConfig.h"
+#include "ModuleFileSystem.h"
 
 #include "ImGui\imgui_stdlib.h"
 
@@ -99,6 +100,7 @@ bool WindowConfig::Draw()
 		}
 		if (ImGui::CollapsingHeader("File System"))
 		{
+			ImGui::TextColored({ 255, 255, 0, 255 }, "%s", App->file_system->GetBasePath());
 		}
 		if (ImGui::CollapsingHeader("Input"))
 		{
