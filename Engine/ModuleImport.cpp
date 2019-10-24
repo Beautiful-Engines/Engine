@@ -249,13 +249,14 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 
 	if (go_fromfbx != nullptr)
 	{
-		component_material = new ComponentMaterial(go_fromfbx);
+		
 		uint id_tex;
 		ilGenImages(1, &id_tex);
 		ilBindImage(id_tex);
 		
 		if (ilLoadImage(final_path.c_str()))
 		{
+			component_material = new ComponentMaterial(go_fromfbx);
 			component_material->id_texture = ilutGLBindTexImage();
 			component_material->path = final_path;
 			component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
@@ -273,13 +274,13 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 
 		ilDeleteImages(1, &id_tex);
 	}
-	else
+	else if(App->scene->GetSelected() != nullptr)
 	{
 		std::vector<GameObject*> children_game_objects = App->scene->GetSelected()->GetChildren();
 
 		for (uint j = 0; j < children_game_objects.size(); ++j)
 		{
-			component_material = new ComponentMaterial(children_game_objects[j]);
+			
 			uint id_tex;
 
 			ilGenImages(1, &id_tex);
@@ -287,6 +288,7 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 			final_path = _path;
 			if (ilLoadImage(final_path.c_str()))
 			{
+				component_material = new ComponentMaterial(children_game_objects[j]);
 				component_material->id_texture = ilutGLBindTexImage();
 				component_material->path = final_path;
 				component_material->width = ilGetInteger(IL_IMAGE_WIDTH);

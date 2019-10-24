@@ -32,7 +32,6 @@ bool ModuleScene::Start()
 	CreateGrid();
 
 	GameObject *root = CreateGameObject("root");
-	//root->SetFocus(true);
 	App->importer->LoadFile("assets/BakerHouse.fbx");
 
 	return true;
