@@ -211,6 +211,7 @@ bool ModuleImport::LoadMesh(const char* _path)
 				if (texture_path.length > 0)
 				{
 					LoadTexture(texture_path.C_Str(), meshgameobject);
+					DefaultTexture(meshgameobject);
 				}
 				else
 				{
@@ -259,6 +260,7 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 			component_material->path = final_path;
 			component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
 			component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
+			go_fromfbx->GetMesh()->id_texture = component_material->id_texture;
 
 			LOG("Added %s to %s", name_path.c_str(), go_fromfbx->GetName().c_str());
 		}
@@ -295,6 +297,7 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 						component_material->path = final_path;
 						component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
 						component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
+						children_game_objects[j]->GetMesh()->id_texture = component_material->id_texture;
 
 						LOG("Added %s to %s", name_path.c_str(), game_objects[i]->GetName().c_str());
 					}
@@ -342,6 +345,8 @@ void ModuleImport::DefaultTexture(GameObject* go_texturedefault)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	go_texturedefault->GetMesh()->id_default_texture = component_material->id_texture;
 
 }
 

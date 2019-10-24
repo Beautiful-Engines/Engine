@@ -61,6 +61,10 @@ bool WindowProperties::Draw()
 			if (go->GetComponents()[i]->GetType() == ComponentType::MATERIAL)
 			{
 				material = (ComponentMaterial*)go->GetComponents()[i];
+				if (!mesh->checkered && material->id_texture == mesh->id_texture)
+					break;
+				else if (mesh->checkered && material->id_texture == mesh->id_default_texture)
+					break;
 			}
 		}
 	}
@@ -126,7 +130,7 @@ bool WindowProperties::Draw()
 					ImGui::Image((void*)(intptr_t)material->id_texture, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
 
 
-					ImGui::Checkbox("Checker texture", &material->checkered);
+					ImGui::Checkbox("Checker texture", &mesh->checkered);
 			}
 		}
 	}

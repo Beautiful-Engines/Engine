@@ -48,6 +48,10 @@ void ComponentMesh::Update()
 		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MATERIAL)
 		{
 			component_material = (ComponentMaterial*)*iterator_component;
+			if (!checkered && component_material->id_texture == this->id_texture)
+				break;
+			else if (checkered && component_material->id_texture == this->id_default_texture)
+				break;
 		}
 	}
 

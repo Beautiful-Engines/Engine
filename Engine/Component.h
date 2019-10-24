@@ -28,10 +28,12 @@ public:
 	const ComponentType GetType() const;
 	const GameObject* GetMyGameObject() const;
 
+
 protected:
 	bool enabled = true;
 	ComponentType type = ComponentType::OTHER;
 	GameObject* my_game_object = nullptr;
+
 };
 
 #endif // !__Component_H__

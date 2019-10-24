@@ -38,6 +38,11 @@ public:
 	float *face_center_point = nullptr;
 	float *face_normal = nullptr;
 
+	bool checkered = false;
+	uint id_texture = 0;
+	uint id_default_texture = 0;
+	
+
 }; 
 
 #endif // !__ComponentMesh_H__

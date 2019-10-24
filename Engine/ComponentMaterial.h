@@ -16,7 +16,6 @@ public:
 	uint id_texture = 0u;  
 	uint width = 0;
 	uint height = 0;
-	bool checkered = false;
 	std::string path;
 
 };
