@@ -174,10 +174,16 @@ void ModuleCamera3D::Focus(float speed)
 			float3 position = { Position.x, Position.y, Position.z };
 			float distance = position.Distance({ App->scene->GetGameObjects()[i]->GetTransform()->local_position.x, App->scene->GetGameObjects()[i]->GetTransform()->local_position.y, App->scene->GetGameObjects()[i]->GetTransform()->local_position.z });
 			speed = speed * distance;
-			if (go_height*7 > distance) {
+			if (go_height*4 > distance - distance / 10) {
 				focus = false;
 			}
 			else newPos -= Z * speed;
+			if (go_height*4 < distance + distance / 10)
+			{
+				focus = false;
+			}
+			else newPos += Z * speed;
+			
 		}
 		else
 		{
