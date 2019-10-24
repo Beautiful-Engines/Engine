@@ -32,7 +32,7 @@ bool ModuleScene::Start()
 	CreateGrid();
 
 	GameObject *root = CreateGameObject("root");
-	root->SetFocus(true);
+	//root->SetFocus(true);
 	App->importer->LoadFile("assets/BakerHouse.fbx");
 
 	return true;
@@ -94,6 +94,29 @@ GameObject* ModuleScene::GetSelected()
 		}
 	}
 	return nullptr;
+}
+
+void ModuleScene::ChangeSelected(GameObject* selected)
+{
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i] != selected)
+		{
+			 game_objects[i]->SetFocus(false);
+		}
+	}
+	
+}
+
+void ModuleScene::SetSelected(GameObject* go)
+{
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i] == go)
+		{
+			game_objects[i]->SetFocus(true);
+		}
+	}
 }
 
 const std::vector<GameObject*> ModuleScene::GetGameObjects() const
