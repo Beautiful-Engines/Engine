@@ -20,7 +20,6 @@ bool WindowHierarchy::Draw()
 
 	if (ImGui::Begin("Hierarchy", &enabled, aboutFlags))
 	{
-		static int selected = 0;
 		
 		for (int i = 0; i < App->scene->GetGameObjects().size(); ++i)
 		{

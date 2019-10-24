@@ -123,7 +123,7 @@ bool ModuleImport::LoadMesh(const char* _path)
 			
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
-			name_object = name_object + std::to_string(i);
+			name_object = name_path.substr(0, pos) + std::to_string(i + 1);
 			GameObject *meshgameobject = new GameObject();
 			meshgameobject->SetName(name_object);
 			meshgameobject->SetParent(go);
@@ -275,43 +275,35 @@ bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
 	}
 	else
 	{
-		std::vector<GameObject*> game_objects = App->scene->GetGameObjects();
+		std::vector<GameObject*> children_game_objects = App->scene->GetSelected()->GetChildren();
 
-		/*for (uint i = 0; i < game_objects.size(); ++i)
+		for (uint j = 0; j < children_game_objects.size(); ++j)
 		{
-			if (game_objects[i]->IsFocused())
-			{*/
-				std::vector<GameObject*> children_game_objects = App->scene->GetSelected()->GetChildren();
+			component_material = new ComponentMaterial(children_game_objects[j]);
+			uint id_tex;
 
-				for (uint j = 0; j < children_game_objects.size(); ++j)
-				{
-					component_material = new ComponentMaterial(children_game_objects[j]);
-					uint id_tex;
+			ilGenImages(1, &id_tex);
+			ilBindImage(id_tex);
+			final_path = _path;
+			if (ilLoadImage(final_path.c_str()))
+			{
+				component_material->id_texture = ilutGLBindTexImage();
+				component_material->path = final_path;
+				component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
+				component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
+				children_game_objects[j]->GetMesh()->id_texture = component_material->id_texture;
 
-					ilGenImages(1, &id_tex);
-					ilBindImage(id_tex);
-					final_path = _path;
-					if (ilLoadImage(final_path.c_str()))
-					{
-						component_material->id_texture = ilutGLBindTexImage();
-						component_material->path = final_path;
-						component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
-						component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
-						children_game_objects[j]->GetMesh()->id_texture = component_material->id_texture;
+				LOG("Added %s to %s", name_path.c_str(), App->scene->GetSelected()->GetName().c_str());
+			}
+			else
+			{
+				auto error = ilGetError();
+				LOG("Error loading texture %s. Error: %s", name_path, ilGetString(error));
+				ret = false;
+			}
 
-						LOG("Added %s to %s", name_path.c_str(), App->scene->GetSelected()->GetName().c_str());
-					}
-					else
-					{
-						auto error = ilGetError();
-						LOG("Error loading texture %s. Error: %s", name_path, ilGetString(error));
-						ret = false;
-					}
-
-					ilDeleteImages(1, &id_tex);
-				}
-		/*	}
-		}*/
+			ilDeleteImages(1, &id_tex);
+		}
 	}
 
 	return ret;
