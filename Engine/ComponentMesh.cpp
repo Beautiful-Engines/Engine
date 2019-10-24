@@ -116,18 +116,18 @@ void ComponentMesh::DrawNormals()
 float3 ComponentMesh::GetMaxPoint()
 {
 	float3 maxP = { vertices[0],vertices[1],vertices[2] };
-	for (int i = 0; i < n_indexes; i += 3) {
-		if (maxP.y < vertices[i + 1])
-		{
-			maxP = { vertices[i],vertices[i+1],vertices[i+2] };
-		}
+	for (int i = 0; i < n_vertices; i += 3) {
+			if (maxP.y < vertices[i + 1])
+			{
+				maxP = { vertices[i],vertices[i + 1],vertices[i + 2] };
+			}
 	}
 	return maxP;
 }
 float3 ComponentMesh::GetMinPoint()
 {
 	float3 minP = { vertices[0],vertices[1],vertices[2] };
-	for (int i = 0; i < n_indexes; i += 3) {
+	for (int i = 0; i < n_vertices; i += 3) {
 		if (minP.y > vertices[i + 1])
 		{
 			minP = { vertices[i],vertices[i + 1],vertices[i + 2] };
