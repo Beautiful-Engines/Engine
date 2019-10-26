@@ -15,43 +15,21 @@ WindowHierarchy::~WindowHierarchy() {}
 
 bool WindowHierarchy::Draw()
 {
-	/*ImGuiWindowFlags aboutFlags = 0;
+
+	ImGuiWindowFlags aboutFlags = 0;
 	aboutFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
 
 	if (ImGui::Begin("Hierarchy", &enabled, aboutFlags))
 	{
-		
-		for (int i = 0; i < App->scene->GetGameObjects().size(); ++i)
+
+		select_iterator = 0;
+
+		for (int i = 0; i < App->scene->GetGameObjects()[0]->GetChildren().size(); i++)
 		{
-			if (App->scene->GetGameObjects()[i]->GetName() != "root")
-			{
-				ImGui::Selectable(App->scene->GetGameObjects()[i]->GetName().c_str());
-				if (ImGui::IsItemClicked(0))
-				{
-					App->scene->GetGameObjects()[i]->SetFocus(true);
-					
-					for (int j = 0; j < App->scene->GetGameObjects().size(); ++j)
-					{
-						if(j != i)App->scene->GetGameObjects()[j]->SetFocus(false);
-					}
-				}
-			}
+			DrawNode(App->scene->GetGameObjects()[0]->GetChildren()[i]);
 		}
 	}
-	
-	ImGui::End();*/
-
-	ImGui::Begin("Hierarchy");
-
-	select_iterator = 0;
-
-	for (int i = 0; i < App->scene->GetGameObjects()[0]->GetChildren().size(); i++)
-	{
-		DrawNode(App->scene->GetGameObjects()[0]->GetChildren()[i]);
-	}
-
 	ImGui::End();
-
 
 	return true;
 }

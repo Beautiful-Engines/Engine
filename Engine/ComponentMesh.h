@@ -41,6 +41,8 @@ public:
 	bool checkered = false;
 	uint id_texture = 0;
 	uint id_default_texture = 0;
+
+	bool is_primitive = false;
 	
 
 }; 

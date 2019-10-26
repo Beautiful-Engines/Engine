@@ -76,7 +76,10 @@ void ComponentMesh::Draw(ComponentMaterial *component_material)
 		component_material->DrawTexture(this);
 	}
 
-	glDrawElements(GL_TRIANGLES, n_indexes, GL_UNSIGNED_INT, NULL);
+	if(is_primitive)
+		glDrawElements(GL_TRIANGLES, n_indexes, GL_UNSIGNED_SHORT, NULL);
+	else
+		glDrawElements(GL_TRIANGLES, n_indexes, GL_UNSIGNED_INT, NULL);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);

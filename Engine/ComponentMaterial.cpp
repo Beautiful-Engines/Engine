@@ -17,9 +17,10 @@ ComponentMaterial::~ComponentMaterial()
 
 void ComponentMaterial::DrawTexture(ComponentMesh* _component_mesh)
 {
-	if (id_texture > 0) {
+	if (id_texture > 0 && _component_mesh->n_uv > 0) {
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+		
 		glBindBuffer(GL_ARRAY_BUFFER, _component_mesh->id_uv);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 		

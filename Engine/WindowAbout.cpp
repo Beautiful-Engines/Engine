@@ -60,6 +60,12 @@ bool WindowAbout::Draw()
 		if (ImGui::Button("JSON for modern C++")) { ShellExecute(0, 0, "https://github.com/nlohmann/json", 0, 0, SW_SHOW); }
 		ImGui::SameLine(); ImGui::TextWrapped("3.7.0");
 
+		if (ImGui::Button("Open-Asset-Importer-Lib")) { ShellExecute(0, 0, "http://www.assimp.org/", 0, 0, SW_SHOW); }
+		ImGui::SameLine(); ImGui::TextWrapped("5.0.0");
+
+		if (ImGui::Button("DevIL")) { ShellExecute(0, 0, "http://openil.sourceforge.net", 0, 0, SW_SHOW); }
+		ImGui::SameLine(); ImGui::TextWrapped("1.8");
+
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();

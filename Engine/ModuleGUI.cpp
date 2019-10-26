@@ -52,6 +52,7 @@ bool ModuleGUI::Init()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	ImGui::StyleColorsDark();
 
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
@@ -107,6 +108,28 @@ bool ModuleGUI::CleanUp()
 // Private Methods-------------------------
 update_status ModuleGUI::CreateMainMenuBar()
 {
+	//// Docking
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
+	ImGui::SetNextWindowBgAlpha(0.0f);
+
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::Begin("DockSpace Demo", NULL, window_flags);
+	ImGui::PopStyleVar(3);
+
+	ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
+	ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+
+	// Main Menu Bar
 	if (ImGui::BeginMainMenuBar())
 	{
 		ImGuiWindowFlags aboutFlags = 0;
@@ -232,7 +255,6 @@ update_status ModuleGUI::CreateMainMenuBar()
 			ImGui::EndMenu();
 		}
 
-		
 	}
 	ImGui::EndMainMenuBar();
 
@@ -243,6 +265,8 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 	if (demo)
 		ImGui::ShowDemoWindow(&demo);
+
+	ImGui::End();
 
 	return UPDATE_CONTINUE;
 }
