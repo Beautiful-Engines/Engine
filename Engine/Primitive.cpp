@@ -18,7 +18,7 @@ Primitive::Primitive(PrimitiveType _primitive_type) : GameObject()
 	switch (_primitive_type)
 	{
 	case PrimitiveType::SPHERE:
-		CreateSphere(5);
+		CreateSphere(10, 10);
 		break;
 	case PrimitiveType::CUBE:
 		CreateCube();
@@ -62,59 +62,60 @@ void Primitive::NormalsCalc()
 	par_shapes_unweld(shape, true);
 	par_shapes_compute_normals(shape);
 
+	// Vertices
 	n_vertices = shape->npoints;
 	vertices = new float[n_vertices * 3];
 	memcpy(vertices, shape->points, sizeof(float) * n_vertices * 3);
 
+	// Indexes
 	n_indexes = shape->ntriangles * 3;
-	indexes = new uint[n_indexes * 3];
-	memcpy(indexes, shape->triangles, sizeof(PAR_SHAPES_T) * n_indexes);
+	indexes = new uint[n_indexes];
+	memcpy(indexes, shape->triangles, sizeof(uint) * n_indexes);
 
+	// UVs
 	if (shape->tcoords) {
+		n_uv = 2;
 		uv_coords = new float[n_vertices * 2];
 		memcpy(uv_coords, shape->tcoords, sizeof(float) * n_vertices * 2);
 	}
 
 	// Normals
-	if (primitive_type != PrimitiveType::CUBE && primitive_type != PrimitiveType::OCTAHEDRON && primitive_type != PrimitiveType::DODECAHEDRON && primitive_type != PrimitiveType::ICOSAHEDRON)
+	if (shape->normals)
 	{
-		if (shape->normals != nullptr)
+		// Vertex Normals
+		normals = new float[n_vertices * 3];
+		memcpy(normals, shape->normals, sizeof(float) * n_vertices * 3);
+
+		// Face Normals
+		face_center_point = new float[n_indexes];
+		face_normal = new float[n_indexes];
+
+		for (uint i = 0; i < n_indexes; i += 3)
 		{
-			normals = new float[n_vertices * 3];
-			memcpy(normals, shape->normals, sizeof(float) * n_vertices * 3);
+			uint index = shape->triangles[i];
+			vec3 vertex0(vertices[index], vertices[index + 1], vertices[index + 2]);
 
-			face_center_point = new float[shape->ntriangles * 3];
-			face_normal = new float[shape->ntriangles * 3];
+			index = shape->triangles[i + 1];
+			vec3 vertex1(vertices[index], vertices[index + 1], vertices[index + 2]);
 
-			// TODO
-			/*for (uint i = 0; i < n_indexes; i += 3)
-			{
-				uint index = indexes[i];
-				vec3 vertex0(vertices[index], vertices[index + 1], vertices[index + 2]);
+			index = shape->triangles[i + 2];
+			vec3 vertex2(vertices[index], vertices[index + 1], vertices[index + 2]);
 
-				index = indexes[i + 1];
-				vec3 vertex1(vertices[index], vertices[index + 1], vertices[index+ 2]);
+			vec3 v0 = vertex0 - vertex2;
+			vec3 v1 = vertex1 - vertex2;
+			vec3 n = cross(v0, v1);
 
-				index = indexes[i + 2];
-				vec3 vertex2(vertices[index], vertices[index+ 1], vertices[index + 2]);
+			vec3 normalized = normalize(n);
 
-				vec3 v0 = vertex0 - vertex2;
-				vec3 v1 = vertex1 - vertex2;
-				vec3 n = cross(v0, v1);
+			face_center_point[i] = (vertex0.x + vertex1.x + vertex2.x) / 3;
+			face_center_point[i + 1] = (vertex0.y + vertex1.y + vertex2.y) / 3;
+			face_center_point[i + 2] = (vertex0.z + vertex1.z + vertex2.z) / 3;
 
-				vec3 normalized = normalize(n);
-
-				face_center_point[i] = (vertex0.x + vertex1.x + vertex2.x) / 3;
-				face_center_point[i + 1] = (vertex0.y + vertex1.y + vertex2.y) / 3;
-				face_center_point[i + 2] = (vertex0.z + vertex1.z + vertex2.z) / 3;
-
-				face_normal[i] = normalized.x;
-				face_normal[i + 1] = normalized.y;
-				face_normal[i + 2] = normalized.z;
-			}*/
+			face_normal[i] = normalized.x;
+			face_normal[i + 1] = normalized.y;
+			face_normal[i + 2] = normalized.z;
 		}
 	}
-	
 
 	AddToMesh();
 	par_shapes_free_mesh(shape);
@@ -142,59 +143,19 @@ void Primitive::AddToMesh()
 	App->importer->DefaultTexture(this);
 }
 
-void Primitive::RestartBuffers()
-{
-	glDeleteBuffers(1, &id_vertex);
-
-	if (shape->normals != nullptr) {
-		glDeleteBuffers(1, &id_normal);
-		delete[] normals;
-	}
-	if (shape->tcoords != nullptr) {
-		glDeleteBuffers(1, &id_uv);
-		delete[] uv_coords;
-	}
-	
-	delete[] vertices;
-	delete[] indexes;
-
-	NormalsCalc();
-	/*GLBuffers();*/
-}
-
 void Primitive::SetPosition(const float& _x, const float& _y, const float& _z)
 {
 	par_shapes_translate(shape, _x, _y, _z);
 }
 
-void Primitive::SetSubdivisions(const int& _subdivisions)
-{
-	par_shapes_free_mesh(shape);
-	subdivisions = _subdivisions;
-
-	switch (primitive_type)
-	{
-	case PrimitiveType::SPHERE:
-		CreateSphere(_subdivisions);
-		break;
-	case PrimitiveType::ROCK:
-		CreateRock(5, _subdivisions);
-		break;
-	default:
-		break;
-	}
-
-	RestartBuffers();
-}
-
 // PRIMITIVE FORMS
-void Primitive::CreateSphere(const uint& _subdivisions)
+void Primitive::CreateSphere(const uint& _slices, const uint& _stacks)
 {
 	std::string name = "Sphere";
 	std::string namecount = name + "1";
 	namecount = PutFirstName(name, namecount);
 
-	shape = par_shapes_create_subdivided_sphere(_subdivisions);
+	shape = par_shapes_create_parametric_sphere(_slices, _stacks);
 	NormalsCalc();
 	
 	SetName(namecount);

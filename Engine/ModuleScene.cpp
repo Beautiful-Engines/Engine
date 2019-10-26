@@ -32,7 +32,7 @@ bool ModuleScene::Start()
 	CreateGrid();
 
 	GameObject *root = CreateGameObject("root");
-	/*App->importer->LoadFile("assets/BakerHouse.fbx");*/
+	App->importer->LoadFile("assets/BakerHouse.fbx");
 
 	return true;
 }

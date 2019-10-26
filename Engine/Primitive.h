@@ -30,15 +30,12 @@ public:
 
 	void SetPosition(const float& _x, const float& _y, const float& _z);
 
-	void SetSubdivisions(const int& _subdivisions);
-
 private:
 
 	/*void GLBuffers();*/
 	void NormalsCalc();
 	void AddToMesh();
-	void RestartBuffers();
-	void CreateSphere(const uint& _subdivisions);
+	void CreateSphere(const uint& _slices, const uint& _stacks);
 	void CreateCube();
 	void CreateTorus(const uint& _slices, const uint& _stacks, const float& _radius);
 	void CreateOctahedron();
