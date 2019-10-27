@@ -1,16 +1,18 @@
 #include "Application.h"
+#include "ModuleCamera3D.h"
+#include "ModuleWindow.h"
+#include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
-#include "SDL\include\SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
-#include "ImGui\imgui_impl_sdl.h"
-#include "ImGui\imgui_impl_opengl2.h"
 
-#pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
+#include "glew\glew.h"
+#include "SDL\include\SDL_opengl.h"
+
+#pragma comment (lib, "glew/glew32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
-ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
+	name = "Renderer3D";
 }
 
 // Destructor
@@ -34,7 +36,7 @@ bool ModuleRenderer3D::Init()
 	if (ret == true)
 	{
 		//Use Vsync
-		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		if (VSync && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
 		//Initialize Projection Matrix
@@ -45,7 +47,7 @@ bool ModuleRenderer3D::Init()
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", __glewErrorStringREGAL(error));
 			ret = false;
 		}
 
@@ -57,7 +59,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", __glewErrorStringREGAL(error));
 			ret = false;
 		}
 
@@ -71,7 +73,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", __glewErrorStringREGAL(error));
 			ret = false;
 		}
 
@@ -95,18 +97,27 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_TEXTURE_2D);
 
 	}
 	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
 
-	// Initialize ImGUi
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui::StyleColorsDark();
-
-	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
-	ImGui_ImplOpenGL2_Init();
+	// Initialize glew
+	GLenum error = glewInit();
+	if (error != GL_NO_ERROR)
+	{
+		LOG("Error initializing gler library! %s\n", SDL_GetError());
+			ret = false;
+	}
+	else
+	{
+		LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+		LOG("OpenGL version supported %s", glGetString(GL_VERSION));
+		LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		LOG("Vendor: %s", glGetString(GL_VENDOR));
+		LOG("Renderer: %s", glGetString(GL_RENDERER));
+	}
 
 	return ret;
 }
@@ -114,47 +125,6 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-	ImGui_ImplOpenGL2_NewFrame();
-	ImGui_ImplSDL2_NewFrame(App->window->window);
-	ImGui::NewFrame();
-
-	bool test = false;
-	if (ImGui::BeginMainMenuBar())
-	{
-		if (ImGui::BeginMenu("File"))
-		{
-			if (ImGui::MenuItem("Exit")) 
-			{ 
-				return UPDATE_STOP;
-			}
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Demo"))
-		{
-			ImGui::Checkbox("Demo Window", &test);
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Edit"))
-		{
-			//TODO put strings at xml file
-			if (ImGui::MenuItem("Cut		  	Ctrl+X"))
-			{
-				//TODO put cut function
-			}
-			if (ImGui::MenuItem("Copy		 	Ctrl+C"))
-			{
-				//TODO put copy function
-			}
-			if (ImGui::MenuItem("Paste			Ctrl+V"))
-			{
-				//TODO put paste function
-			}
-			ImGui::EndMenu();
-		}
-		ImGui::EndMainMenuBar();
-	}
-	if (test)
-		ImGui::ShowDemoWindow(&test);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -174,8 +144,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	ImGui::Render();
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
@@ -203,3 +171,46 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
+
+//Load and Save
+bool ModuleRenderer3D::LoadDefault(nlohmann::json &load_default_json)
+{
+	VSync = load_default_json[name]["VSync"];
+
+	return true;
+}
+
+bool ModuleRenderer3D::Load(nlohmann::json &load_json)
+{
+	VSync = load_json[name]["VSync"];
+
+	return true;
+}
+
+bool ModuleRenderer3D::Save(nlohmann::json &save_json)
+{
+	save_json[name]["VSync"] = VSync;
+
+	return true;
+}
+
+bool ModuleRenderer3D::GetVSync()
+{
+	return VSync;
+}
+
+void ModuleRenderer3D::SetVSync(bool VSync)
+{
+	this->VSync = VSync;
+
+	if (this->VSync)
+	{
+		SDL_GL_SetSwapInterval(1);
+	}
+	else 
+	{
+		SDL_GL_SetSwapInterval(0);
+	}
+}
+
+

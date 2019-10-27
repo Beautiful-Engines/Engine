@@ -1,4 +1,6 @@
+#include "Application.h"
 #include "Globals.h"
+#include "ModuleGUI.h"
 
 void log(const char file[], int line, const char* format, ...)
 {
@@ -12,4 +14,6 @@ void log(const char file[], int line, const char* format, ...)
 	va_end(ap);
 	sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
 	OutputDebugString(tmp_string2);
+	if(App && App->gui)
+		App->gui->LogDebug(tmp_string2);
 }

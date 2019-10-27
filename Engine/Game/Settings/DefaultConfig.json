@@ -1,0 +1,19 @@
+{
+    "Application": {
+        "FPS_cap": 60,
+        "Organization": "Beautiful Engines",
+        "Title": "Engine"
+    },
+    "Renderer3D": {
+        "VSync": true
+    },
+    "Window": {
+        "Borderless": false,
+        "Brightness": 1.0,
+        "Fulldesktop": false,
+        "Fullscreen": false,
+        "Height": 720,
+        "Resizable": true,
+        "Width": 1280
+    }
+}

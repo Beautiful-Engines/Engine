@@ -18,6 +18,23 @@ void log(const char file[], int line, const char* format, ...);
 #define RADTODEG 57.295779513082320876f
 #define HAVE_M_PI
 
+#define RELEASE_ARRAY( x )\
+	{\
+       if( x != nullptr )\
+       {\
+           delete[] x;\
+	       x = nullptr;\
+		 }\
+	 }
+
+
+#define RELEASE(x) \
+    { \
+    if (x != nullptr) \
+      delete x; \
+	x = nullptr; \
+	} \
+
 
 typedef unsigned int uint;
 
@@ -29,8 +46,8 @@ enum update_status
 };
 
 // Configuration -----------
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
+#define SCREEN_WIDTH 1440
+#define SCREEN_HEIGHT 900
 #define SCREEN_SIZE 1
 #define WIN_FULLSCREEN false
 #define WIN_RESIZABLE true
@@ -38,5 +55,22 @@ enum update_status
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
 #define TITLE "Engine"
+#define ORGANIZATION "Beautiful Engines"
+#define FPS_CAP 60
+
+// Configuration -----------
+#define VERSION "0.4-alpha"
+#define ASSETS_FOLDER "Assets/"
+#define SETTINGS_FOLDER "/Settings/"
+#define LIBRARY_FOLDER "/Library/"
+#define LIBRARY_AUDIO_FOLDER "/Library/Audio/"
+#define LIBRARY_TEXTURES_FOLDER "/Library/Textures/"
+#define LIBRARY_MESH_FOLDER "/Library/Meshes/"
+#define LIBRARY_ANIMATION_FOLDER "/Library/Animations/"
+#define LIBRARY_SCENE_FOLDER "/Library/Scenes/"
+#define LIBRARY_MODEL_FOLDER "/Library/Models/"
+#define LIBRARY_MATERIAL_FOLDER "/Library/Materials/"
+#define LIBRARY_STATE_MACHINE_FOLDER "/Library/StateMachines/"
+
 
 #endif // !__Globals_H_

@@ -1,7 +1,7 @@
 #ifndef __Module_H__
 #define __Module_H__
 
-class Application;
+#include "nlohmann\json.hpp"
 
 class Module
 {
@@ -9,10 +9,11 @@ private:
 	bool enabled;
 
 public:
-	Application * App;
+	std::string name;
 
-	Module(Application* parent, bool start_enabled = true) : App(parent)
-	{}
+public:
+
+	Module(bool start_enabled = true) {}
 
 	virtual ~Module()
 	{}
@@ -43,6 +44,22 @@ public:
 	}
 
 	virtual bool CleanUp()
+	{
+		return true;
+	}
+
+	//Load and Save
+	virtual bool LoadDefault(nlohmann::json &load_default_json)
+	{
+		return true;
+	}
+
+	virtual bool Load(nlohmann::json &load_json)
+	{
+		return true;
+	}
+
+	virtual bool Save(nlohmann::json &save_json)
 	{
 		return true;
 	}

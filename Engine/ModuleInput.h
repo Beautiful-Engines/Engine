@@ -17,7 +17,7 @@ class ModuleInput : public Module
 {
 public:
 
-	ModuleInput(Application* app, bool start_enabled = true);
+	ModuleInput(bool start_enabled = true);
 	~ModuleInput();
 
 	bool Init();
@@ -68,6 +68,7 @@ private:
 	int mouse_x_motion;
 	int mouse_y_motion;
 	//int mouse_z_motion;
+
 };
 
 #endif // !__ModuleInput_H__
