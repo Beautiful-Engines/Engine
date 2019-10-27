@@ -23,7 +23,7 @@ Primitive::Primitive(PrimitiveType _primitive_type) : GameObject()
 	case PrimitiveType::CUBE:
 		CreateCube();
 		break;
-	case PrimitiveType::TORUS:
+	/*case PrimitiveType::TORUS:
 		CreateTorus(10, 20, 0.5f);
 		break;
 	case PrimitiveType::OCTAHEDRON:
@@ -42,7 +42,7 @@ Primitive::Primitive(PrimitiveType _primitive_type) : GameObject()
 		CreateKleinBottle(20, 20);
 		break;
 	case PrimitiveType::OTHER:
-		break;
+		break;*/
 	default:
 		break;
 	}

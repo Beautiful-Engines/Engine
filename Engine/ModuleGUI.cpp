@@ -265,7 +265,7 @@ update_status ModuleGUI::CreateMainMenuBar()
 					App->scene->AddGameObject(new Primitive(PrimitiveType::SPHERE));
 				if (ImGui::MenuItem("Cube"))
 					App->scene->AddGameObject(new Primitive(PrimitiveType::CUBE));
-				if (ImGui::MenuItem("Torus"))
+				/*if (ImGui::MenuItem("Torus"))
 					App->scene->AddGameObject(new Primitive(PrimitiveType::TORUS));
 				if (ImGui::MenuItem("Octahedron"))
 					App->scene->AddGameObject(new Primitive(PrimitiveType::OCTAHEDRON));
@@ -276,7 +276,7 @@ update_status ModuleGUI::CreateMainMenuBar()
 				if (ImGui::MenuItem("Rock"))
 					App->scene->AddGameObject(new Primitive(PrimitiveType::ROCK));
 				if (ImGui::MenuItem("Klein Bottle"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::KLEIN_BOTTLE));
+					App->scene->AddGameObject(new Primitive(PrimitiveType::KLEIN_BOTTLE));*/
 					
 				ImGui::EndMenu();
 			}

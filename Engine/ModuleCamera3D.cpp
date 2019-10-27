@@ -98,7 +98,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
-		if (App->scene->GetSelected() != nullptr)
+		if (App->scene->GetSelected() != nullptr && App->scene->GetSelected()->GetMesh()->is_primitive == false)
 		{
 			LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
 			if (App->scene->GetSelected()->GetMesh())
@@ -111,6 +111,11 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 		}
 		
+	}
+	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+	{
+		Position = vec3(0.0f, 0.0f, 5.0f);
+		Reference = vec3(0.0f, 0.0f, 0.0f);
 	}
 	if (focus)
 	{
