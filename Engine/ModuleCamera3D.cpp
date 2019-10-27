@@ -122,39 +122,42 @@ update_status ModuleCamera3D::Update(float dt)
 	
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
-				LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
-				
-				int dx = -App->input->GetMouseXMotion();
-				int dy = -App->input->GetMouseYMotion();
+		if (App->scene->GetSelected() != nullptr)
+		{
+			LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
 
-				float Sensitivity = 0.25f;
+			int dx = -App->input->GetMouseXMotion();
+			int dy = -App->input->GetMouseYMotion();
 
-				Position -= Reference;
+			float Sensitivity = 0.25f;
 
-				if (dx != 0)
+			Position -= Reference;
+
+			if (dx != 0)
+			{
+				float DeltaX = (float)dx * Sensitivity;
+
+				X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+			}
+
+			if (dy != 0)
+			{
+				float DeltaY = (float)dy * Sensitivity;
+
+				Y = rotate(Y, DeltaY, X);
+				Z = rotate(Z, DeltaY, X);
+
+				if (Y.y < 0.0f)
 				{
-					float DeltaX = (float)dx * Sensitivity;
-
-					X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-					Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-					Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+					Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+					Y = cross(Z, X);
 				}
+			}
 
-				if (dy != 0)
-				{
-					float DeltaY = (float)dy * Sensitivity;
-
-					Y = rotate(Y, DeltaY, X);
-					Z = rotate(Z, DeltaY, X);
-
-					if (Y.y < 0.0f)
-					{
-						Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-						Y = cross(Z, X);
-					}
-				}
-
-				Position = Reference + Z * length(Position);
+			Position = Reference + Z * length(Position);
+		}
 	}
 	// Recalculate matrix -------------
 	CalculateViewMatrix();

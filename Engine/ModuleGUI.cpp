@@ -84,6 +84,8 @@ update_status ModuleGUI::PostUpdate(float dt)
 	ImGui::Render();
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	ImGui::EndFrame();
 	
 	return UPDATE_CONTINUE;
 }

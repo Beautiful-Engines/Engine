@@ -29,7 +29,7 @@ public:
 	float *vertices = nullptr;
 
 	uint id_normal = 0u;
-	aiVector3D *normals;
+	aiVector3D *normals = nullptr;
 
 	uint id_uv = 0u;
 	uint n_uv = 0u;

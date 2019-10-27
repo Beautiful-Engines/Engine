@@ -28,8 +28,6 @@ public:
 
 	PrimitiveType primitive_type = PrimitiveType::OTHER;
 
-	void SetPosition(const float& _x, const float& _y, const float& _z);
-
 private:
 
 	/*void GLBuffers();*/
@@ -56,7 +54,7 @@ public:
 	float *vertices = nullptr;
 
 	uint id_normal = 0u;
-	float *normals = nullptr;
+	aiVector3D *normals = nullptr;
 
 	uint id_uv = 0u;
 	uint n_uv = 0u;

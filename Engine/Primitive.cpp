@@ -59,6 +59,11 @@ Primitive::~Primitive()
 
 void Primitive::NormalsCalc()
 {
+	if (!shape->normals)
+	{
+		par_shapes_unweld(shape, true);
+		par_shapes_compute_normals(shape);
+	}
 	// Vertices
 	n_vertices = shape->npoints;
 	vertices = new float[n_vertices * 3];
@@ -80,8 +85,8 @@ void Primitive::NormalsCalc()
 	if (shape->normals)
 	{
 		// Vertex Normals
-		normals = new float[n_vertices * 3];
-		memcpy(normals, shape->normals, sizeof(float) * n_vertices * 3);
+		normals = new aiVector3D[n_vertices * 3];
+		memcpy(normals, shape->normals, sizeof(aiVector3D) * n_vertices * 3);
 
 		// Face Normals
 		face_center_point = new float[n_indexes];
@@ -90,13 +95,13 @@ void Primitive::NormalsCalc()
 		for (uint i = 0; i < n_indexes; i += 3)
 		{
 			uint index = shape->triangles[i];
-			vec3 vertex0(vertices[index], vertices[index + 1], vertices[index + 2]);
+			vec3 vertex0(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
 
 			index = shape->triangles[i + 1];
-			vec3 vertex1(vertices[index], vertices[index + 1], vertices[index + 2]);
+			vec3 vertex1(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
 
 			index = shape->triangles[i + 2];
-			vec3 vertex2(vertices[index], vertices[index + 1], vertices[index + 2]);
+			vec3 vertex2(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
 
 			vec3 v0 = vertex0 - vertex2;
 			vec3 v1 = vertex1 - vertex2;
@@ -128,7 +133,7 @@ void Primitive::AddToMesh()
 	primitive_mesh->n_vertices = n_vertices;
 	primitive_mesh->vertices = vertices;
 	primitive_mesh->id_normal = id_normal;
-	primitive_mesh->normals = (aiVector3D*)normals;
+	primitive_mesh->normals = normals;
 	primitive_mesh->id_uv = id_uv;
 	primitive_mesh->n_uv = n_uv;
 	primitive_mesh->uv_coords = uv_coords;
@@ -138,11 +143,6 @@ void Primitive::AddToMesh()
 
 	App->importer->GLBuffer(primitive_mesh);
 	App->importer->DefaultTexture(this);
-}
-
-void Primitive::SetPosition(const float& _x, const float& _y, const float& _z)
-{
-	par_shapes_translate(shape, _x, _y, _z);
 }
 
 // PRIMITIVE FORMS

@@ -217,6 +217,11 @@ bool ModuleImport::LoadMesh(const char* _path)
 				{
 					DefaultTexture(meshgameobject);
 				}
+				// Just to present, then delete this
+				if (name_path.substr(0, pos) == "japanese_temple")
+					LoadTexture("japanese_temple_paint2_japanese_shrine_mat_albedotransparency.png", meshgameobject);
+				else if (name_path.substr(0, pos) == "penguinbasemesh")
+					LoadTexture("penguin-diffuse-color.dds", meshgameobject);
 			}
 
 			GLBuffer(mymesh);
@@ -319,6 +324,7 @@ void ModuleImport::DefaultTexture(GameObject* go_texturedefault)
 	glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
