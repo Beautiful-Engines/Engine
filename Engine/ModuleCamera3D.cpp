@@ -188,6 +188,7 @@ void ModuleCamera3D::Focus(float speed)
 			}
 		}
 	}
+	
 }
 // -----------------------------------------------------------------
 void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)

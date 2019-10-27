@@ -59,9 +59,6 @@ Primitive::~Primitive()
 
 void Primitive::NormalsCalc()
 {
-	par_shapes_unweld(shape, true);
-	par_shapes_compute_normals(shape);
-
 	// Vertices
 	n_vertices = shape->npoints;
 	vertices = new float[n_vertices * 3];
