@@ -98,7 +98,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
-		if (App->scene->GetSelected() != nullptr )
+		if (App->scene->GetSelected() != nullptr)
 		{
 			LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
 			if (App->scene->GetSelected()->GetMesh() && App->scene->GetSelected()->GetMesh()->is_primitive == false)
