@@ -217,6 +217,24 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 		if (ImGui::BeginMenu("GameObject"))
 		{
+			if (ImGui::MenuItem("Create Empty"))
+			{
+				uint count = 1;
+				std::string name = "GameObject";
+				std::string namecount = name + std::to_string(count);
+				for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
+				{
+					if (App->scene->GetGameObjects()[i] != nullptr && App->scene->GetGameObjects()[i]->GetName() == namecount)
+					{
+						count++;
+						namecount = name + std::to_string(count);
+						i = 0;
+					}
+				}
+				App->scene->CreateGameObject(namecount);
+			}
+				
+			ImGui::Separator();
 			if (ImGui::BeginMenu("3D Objects"))
 			{
 				if (ImGui::MenuItem("Sphere"))

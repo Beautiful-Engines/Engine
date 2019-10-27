@@ -148,113 +148,97 @@ void Primitive::AddToMesh()
 // PRIMITIVE FORMS
 void Primitive::CreateSphere(const uint& _slices, const uint& _stacks)
 {
-	std::string name = "Sphere";
-	std::string namecount = name + "1";
-	namecount = PutFirstName(name, namecount);
+	std::string name = PutFirstName("Sphere");
 
 	shape = par_shapes_create_parametric_sphere(_slices, _stacks);
 	NormalsCalc();
 	
-	SetName(namecount);
+	SetName(name);
 }
 
 void Primitive::CreateCube()
 {
-	std::string name = "Cube";
-	std::string namecount = name + "1";
-	namecount = PutFirstName(name, namecount);
+	std::string name = PutFirstName("Cube");
 
 	shape = par_shapes_create_cube();
 	NormalsCalc();
 
-	SetName(namecount);
+	SetName(name);
 }
 
 void Primitive::CreateTorus(const uint& slices, const uint& stacks, const float& radius)
 {
-	std::string name = "Torus";
-	std::string namecount = name + "1";
-	namecount = PutFirstName(name, namecount);
+	std::string name = PutFirstName("Torus");
 
 	shape = par_shapes_create_torus(slices, stacks, radius);
 	NormalsCalc();
 
-	SetName(namecount);
+	SetName(name);
 }
 
 void Primitive::CreateOctahedron()
 {
-	std::string name = "Octahedron";
-	std::string namecount = name + "1";
-	namecount = PutFirstName(name, namecount);
+	std::string name = PutFirstName("Octahedron");
 
 	shape = par_shapes_create_octahedron();
 	NormalsCalc();
 
-	SetName(namecount);
+	SetName(name);
 }
 
 void Primitive::CreateDodecahedron()
 {
-	std::string name = "Dodecahedron";
-	std::string namecount = name + "1";
-	namecount = PutFirstName(name, namecount);
+	std::string name = PutFirstName("Dodecahedron");
 
 	shape = par_shapes_create_dodecahedron();
 	NormalsCalc();
 
-	SetName(namecount);
+	SetName(name);
 }
 
 void Primitive::CreateIcosahedron()
 {
-	std::string name = "Icosahedron";
-	std::string namecount = name + "1";
-	namecount = PutFirstName(name, namecount);
+	std::string name = PutFirstName("Icosahedron");
 
 	shape = par_shapes_create_icosahedron();
 	NormalsCalc();
 
-	SetName(namecount);
+	SetName(name);
 }
 
 void Primitive::CreateRock(const uint& _seed, const uint& _subdivisions)
 {
-	std::string name = "Rock";
-	std::string namecount = name + "1";
-	namecount = PutFirstName(name, namecount);
+	std::string name = PutFirstName("Rock");
 
 	shape = par_shapes_create_rock(_seed, _subdivisions);
 	NormalsCalc();
 
-	SetName(namecount);
+	SetName(name);
 }
 
 void Primitive::CreateKleinBottle(const uint& _slices, const uint& _stacks)
 {
-	std::string name = "Klein_Bottle";
-	std::string namecount = name + "1";
-	namecount = PutFirstName(name, namecount);
+	std::string name = PutFirstName("Klein_Bottle");
 
 	shape = par_shapes_create_klein_bottle(_slices, _stacks);
 	NormalsCalc();
 
-	SetName(namecount);
+	SetName(name);
 }
 
-std::string Primitive::PutFirstName(const std::string& _name, std::string _namecount)
+std::string Primitive::PutFirstName(const std::string& _name)
 {
-	std::vector<GameObject*> game_object = App->scene->GetGameObjects();
 	uint count = 1;
-	for (uint i = 0; i < game_object.size(); ++i)
+	std::string namecount = _name + std::to_string(count);
+	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
 	{
-		if (game_object[i] != nullptr && game_object[i]->GetName() == _namecount)
+		if (App->scene->GetGameObjects()[i] != nullptr && App->scene->GetGameObjects()[i]->GetName() == namecount)
 		{
 			count++;
-			_namecount = _name + std::to_string(count);
+			namecount = _name + std::to_string(count);
 			i = 0;
 		}
 	}
 
-	return _namecount;
+	return namecount;
 }

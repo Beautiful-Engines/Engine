@@ -41,7 +41,7 @@ private:
 	void CreateIcosahedron();
 	void CreateRock(const uint& _seed, const uint& _subdivisions);
 	void CreateKleinBottle(const uint& _slices, const uint& _stacks);
-	std::string PutFirstName(const std::string& _name, std::string _namecount);
+	std::string PutFirstName(const std::string& _name);
 
 
 public:
