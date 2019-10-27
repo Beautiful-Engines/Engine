@@ -166,7 +166,7 @@ update_status ModuleCamera3D::Update(float dt)
 					Y = cross(Z, X);
 				}
 			}
-
+			if (Z.x != NULL)
 			Position = Reference + Z * length(Position);
 		}
 	}
