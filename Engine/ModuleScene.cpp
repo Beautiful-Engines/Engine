@@ -33,8 +33,6 @@ bool ModuleScene::Start()
 
 	GameObject *root = CreateGameObject("root");
 	App->importer->LoadFile("assets/BakerHouse.fbx");
-	App->importer->LoadFile("assets/japanese_temple.fbx");
-	App->importer->LoadFile("assets/penguinbasemesh.fbx");
 
 	return true;
 }

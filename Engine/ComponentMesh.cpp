@@ -95,7 +95,7 @@ void ComponentMesh::DrawNormals()
 		glBegin(GL_LINES);
 		float lenght = 0.4f;
 
-		if (App->renderer3D->vertex_normals || vertex_normals)
+		if ((App->renderer3D->vertex_normals && App->renderer3D->normals) || vertex_normals)
 		{
 			int j = 0;
 			for (int i = 0; i < n_vertices * 3; i += 3) {
