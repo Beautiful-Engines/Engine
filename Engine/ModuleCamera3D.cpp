@@ -101,7 +101,7 @@ update_status ModuleCamera3D::Update(float dt)
 		if (App->scene->GetSelected() != nullptr)
 		{
 			LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
-			if (App->scene->GetSelected()->GetMesh())
+			if (App->scene->GetSelected()->GetMesh() && App->scene->GetSelected()->GetMesh()->is_primitive == false)
 			{
 				focus = true;
 			}
@@ -111,6 +111,17 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 		}
 		
+	}
+	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+	{
+		CalculateViewMatrix();
+
+		X = vec3(1.0f, 0.0f, 0.0f);
+		Y = vec3(0.0f, 1.0f, 0.0f);
+		Z = vec3(0.0f, 0.0f, 1.0f);
+
+		Position = vec3(0.0f, 0.0f, 5.0f);
+		Reference = vec3(0.0f, 0.0f, 0.0f);
 	}
 	if (focus)
 	{
@@ -155,7 +166,7 @@ update_status ModuleCamera3D::Update(float dt)
 					Y = cross(Z, X);
 				}
 			}
-
+			if (Z.x != NULL)
 			Position = Reference + Z * length(Position);
 		}
 	}

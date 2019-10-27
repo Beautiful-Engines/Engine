@@ -217,11 +217,6 @@ bool ModuleImport::LoadMesh(const char* _path)
 				{
 					DefaultTexture(meshgameobject);
 				}
-				// Just to present, then delete this
-				if (name_path.substr(0, pos) == "japanese_temple")
-					LoadTexture("japanese_temple_paint2_japanese_shrine_mat_albedotransparency.png", meshgameobject);
-				else if (name_path.substr(0, pos) == "penguinbasemesh")
-					LoadTexture("penguin-diffuse-color.dds", meshgameobject);
 			}
 
 			GLBuffer(mymesh);
