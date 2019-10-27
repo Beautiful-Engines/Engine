@@ -64,7 +64,7 @@ bool WindowConfig::Draw()
 			if (ImGui::Checkbox("Use VSync", &vsync))
 			{
 				App->renderer3D->SetVSync(vsync);
-				if (vsync && App->GetFPSCap()>0)
+				if (App->GetFPSCap()>0)
 					App->SetFPSCap(fpscap);
 			}
 

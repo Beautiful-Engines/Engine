@@ -43,6 +43,10 @@ public:
 	uint id_default_texture = 0;
 
 	bool is_primitive = false;
+
+	bool vertex_normals = false;
+	bool face_normals = false;
+	bool textures = true;
 	
 
 }; 

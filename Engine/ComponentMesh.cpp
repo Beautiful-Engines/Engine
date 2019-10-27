@@ -58,7 +58,7 @@ void ComponentMesh::Update()
 	}
 
 	Draw(component_material);
-	if (App->renderer3D->normals)
+	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
 }
 
@@ -71,7 +71,7 @@ void ComponentMesh::Draw(ComponentMaterial *component_material)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	if (component_material != nullptr)
+	if (component_material != nullptr && textures)
 	{
 		component_material->DrawTexture(this);
 	}
@@ -95,7 +95,7 @@ void ComponentMesh::DrawNormals()
 		glBegin(GL_LINES);
 		float lenght = 0.4f;
 
-		if (App->renderer3D->vertex_normals)
+		if (App->renderer3D->vertex_normals || vertex_normals)
 		{
 			int j = 0;
 			for (int i = 0; i < n_vertices * 3; i += 3) {
@@ -104,13 +104,15 @@ void ComponentMesh::DrawNormals()
 				++j;
 			}
 		}
-		else {
-
+		if((App->renderer3D->normals && !App->renderer3D->vertex_normals) || face_normals)
+		{
 			for (int i = 0; i < n_indexes; i += 3) {
 				glVertex3f(face_center_point[i], face_center_point[i + 1], face_center_point[i + 2]);
 				glVertex3f(face_center_point[i] + face_normal[i] * lenght, face_center_point[i + 1] + face_normal[i + 1] * lenght, face_center_point[i + 2] + face_normal[i + 2] * lenght);
 			}
 		}
+
+
 
 		glEnd();
 	}
