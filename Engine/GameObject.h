@@ -29,7 +29,7 @@ public:
 	void SetParent(GameObject* game_object);
 	const std::vector<GameObject*> GetChildren() const;
 
-	ComponentTransform* GetTransform();
+	ComponentTransform* GetTransform() const;
 
 	ComponentMesh* GetMesh();
 

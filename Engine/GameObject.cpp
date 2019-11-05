@@ -113,7 +113,7 @@ const std::vector<GameObject*> GameObject::GetChildren() const
 	return children;
 }
 
-ComponentTransform * GameObject::GetTransform()
+ComponentTransform * GameObject::GetTransform() const
 {
 	for (uint i = 0; i < this->GetComponents().size(); ++i)
 	{

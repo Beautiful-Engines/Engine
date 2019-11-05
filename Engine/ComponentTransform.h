@@ -12,12 +12,20 @@ public:
 	
 	float3 position;
 	Quat rotation;
+	float3 euler;
 	float3 scale;
 
 	//local
 	float3 local_position;
 	Quat local_rotation;
+	float3 local_euler;
 	float3 local_scale;
+
+	float3 TransformEulerAngles();
+	float4x4 GetTransformMatrix();
+
+	float4x4 local_transform_matrix;
+	float4x4 transform_matrix;
 };
 #endif
 

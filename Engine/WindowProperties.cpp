@@ -81,6 +81,15 @@ bool WindowProperties::Draw()
 
 			if (ImGui::CollapsingHeader("Transform"))
 			{
+
+				float* p = (float*)&trans->local_position;
+				ImGui::InputFloat3("Position", p, 2);
+
+				float* r = (float*)&trans->local_euler;
+				ImGui::InputFloat3("Rotation", r, 2);
+
+				float* s = (float*)&trans->local_scale;
+				ImGui::InputFloat3("Scale", s, 2);
 			
 				ImGui::Text("Position"); ImGui::SameLine();
 				ImGui::Text("X:"); ImGui::SameLine();  ImGui::PushItemWidth(60);
@@ -105,6 +114,10 @@ bool WindowProperties::Draw()
 				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.y); ImGui::SameLine();
 				ImGui::Text("Z:"); ImGui::SameLine();
 				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.z);
+				if (go->GetTransform())
+				{
+					go->GetTransform()->GetTransformMatrix();
+				}
 			}
 		}
 		if (mesh != nullptr)

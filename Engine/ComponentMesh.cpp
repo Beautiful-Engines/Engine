@@ -64,6 +64,9 @@ void ComponentMesh::Update()
 
 void ComponentMesh::Draw(ComponentMaterial *component_material)
 {
+	glPushMatrix();
+	glMultMatrixf((float*)&GetMyGameObject()->GetTransform()->transform_matrix.Transposed());
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glColor3f(1.f, 1.f, 1.f);
