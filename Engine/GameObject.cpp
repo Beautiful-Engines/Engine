@@ -6,7 +6,7 @@
 
 GameObject::GameObject()
 {
-	
+	new ComponentTransform(this);
 }
 
 GameObject::~GameObject()

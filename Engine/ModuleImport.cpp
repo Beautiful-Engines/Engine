@@ -142,7 +142,7 @@ bool ModuleImport::LoadFBX(const char* _path)
 void ModuleImport::LoadNode(aiNode* _node, const aiScene* _scene, GameObject* _object)
 {
 	// Transform
-	ComponentTransform *mytransform = new ComponentTransform(_object);
+	ComponentTransform *mytransform = _object->GetTransform();
 	aiVector3D translation, scaling;
 	aiQuaternion rotation;
 	_node->mTransformation.Decompose(scaling, rotation, translation);
