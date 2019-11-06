@@ -5,6 +5,8 @@
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
+#include "MathGeoLib\include\Geometry\AABB.h"
+#include "MathGeoLib\include\Geometry\OBB.h"
 
 class GameObject
 {
@@ -36,7 +38,11 @@ public:
 	const bool IsFocused() const;
 	void SetFocus(bool focus);
 
+	void UpdateBB();
+
 	bool hide = false;
+	AABB abb;
+	OBB obb;
 
 private:
 	bool enabled = true;

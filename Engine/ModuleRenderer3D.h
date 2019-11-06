@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Light.h"
+#include "MathGeoLib\include\Math\float3.h"
 
 #define MAX_LIGHTS 8
 #define MAX_MESHES 200
@@ -38,6 +39,8 @@ public:
 	
 	bool GetVSync();
 	void SetVSync(bool VSync);
+
+	void DebugDrawCube(const float3 * vertices, Color color) const;
 
 	bool normals = false;
 	bool vertex_normals = true;

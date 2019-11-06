@@ -145,3 +145,15 @@ void GameObject::SetFocus(bool _focus)
 {
 	focus = _focus;
 }
+
+void GameObject :: UpdateBB()
+{
+	if (GetMesh())
+	{
+		obb = GetMesh()->GetBB();
+		obb.Transform(GetTransform()->GetTransformMatrix());
+
+		abb.SetNegativeInfinity();
+		abb.Enclose(obb);
+	}
+}

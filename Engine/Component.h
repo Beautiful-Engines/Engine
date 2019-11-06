@@ -26,7 +26,7 @@ public:
 	const bool IsEnabled() const;
 
 	const ComponentType GetType() const;
-	const GameObject* GetMyGameObject() const;
+	GameObject* GetMyGameObject();
 
 
 protected:

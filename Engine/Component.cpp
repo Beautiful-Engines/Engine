@@ -37,7 +37,7 @@ const ComponentType Component::GetType() const
 	return type;
 }
 
-const GameObject* Component::GetMyGameObject() const
+GameObject* Component::GetMyGameObject()
 {
 	return my_game_object;
 }

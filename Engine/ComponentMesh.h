@@ -14,6 +14,7 @@ public:
 	void Update();
 
 	float3 GetMinPoint();
+	AABB GetBB();
 	float3 GetMaxPoint();
 
 	void Draw(ComponentMaterial *component_material);
@@ -49,6 +50,7 @@ public:
 	bool textures = true;
 	
 
+	bool debug_bb = true;
 }; 
 
 #endif // !__ComponentMesh_H__

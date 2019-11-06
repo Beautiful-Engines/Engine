@@ -3,7 +3,9 @@
 #include "ModuleImport.h"
 #include "GameObject.h"
 #include "ComponentMaterial.h"
+#include "ModuleRenderer3D.h"
 #include "ComponentMesh.h"
+#include "MathGeoLib\include\Geometry\AABB.h"
 
 #include "glew/glew.h"
 
@@ -60,6 +62,20 @@ void ComponentMesh::Update()
 	Draw(component_material);
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
+
+	AABB o = GetMyGameObject()->abb = GetBB();
+	GetMyGameObject()->obb = GetBB();
+	GetMyGameObject()->UpdateBB();
+
+	if (debug_bb)
+	{
+		static float3 corners[8];
+		GetMyGameObject()->abb.GetCornerPoints(corners);
+		App->renderer3D->DebugDrawCube(corners, { 0, 255, 0, 255 });
+		GetMyGameObject()->obb.GetCornerPoints(corners);
+		App->renderer3D->DebugDrawCube(corners, { 0, 255, 0, 255 });
+	}
+
 }
 
 void ComponentMesh::Draw(ComponentMaterial *component_material)
@@ -114,13 +130,9 @@ void ComponentMesh::DrawNormals()
 				glVertex3f(face_center_point[i] + face_normal[i] * lenght, face_center_point[i + 1] + face_normal[i + 1] * lenght, face_center_point[i + 2] + face_normal[i + 2] * lenght);
 			}
 		}
-
-
-
 		glEnd();
 	}
 }
-
 float3 ComponentMesh::GetMaxPoint()
 {
 	float3 maxP = { vertices[0],vertices[1],vertices[2] };
@@ -131,6 +143,13 @@ float3 ComponentMesh::GetMaxPoint()
 			}
 	}
 	return maxP;
+}
+AABB ComponentMesh::GetBB()
+{
+	AABB bounding_box;
+	bounding_box.SetNegativeInfinity();
+	bounding_box.Enclose(&(float3)vertices, n_vertices);
+	return bounding_box;
 }
 float3 ComponentMesh::GetMinPoint()
 {
