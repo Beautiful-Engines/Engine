@@ -26,8 +26,9 @@ public:
 	const std::vector<Component*> GetComponents() const;
 
 	const GameObject* GetParent() const;
-	void SetParent(GameObject* game_object);
+	void SetParent(GameObject* _game_object);
 	const std::vector<GameObject*> GetChildren() const;
+	void DeleteChildren(GameObject* _game_object);
 
 	ComponentTransform* GetTransform() const;
 

@@ -6,26 +6,29 @@
 
 GameObject::GameObject()
 {
-	new ComponentTransform(this);
+	
 }
 
 GameObject::~GameObject()
 {
 	std::vector<Component*>::iterator iterator_components = components.begin();
 	for (; iterator_components != components.end(); ++iterator_components) {
-		if (*iterator_components != nullptr) {
-			delete* iterator_components;
-			*iterator_components = nullptr;
+		if (*iterator_components != nullptr) 
+		{
+			RELEASE(*iterator_components);
+			iterator_components = components.erase(iterator_components);
 		}
 	}
 
 	std::vector<GameObject*>::iterator iterator_children = children.begin();
 	for (; iterator_children != children.end(); ++iterator_children) {
-		if (*iterator_children != nullptr) {
-			delete* iterator_children;
-			*iterator_children = nullptr;
+		if (*iterator_children != nullptr) 
+		{
+			RELEASE(*iterator_children);
+			iterator_children = children.erase(iterator_children);
 		}
 	}
+
 }
 
 void GameObject::Update()
@@ -102,15 +105,29 @@ const GameObject* GameObject::GetParent() const
 	return parent;
 }
 
-void GameObject::SetParent(GameObject* game_object)
+void GameObject::SetParent(GameObject* _game_object)
 {
-	parent = game_object;
-	game_object->children.push_back(this);
+	parent = _game_object;
+	_game_object->children.push_back(this);
 }
 
 const std::vector<GameObject*> GameObject::GetChildren() const
 {
 	return children;
+}
+
+void GameObject::DeleteChildren(GameObject* _game_object)
+{
+	std::vector<GameObject*>::iterator iterator_go = children.begin();
+	for (; iterator_go != children.end(); ++iterator_go) {
+		if (*iterator_go != nullptr && (*iterator_go) == _game_object)
+		{
+			delete* iterator_go;
+			*iterator_go = nullptr;
+			children.erase(iterator_go);
+			iterator_go = children.begin();
+		}
+	}
 }
 
 ComponentTransform * GameObject::GetTransform() const

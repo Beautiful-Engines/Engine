@@ -83,6 +83,52 @@ void ModuleScene::AddGameObject(GameObject* _game_object)
 	game_objects.push_back(_game_object);
 }
 
+void ModuleScene::DeleteGameObject(GameObject* _game_object)
+{
+
+	// Delete children
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i]->GetParent() == _game_object)
+		{
+			DeleteGameObject(game_objects[i]);
+		}
+		
+	}
+
+	// Delete parent pointer
+	const GameObject* parent = _game_object->GetParent();
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i]->GetParent() == parent)
+		{
+			game_objects[i]->DeleteChildren(_game_object);
+		}
+	}
+
+	// Erase
+	std::vector<GameObject*>::iterator iterator_go = game_objects.begin();
+	for (; iterator_go != game_objects.end(); ++iterator_go) {
+		if (*iterator_go != nullptr && (*iterator_go) == _game_object)
+		{
+			game_objects.erase(iterator_go);
+
+			// Delete gameobject
+			_game_object->~GameObject();
+			RELEASE(_game_object);
+			iterator_go = game_objects.begin();
+		}
+	}
+
+	
+	
+	
+	
+	
+
+
+}
+
 GameObject* ModuleScene::GetSelected()
 {
 	for (uint i = 0; i < game_objects.size(); ++i)

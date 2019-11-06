@@ -20,6 +20,7 @@ public:
 
 	GameObject* CreateGameObject(std::string name);
 	void AddGameObject(GameObject* game_object);
+	void ModuleScene::DeleteGameObject(GameObject* _game_object);
 	GameObject* GetSelected();
 	void ChangeSelected(GameObject* selected);
 	void SetSelected(GameObject * go);
