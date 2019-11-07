@@ -54,11 +54,13 @@ public:
 	float3 *vertices = nullptr;
 
 	uint id_normal = 0u;
-	aiVector3D *normals = nullptr;
+	uint n_normals = 0u;
+	float3 *normals = nullptr;
 
 	uint id_uv = 0u;
+	uint uv_comp = 0u;
 	uint n_uv = 0u;
-	float *uv_coords = nullptr;
+	float2 *uv_coords = nullptr;
 
 	float *face_center_point = nullptr;
 	float *face_normal = nullptr;

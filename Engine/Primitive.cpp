@@ -76,17 +76,19 @@ void Primitive::NormalsCalc()
 
 	// UVs
 	if (shape->tcoords) {
-		n_uv = 2;
-		uv_coords = new float[n_vertices * 2];
-		memcpy(uv_coords, shape->tcoords, sizeof(float) * n_vertices * 2);
+		uv_comp = 2;
+		n_uv = n_vertices;
+		uv_coords = new float2[n_uv * uv_comp];
+		memcpy(uv_coords, shape->tcoords, sizeof(float2) * n_uv * uv_comp);
 	}
 
 	// Normals
 	if (shape->normals)
 	{
 		// Vertex Normals
-		normals = new aiVector3D[n_vertices * 3];
-		memcpy(normals, shape->normals, sizeof(aiVector3D) * n_vertices * 3);
+		normals = new float3[n_vertices * 3];
+		n_normals = n_vertices;
+		memcpy(normals, shape->normals, sizeof(float3) * n_normals);
 
 		// Face Normals
 		face_center_point = new float[n_indexes];
@@ -133,9 +135,11 @@ void Primitive::AddToMesh()
 	primitive_mesh->n_vertices = n_vertices;
 	primitive_mesh->vertices = vertices;
 	primitive_mesh->id_normal = id_normal;
+	primitive_mesh->n_normals = n_normals;
 	primitive_mesh->normals = normals;
 	primitive_mesh->id_uv = id_uv;
 	primitive_mesh->n_uv = n_uv;
+	primitive_mesh->uv_comp = uv_comp;
 	primitive_mesh->uv_coords = uv_coords;
 	primitive_mesh->face_center_point = face_center_point;
 	primitive_mesh->face_normal = face_normal;

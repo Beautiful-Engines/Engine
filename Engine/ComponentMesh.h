@@ -2,6 +2,7 @@
 #define __ComponentMesh_H__
 
 #include "Component.h"
+#include "MathGeoLib\include\Math\float2.h"
 #include "MathGeoLib\include\Math\float3.h"
 class ComponentMaterial;
 
@@ -31,11 +32,12 @@ public:
 
 	uint id_normal = 0u;
 	uint n_normals = 0u;
-	aiVector3D *normals = nullptr;
+	float3 *normals = nullptr;
 
 	uint id_uv = 0u;
+	uint uv_comp = 0u;
 	uint n_uv = 0u;
-	float *uv_coords = nullptr;
+	float2 *uv_coords = nullptr;
 
 	float *face_center_point = nullptr;
 	float *face_normal = nullptr;
