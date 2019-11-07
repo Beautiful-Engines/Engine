@@ -71,12 +71,12 @@ bool WindowProperties::Draw()
 	{
 		ImGui::SetWindowFontScale(1);
 
-		if (ImGui::Button("Delete", { 100,20 }))
-			App->scene->DeleteGameObject(go);
+		
 
 		if (trans != nullptr)
 		{
-			
+			if (ImGui::Button("Delete", { 100,20 }))
+				App->scene->DeleteGameObject(go);
 
 			ImGui::Checkbox("Hide", &go->hide);
 			if (go->hide)

@@ -30,8 +30,9 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
-	AddModule(camera);
 	AddModule(gui);
+	AddModule(camera);
+	
 	AddModule(input);
 	AddModule(scene);
 	AddModule(file_system);

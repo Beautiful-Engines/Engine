@@ -30,7 +30,7 @@ public:
 	const GameObject* GetParent() const;
 	void SetParent(GameObject* _game_object);
 	const std::vector<GameObject*> GetChildren() const;
-	void DeleteChildren(GameObject* _game_object);
+	void DeleteChild(GameObject* _game_object);
 
 	ComponentTransform* GetTransform() const;
 

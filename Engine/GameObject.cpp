@@ -11,23 +11,25 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-	std::vector<Component*>::iterator iterator_components = components.begin();
-	for (; iterator_components != components.end(); ++iterator_components) {
-		if (*iterator_components != nullptr) 
+	for (auto iterator_components = components.begin(); iterator_components < components.end(); iterator_components++) {
+		if (*iterator_components != nullptr)
 		{
 			RELEASE(*iterator_components);
 			iterator_components = components.erase(iterator_components);
+			if (components.size() == 0)
+				break;
 		}
 	}
+	components.clear();
 
-	std::vector<GameObject*>::iterator iterator_children = children.begin();
-	for (; iterator_children != children.end(); ++iterator_children) {
-		if (*iterator_children != nullptr) 
+	for (auto iterator_children = children.begin(); iterator_children < children.end(); ++iterator_children) {
+		if (*iterator_children != nullptr)
 		{
 			RELEASE(*iterator_children);
 			iterator_children = children.erase(iterator_children);
 		}
 	}
+	children.clear();
 
 }
 
@@ -116,16 +118,14 @@ const std::vector<GameObject*> GameObject::GetChildren() const
 	return children;
 }
 
-void GameObject::DeleteChildren(GameObject* _game_object)
+void GameObject::DeleteChild(GameObject* _game_object)
 {
 	std::vector<GameObject*>::iterator iterator_go = children.begin();
 	for (; iterator_go != children.end(); ++iterator_go) {
 		if (*iterator_go != nullptr && (*iterator_go) == _game_object)
 		{
-			delete* iterator_go;
-			*iterator_go = nullptr;
-			children.erase(iterator_go);
-			iterator_go = children.begin();
+			iterator_go = children.erase(iterator_go);
+			break;
 		}
 	}
 }

@@ -13,6 +13,7 @@
 
 ModuleScene::ModuleScene(bool start_enabled) : Module(start_enabled)
 {
+	name = "Scene";
 }
 
 ModuleScene::~ModuleScene()
@@ -86,47 +87,34 @@ void ModuleScene::AddGameObject(GameObject* _game_object)
 void ModuleScene::DeleteGameObject(GameObject* _game_object)
 {
 
-	// Delete children
+	// Delete children, recursive
 	for (uint i = 0; i < game_objects.size(); ++i)
 	{
 		if (game_objects[i]->GetParent() == _game_object)
 		{
 			DeleteGameObject(game_objects[i]);
+			i = 0;
 		}
-		
 	}
 
-	// Delete parent pointer
-	const GameObject* parent = _game_object->GetParent();
+	// Delete parent pointer, erase from children
 	for (uint i = 0; i < game_objects.size(); ++i)
 	{
-		if (game_objects[i]->GetParent() == parent)
+		if (game_objects[i] == _game_object->GetParent())
 		{
-			game_objects[i]->DeleteChildren(_game_object);
+			game_objects[i]->DeleteChild(_game_object);
 		}
 	}
 
-	// Erase
-	std::vector<GameObject*>::iterator iterator_go = game_objects.begin();
-	for (; iterator_go != game_objects.end(); ++iterator_go) {
+	// Erase from game_objects
+	for (auto iterator_go = game_objects.begin(); iterator_go < game_objects.end(); iterator_go++) {
 		if (*iterator_go != nullptr && (*iterator_go) == _game_object)
 		{
-			game_objects.erase(iterator_go);
-
-			// Delete gameobject
-			_game_object->~GameObject();
-			RELEASE(_game_object);
-			iterator_go = game_objects.begin();
+			RELEASE(*iterator_go);
+			iterator_go = game_objects.erase(iterator_go);
+			break;
 		}
 	}
-
-	
-	
-	
-	
-	
-
-
 }
 
 GameObject* ModuleScene::GetSelected()
