@@ -62,20 +62,6 @@ void ComponentMesh::Update()
 	Draw(component_material);
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
-
-	AABB o = GetMyGameObject()->abb = GetBB();
-	GetMyGameObject()->obb = GetBB();
-	GetMyGameObject()->UpdateBB();
-
-	if (debug_bb)
-	{
-		static float3 corners[8];
-		GetMyGameObject()->abb.GetCornerPoints(corners);
-		App->renderer3D->DebugDrawCube(corners, { 0, 255, 0, 255 });
-		GetMyGameObject()->obb.GetCornerPoints(corners);
-		App->renderer3D->DebugDrawCube(corners, { 0, 255, 0, 255 });
-	}
-
 }
 
 void ComponentMesh::Draw(ComponentMaterial *component_material)
@@ -146,6 +132,14 @@ float3 ComponentMesh::GetMaxPoint()
 }
 AABB ComponentMesh::GetBB()
 {
+	if (debug_bb)
+	{
+		static float3 corners[8];
+		GetMyGameObject()->abb.GetCornerPoints(corners);
+		App->renderer3D->DebugDrawCube(corners, { 0, 255, 0, 255 });
+		GetMyGameObject()->obb.GetCornerPoints(corners);
+		App->renderer3D->DebugDrawCube(corners, { 0, 0, 255, 255 });
+	}
 	AABB bounding_box;
 	bounding_box.SetNegativeInfinity();
 	bounding_box.Enclose(vertices, n_vertices);

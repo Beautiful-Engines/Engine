@@ -35,8 +35,6 @@ float4x4 ComponentTransform::GetTransformMatrix()
 
 	if (GetMyGameObject()->GetParent())
 	{
-		//std::string a = GetMyGameObject()->GetName();
-		//int x = GetMyGameObject()->GetChildren().size();
 		transform_matrix = GetMyGameObject()->GetParent()->GetTransform()->transform_matrix * local_transform_matrix;
 	}
 	else
@@ -47,6 +45,11 @@ float4x4 ComponentTransform::GetTransformMatrix()
 	for (int i = 0; i < GetMyGameObject()->GetChildren().size(); i++)
 	{
 		GetMyGameObject()->GetChildren()[i]->GetTransform()->GetTransformMatrix();
+	}
+
+	if (GetMyGameObject()->GetMesh())
+	{
+		GetMyGameObject()->UpdateBB();
 	}
 
 	transform_matrix.Decompose(position, rotation, scale);

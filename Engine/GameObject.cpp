@@ -168,7 +168,7 @@ void GameObject :: UpdateBB()
 	if (GetMesh())
 	{
 		obb = GetMesh()->GetBB();
-		obb.Transform(GetTransform()->GetTransformMatrix());
+		obb.Transform(GetTransform()->transform_matrix);
 
 		abb.SetNegativeInfinity();
 		abb.Enclose(obb);
