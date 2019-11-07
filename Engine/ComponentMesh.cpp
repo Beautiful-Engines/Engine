@@ -117,9 +117,9 @@ void ComponentMesh::DrawNormals()
 		if ((App->renderer3D->vertex_normals && App->renderer3D->normals) || vertex_normals)
 		{
 			int j = 0;
-			for (int i = 0; i < n_vertices * 3; i += 3) {
-				glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
-				glVertex3f(vertices[i] + normals[j].x  * lenght, vertices[i + 1] + normals[j].y  * lenght, vertices[i + 2] + normals[j].z  * lenght);
+			for (int i = 0; i < n_vertices; i ++) {
+				glVertex3f(vertices[i].x, vertices[i].y, vertices[i].z);
+				glVertex3f(vertices[i].x + normals[j].x  * lenght, vertices[i].y + normals[j].y  * lenght, vertices[i].z + normals[j].z  * lenght);
 				++j;
 			}
 		}
@@ -135,11 +135,11 @@ void ComponentMesh::DrawNormals()
 }
 float3 ComponentMesh::GetMaxPoint()
 {
-	float3 maxP = { vertices[0],vertices[1],vertices[2] };
-	for (int i = 0; i < n_vertices; i += 3) {
-			if (maxP.y < vertices[i + 1])
+	float3 maxP = vertices[0];
+	for (int i = 0; i < n_vertices; i ++) {
+			if (maxP.y < vertices[i].y)
 			{
-				maxP = { vertices[i],vertices[i + 1],vertices[i + 2] };
+				maxP = vertices[i];
 			}
 	}
 	return maxP;
@@ -148,16 +148,16 @@ AABB ComponentMesh::GetBB()
 {
 	AABB bounding_box;
 	bounding_box.SetNegativeInfinity();
-	bounding_box.Enclose(&(float3)vertices, n_vertices);
+	bounding_box.Enclose(vertices, n_vertices);
 	return bounding_box;
 }
 float3 ComponentMesh::GetMinPoint()
 {
-	float3 minP = { vertices[0],vertices[1],vertices[2] };
-	for (int i = 0; i < n_vertices; i += 3) {
-		if (minP.y > vertices[i + 1])
+	float3 minP = vertices[0];
+	for (int i = 0; i < n_vertices; i ++) {
+		if (minP.y > vertices[i].y)
 		{
-			minP = { vertices[i],vertices[i + 1],vertices[i + 2] };
+			minP = vertices[i];
 		}
 	}
 	return minP;

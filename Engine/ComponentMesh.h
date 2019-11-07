@@ -27,9 +27,10 @@ public:
 
 	uint id_vertex = 0u;
 	uint n_vertices = 0u;
-	float *vertices = nullptr;
+	float3 *vertices = nullptr;
 
 	uint id_normal = 0u;
+	uint n_normals = 0u;
 	aiVector3D *normals = nullptr;
 
 	uint id_uv = 0u;

@@ -44,6 +44,9 @@
     <Filter Include="Sources\Components">
       <UniqueIdentifier>{ce7c10b9-dfcd-4a5d-bcb4-e0eaded3db8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Importers">
+      <UniqueIdentifier>{c312935b-51e5-4d1d-b362-fea66911b9ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -352,6 +355,12 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>Sources\Containers\ExtLibraries\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Sources\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImportMesh.h">
+      <Filter>Sources\Importers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -551,6 +560,9 @@
     </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>Sources\Containers\ExtLibraries\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImportMesh.cpp">
+      <Filter>Sources\Importers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

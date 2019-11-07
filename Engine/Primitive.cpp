@@ -66,8 +66,8 @@ void Primitive::NormalsCalc()
 	}
 	// Vertices
 	n_vertices = shape->npoints;
-	vertices = new float[n_vertices * 3];
-	memcpy(vertices, shape->points, sizeof(float) * n_vertices * 3);
+	vertices = new float3[n_vertices];
+	memcpy(vertices, shape->points, sizeof(float3) * n_vertices);
 
 	// Indexes
 	n_indexes = shape->ntriangles * 3;
@@ -92,16 +92,16 @@ void Primitive::NormalsCalc()
 		face_center_point = new float[n_indexes];
 		face_normal = new float[n_indexes];
 
-		for (uint i = 0; i < n_indexes; i += 3)
+		for (uint i = 0; i < n_indexes; i +=3 )
 		{
 			uint index = shape->triangles[i];
-			vec3 vertex0(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
+			vec3 vertex0(vertices[index * 3].x, vertices[index * 3].y, vertices[index * 3].z);
 
 			index = shape->triangles[i + 1];
-			vec3 vertex1(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
+			vec3 vertex1(vertices[index * 3].x, vertices[index * 3].y, vertices[index * 3].z);
 
 			index = shape->triangles[i + 2];
-			vec3 vertex2(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
+			vec3 vertex2(vertices[index * 3].x, vertices[index * 3].y, vertices[index * 3].z);
 
 			vec3 v0 = vertex0 - vertex2;
 			vec3 v1 = vertex1 - vertex2;

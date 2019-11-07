@@ -166,7 +166,7 @@ void ModuleImport::LoadNode(aiNode* _node, const aiScene* _scene, GameObject* _o
 		ai_mesh = _scene->mMeshes[_node->mMeshes[0]];
 
 		mymesh->n_vertices = ai_mesh->mNumVertices;
-		mymesh->vertices = new float[mymesh->n_vertices * 3];
+		mymesh->vertices = new float3[mymesh->n_vertices];
 		memcpy(mymesh->vertices, ai_mesh->mVertices, sizeof(float) * mymesh->n_vertices * 3);
 
 		// Faces
@@ -200,13 +200,13 @@ void ModuleImport::LoadNode(aiNode* _node, const aiScene* _scene, GameObject* _o
 			for (uint i = 0; i < mymesh->n_indexes; i += 3)
 			{
 				uint index = mymesh->indexes[i];
-				vec3 vertex0(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
+				vec3 vertex0(mymesh->vertices[index * 3].x, mymesh->vertices[index * 3].y, mymesh->vertices[index * 3].z);
 
 				index = mymesh->indexes[i + 1];
-				vec3 vertex1(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
+				vec3 vertex1(mymesh->vertices[index * 3].x, mymesh->vertices[index * 3].y, mymesh->vertices[index * 3].z);
 
 				index = mymesh->indexes[i + 2];
-				vec3 vertex2(mymesh->vertices[index * 3], mymesh->vertices[index * 3 + 1], mymesh->vertices[index * 3 + 2]);
+				vec3 vertex2(mymesh->vertices[index * 3].x, mymesh->vertices[index * 3].y, mymesh->vertices[index * 3].z);
 
 				vec3 v0 = vertex0 - vertex2;
 				vec3 v1 = vertex1 - vertex2;

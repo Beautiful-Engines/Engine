@@ -27,5 +27,5 @@ public:
 	float4x4 local_transform_matrix;
 	float4x4 transform_matrix;
 };
-#endif
+#endif // !__ComponentTransform_H__
 
