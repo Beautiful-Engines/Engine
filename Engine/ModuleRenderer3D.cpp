@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
+#include "MathGeoLib/include/Math/float2.h"
 
 #include "glew\glew.h"
 #include "SDL\include\SDL_opengl.h"
@@ -101,7 +102,7 @@ bool ModuleRenderer3D::Init()
 
 	}
 	// Projection matrix for
-	OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
+	/*OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());*/
 
 	// Initialize glew
 	GLenum error = glewInit();
@@ -117,6 +118,8 @@ bool ModuleRenderer3D::Init()
 		LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		LOG("Vendor: %s", glGetString(GL_VENDOR));
 		LOG("Renderer: %s", glGetString(GL_RENDERER));
+		OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
+		CreateSceneBuffer();
 	}
 
 	return ret;
@@ -125,6 +128,8 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
+	/*glBindFramebuffer(GL_FRAMEBUFFER, scene_buffer_id);*/
+
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -144,6 +149,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
@@ -211,6 +217,30 @@ void ModuleRenderer3D::SetVSync(bool VSync)
 	{
 		SDL_GL_SetSwapInterval(0);
 	}
+}
+
+void ModuleRenderer3D::CreateSceneBuffer()
+{
+	glGenFramebuffers(1, &scene_buffer_id);
+	glBindFramebuffer(GL_FRAMEBUFFER, scene_buffer_id);
+
+	glGenTextures(1, &scene_texture_id);
+	glBindTexture(GL_TEXTURE_2D, scene_texture_id);
+
+	float2 size = float2(App->window->GetWindowWidth(), App->window->GetWindowHeight());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size.x, size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, scene_texture_id, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glGenRenderbuffers(1, &scene_depth_id);
+	glBindRenderbuffer(GL_RENDERBUFFER, scene_depth_id);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, scene_depth_id);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void ModuleRenderer3D::DebugDrawCube(const float3 * vertices, Color color) const

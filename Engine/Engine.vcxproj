@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{5270F10E-458D-42BD-B24C-3ECCCB47BB6F}</ProjectGuid>
     <RootNamespace>Engine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -235,6 +235,7 @@
     <ClInclude Include="WindowEngine.h" />
     <ClInclude Include="WindowPrimitives.h" />
     <ClInclude Include="WindowProperties.h" />
+    <ClInclude Include="WindowScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -304,6 +305,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="WindowPrimitives.cpp" />
     <ClCompile Include="WindowProperties.cpp" />
+    <ClCompile Include="WindowScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl" />

@@ -16,6 +16,7 @@
 #include "WindowConsole.h"
 #include "WindowPrimitives.h"
 #include "WindowProperties.h"
+#include "WindowScene.h"
 
 #include "Primitive.h"
 
@@ -37,6 +38,7 @@ bool ModuleGUI::Init()
 	window_console = new WindowConsole();
 	window_primitives = new WindowPrimitives();
 	window_properties = new WindowProperties();
+	window_scene = new WindowScene();
 
 	// Push windows into vector
 	windows_engine.push_back(window_hierarchy);
@@ -45,6 +47,7 @@ bool ModuleGUI::Init()
 	windows_engine.push_back(window_console);
 	windows_engine.push_back(window_primitives);
 	windows_engine.push_back(window_properties);
+	windows_engine.push_back(window_scene);
 
 	// Initialize ImGUi
 	LOG("Creating ImGui context");

@@ -36,9 +36,14 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	bool VSync = true;
+	uint scene_buffer_id = -1;
+	uint scene_texture_id;
+	uint scene_depth_id;
 	
 	bool GetVSync();
 	void SetVSync(bool VSync);
+
+	void CreateSceneBuffer();
 
 	void DebugDrawCube(const float3 * vertices, Color color) const;
 

@@ -361,6 +361,9 @@
     <ClInclude Include="ImportMesh.h">
       <Filter>Sources\Importers</Filter>
     </ClInclude>
+    <ClInclude Include="WindowScene.h">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -563,6 +566,9 @@
     </ClCompile>
     <ClCompile Include="ImportMesh.cpp">
       <Filter>Sources\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowScene.cpp">
+      <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
