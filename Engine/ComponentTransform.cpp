@@ -41,12 +41,10 @@ float4x4 ComponentTransform::GetTransformMatrix()
 	{
 		transform_matrix = local_transform_matrix;
 	}
-
 	for (int i = 0; i < GetMyGameObject()->GetChildren().size(); i++)
 	{
 		GetMyGameObject()->GetChildren()[i]->GetTransform()->GetTransformMatrix();
 	}
-
 	if (GetMyGameObject()->GetMesh())
 	{
 		GetMyGameObject()->UpdateBB();
