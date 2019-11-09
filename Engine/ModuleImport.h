@@ -3,10 +3,9 @@
 
 #include "Module.h"
 
-class ComponentMesh;
-class GameObject;
-class aiNode;
-class aiScene;
+class ImportScene;
+class ImportMesh;
+class ImportTexture;
 
 class ModuleImport : public Module
 {
@@ -19,16 +18,14 @@ public:
 	bool CleanUp() override;
 
 
-	bool LoadFile(const char* path);
-	bool LoadFBX(const char* path);
-	bool LoadTexture(const char* path, GameObject* go_fromfbx = nullptr);
-	void DefaultTexture(GameObject* go_texturedefault);
-	void GLBuffer(ComponentMesh *mesh);
+	void LoadFile(const char* path);
 
-	std::string final_path = "";
+public:
 
-private:
-	void LoadNode(aiNode* node, const aiScene* scene, GameObject* object);
+	ImportScene* import_scene;
+	ImportMesh* import_mesh;
+	ImportTexture* import_texture;
+
 };
 
 

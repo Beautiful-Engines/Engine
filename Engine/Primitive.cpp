@@ -42,8 +42,10 @@ Primitive::Primitive(PrimitiveType _primitive_type) : GameObject()
 		CreateKleinBottle(20, 20);
 		break;
 	case PrimitiveType::OTHER:
+		CreateCube();
 		break;*/
 	default:
+		CreateCube();
 		break;
 	}
 
@@ -86,15 +88,15 @@ void Primitive::NormalsCalc()
 	if (shape->normals)
 	{
 		// Vertex Normals
-		normals = new float3[n_vertices * 3];
+		normals = new float3[n_vertices];
 		n_normals = n_vertices;
 		memcpy(normals, shape->normals, sizeof(float3) * n_normals);
 
 		// Face Normals
-		face_center_point = new float[n_indexes];
-		face_normal = new float[n_indexes];
+		face_center_point = new float3[shape->ntriangles];
+		face_normal = new float3[shape->ntriangles];
 
-		for (uint i = 0; i < n_indexes; i +=3 )
+		/*for (uint i = 0; i < n_indexes; i +=3 )
 		{
 			uint index = shape->triangles[i];
 			vec3 vertex0(vertices[index * 3].x, vertices[index * 3].y, vertices[index * 3].z);
@@ -111,14 +113,14 @@ void Primitive::NormalsCalc()
 
 			vec3 normalized = normalize(n);
 
-			face_center_point[i] = (vertex0.x + vertex1.x + vertex2.x) / 3;
-			face_center_point[i + 1] = (vertex0.y + vertex1.y + vertex2.y) / 3;
-			face_center_point[i + 2] = (vertex0.z + vertex1.z + vertex2.z) / 3;
+			face_center_point[i].x = (vertex0.x + vertex1.x + vertex2.x) / 3;
+			face_center_point[i].y = (vertex0.y + vertex1.y + vertex2.y) / 3;
+			face_center_point[i].z = (vertex0.z + vertex1.z + vertex2.z) / 3;
 
-			face_normal[i] = normalized.x;
-			face_normal[i + 1] = normalized.y;
-			face_normal[i + 2] = normalized.z;
-		}
+			face_normal[i].x = normalized.x;
+			face_normal[i].y = normalized.y;
+			face_normal[i].z = normalized.z;
+		}*/
 	}
 
 	AddToMesh();
@@ -145,8 +147,8 @@ void Primitive::AddToMesh()
 	primitive_mesh->face_normal = face_normal;
 	primitive_mesh->is_primitive = true;
 
-	App->importer->GLBuffer(primitive_mesh);
-	App->importer->DefaultTexture(this);
+	/*App->importer->GLBuffer(primitive_mesh);
+	App->importer->DefaultTexture(this);*/
 }
 
 // PRIMITIVE FORMS

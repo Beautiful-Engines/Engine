@@ -39,8 +39,8 @@ public:
 	uint n_uv = 0u;
 	float2 *uv_coords = nullptr;
 
-	float *face_center_point = nullptr;
-	float *face_normal = nullptr;
+	float3 *face_center_point = nullptr;
+	float3 *face_normal = nullptr;
 
 	bool checkered = false;
 	uint id_texture = 0;

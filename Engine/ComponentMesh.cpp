@@ -113,8 +113,8 @@ void ComponentMesh::DrawNormals()
 		if((App->renderer3D->normals && !App->renderer3D->vertex_normals) || face_normals)
 		{
 			for (int i = 0; i < n_indexes; i += 3) {
-				glVertex3f(face_center_point[i], face_center_point[i + 1], face_center_point[i + 2]);
-				glVertex3f(face_center_point[i] + face_normal[i] * lenght, face_center_point[i + 1] + face_normal[i + 1] * lenght, face_center_point[i + 2] + face_normal[i + 2] * lenght);
+				glVertex3f(face_center_point[i].x, face_center_point[i].y, face_center_point[i].z);
+				glVertex3f(face_center_point[i].x + face_normal[i].x * lenght, face_center_point[i].y + face_normal[i].y * lenght, face_center_point[i].z + face_normal[i].z * lenght);
 			}
 		}
 		glEnd();

@@ -154,6 +154,8 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="Importer.h" />
     <ClInclude Include="ImportMesh.h" />
+    <ClInclude Include="ImportScene.h" />
+    <ClInclude Include="ImportTexture.h" />
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleImport.h" />
     <ClInclude Include="Par\par_shapes.h" />
@@ -254,6 +256,8 @@
     <ClCompile Include="ImGui\imgui_stdlib.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="ImportMesh.cpp" />
+    <ClCompile Include="ImportScene.cpp" />
+    <ClCompile Include="ImportTexture.cpp" />
     <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImport.cpp" />
     <ClCompile Include="Primitive.cpp" />

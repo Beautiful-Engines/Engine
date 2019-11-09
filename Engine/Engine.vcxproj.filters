@@ -364,6 +364,12 @@
     <ClInclude Include="WindowScene.h">
       <Filter>Sources\EngineWindows</Filter>
     </ClInclude>
+    <ClInclude Include="ImportScene.h">
+      <Filter>Sources\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImportTexture.h">
+      <Filter>Sources\Importers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -569,6 +575,12 @@
     </ClCompile>
     <ClCompile Include="WindowScene.cpp">
       <Filter>Sources\EngineWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="ImportScene.cpp">
+      <Filter>Sources\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="ImportTexture.cpp">
+      <Filter>Sources\Importers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

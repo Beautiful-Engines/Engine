@@ -3,7 +3,6 @@
 
 #include "Importer.h"
 
-class ComponentMesh;
 struct aiScene;
 struct aiMesh;
 
@@ -16,11 +15,11 @@ public:
 	bool Init();
 	bool CleanUp();
 
-	/*ComponentMesh* Import(const aiScene* scene, const aiMesh* mesh);*/
+	void Import(const aiScene* scene, const aiMesh* ai_mesh, GameObject* _object);
 	bool Save(ComponentMesh* mesh);
 
-	/*ComponentMesh* Load(const char* exported_file);*/
-	/*ComponentMesh* LoadPrimitive(PRIMITIVE_TYPE type);*/
+private:
+	void GLBuffer(ComponentMesh *mesh);
 };
 
 #endif // !__ImportMesh_H_

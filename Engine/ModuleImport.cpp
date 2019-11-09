@@ -7,37 +7,14 @@
 #include "ModuleImport.h"
 #include "ModuleFileSystem.h"
 
-#include "glmath.h"
-#include "glew\glew.h"
-
-#include "Assimp/include/cimport.h"
-#include "Assimp/include/scene.h"
-#include "Assimp/include/postprocess.h"
-#include "Assimp/include/cfileio.h" 
-
-#include "DeviL/include/il.h"
-#include "DeviL/include/ilu.h"
-#include "DeviL/include/ilut.h"
-
-#pragma comment (lib, "Assimp/libx86/assimp.lib")
-#pragma comment (lib, "DeviL/lib/DevIL.lib")
-#pragma comment (lib, "DeviL/lib/ILU.lib")
-#pragma comment (lib, "DeviL/lib/ILUT.lib")
-
-
-
-void LogCallback(const char* text, char* data)
-{
-	std::string temp_string = text;
-	temp_string.erase(std::remove(temp_string.begin(), temp_string.end(), '%'), temp_string.end());
-	LOG(temp_string.c_str());
-}
+#include "ImportScene.h"
+#include "ImportMesh.h"
+#include "ImportTexture.h"
 
 ModuleImport::ModuleImport(bool start_enabled) : Module(start_enabled)
 {
 	name = "Import";
 }
-
 
 ModuleImport::~ModuleImport()
 {
@@ -45,18 +22,14 @@ ModuleImport::~ModuleImport()
 
 bool ModuleImport::Init()
 {
-	// Stream log messages to Debug window
-	struct aiLogStream stream;
-	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	stream.callback = LogCallback;
-	aiAttachLogStream(&stream);
+	import_scene = new ImportScene();
+	import_scene->Init();
 
-	ilInit();
-	iluInit();
-	ilutInit();
-	ilEnable(IL_CONV_PAL);
-	ilutEnable(ILUT_OPENGL_CONV);
-	ilutRenderer(ILUT_OPENGL);
+	import_mesh = new ImportMesh();
+	import_mesh->Init();
+
+	import_texture = new ImportTexture();
+	import_texture->Init();
 
 	return true;
 }
@@ -67,325 +40,34 @@ bool ModuleImport::Start()
 
 bool ModuleImport::CleanUp()
 {
-	aiDetachAllLogStreams();
 	return true;
 }
 
-bool ModuleImport::LoadFile(const char* _path)
+void ModuleImport::LoadFile(const char* _path)
 {
-	bool ret = true;
-
-	const aiScene * scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	//copy file
 	std::string normalized_path = _path;
 	App->file_system->NormalizePath(normalized_path);
-	std::string file;
-	App->file_system->SplitFilePath(normalized_path.c_str(), nullptr, &file, nullptr);
+	std::string file, extension;
+	App->file_system->SplitFilePath(normalized_path.c_str(), nullptr, &file, &extension);
+
 	std::string final_path = ASSETS_FOLDER+file;
 
-	App->file_system->CopyFromOutsideFS(normalized_path.c_str(), final_path.c_str());
+	if (!App->file_system->Exists(final_path.c_str()))
+	{
+		App->file_system->CopyFromOutsideFS(normalized_path.c_str(), final_path.c_str());
+	}
 	
-	std::string extension;
-	App->file_system->SplitFilePath(final_path.c_str(), nullptr, nullptr, &extension);
 	if (extension == "fbx")
 	{
-		LoadFBX(final_path.c_str());
+		import_scene->LoadFBX(final_path.c_str());
 	}
 	else if (extension == "png" || extension == "dds")
 	{
-		LoadTexture(final_path.c_str());
+		std::string output_file;
+		import_texture->Import(final_path.c_str(), output_file);
+		import_texture->LoadTexture(output_file.c_str());
 	}
-
-	return ret;
-}
-
-bool ModuleImport::LoadFBX(const char* _path)
-{
-	bool ret = true;
-
-	// Name
-	std::string name_path = _path;
-	uint pos = name_path.find_last_of("\\/");
-	name_path = (name_path.substr(pos + 1)).c_str();
-	pos = name_path.find(".");
-	std::string name_object = name_path.substr(0,pos);
-
-	GameObject *go = App->scene->CreateGameObject(name_object);
-	
-	// Scene
-	const aiScene *scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
-
-	// Mesh
-	if (scene != nullptr && scene->HasMeshes())
-	{
-		for (int i = 0; i < scene->mRootNode->mNumChildren; ++i)
-		{
-			name_object = name_path.substr(0, pos) + std::to_string(i + 1);
-			GameObject *meshgameobject = new GameObject();
-			meshgameobject->SetName(name_object);
-			meshgameobject->SetParent(go);
-
-			LoadNode(scene->mRootNode->mChildren[i], scene, meshgameobject);
-		}
-		aiReleaseImport(scene);
-	}
-	else
-	{
-		LOG("Error loading scene %s", aiGetErrorString());
-		ret = false;
-	}
-	
-	return ret;
-}
-
-void ModuleImport::LoadNode(aiNode* _node, const aiScene* _scene, GameObject* _object)
-{
-	// Transform
-	ComponentTransform *mytransform = _object->GetTransform();
-	aiVector3D translation, scaling;
-	aiQuaternion rotation;
-	_node->mTransformation.Decompose(scaling, rotation, translation);
-	mytransform->position = float3(translation.x, translation.y, translation.z);
-	mytransform->scale = float3(scaling.x, scaling.y, scaling.z);
-	if (mytransform->scale.x > 1000)
-		mytransform->scale.x /= 1000;
-	if (mytransform->scale.x > 100)
-		mytransform->scale.x /= 100;
-	if (mytransform->scale.x > 10)
-		mytransform->scale.x /= 10;
-	mytransform->rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
-
-	// Mesh
-	if (_node->mNumMeshes > 0)
-	{
-		aiMesh *ai_mesh = nullptr;
-		ComponentMesh *mymesh = new ComponentMesh(_object);
-		App->scene->AddGameObject(_object);
-
-		ai_mesh = _scene->mMeshes[_node->mMeshes[0]];
-
-		mymesh->n_vertices = ai_mesh->mNumVertices;
-		mymesh->vertices = new float3[mymesh->n_vertices];
-		memcpy(mymesh->vertices, ai_mesh->mVertices, sizeof(float3) * mymesh->n_vertices);
-
-		// Faces
-		if (ai_mesh->HasFaces())
-		{
-			mymesh->n_indexes = ai_mesh->mNumFaces * 3;
-			mymesh->indexes = new uint[mymesh->n_indexes];
-
-			for (uint j = 0; j < ai_mesh->mNumFaces; ++j)
-			{
-				if (ai_mesh->mFaces[j].mNumIndices != 3)
-				{
-					LOG("WARNING, geometry face with != 3 indices!");
-				}
-				else
-				{
-					memcpy(&mymesh->indexes[j * 3], ai_mesh->mFaces[j].mIndices, sizeof(uint) * 3);
-				}
-			}
-			LOG("New mesh %s, with %i vertices and %i faces has been added", _object->GetName(), mymesh->n_vertices, mymesh->n_indexes / 3);
-		}
-		// Normals
-		if (ai_mesh->HasNormals())
-		{
-			mymesh->normals = new float3[mymesh->n_vertices];
-			mymesh->n_normals = mymesh->n_vertices;
-			memcpy(mymesh->normals, ai_mesh->mNormals, sizeof(float3) * mymesh->n_normals);
-
-			mymesh->face_center_point = new float[ai_mesh->mNumFaces * 3];
-			mymesh->face_normal = new float[ai_mesh->mNumFaces * 3];
-
-			for (uint i = 0; i < mymesh->n_indexes; i += 3)
-			{
-				uint index = mymesh->indexes[i] * 3;
-				vec3 vertex0(mymesh->vertices[index].x, mymesh->vertices[index].y, mymesh->vertices[index].z);
-
-				index = mymesh->indexes[i + 1] * 3;
-				vec3 vertex1(mymesh->vertices[index].x, mymesh->vertices[index].y, mymesh->vertices[index].z);
-
-				index = mymesh->indexes[i + 2] * 3;
-				vec3 vertex2(mymesh->vertices[index].x, mymesh->vertices[index].y, mymesh->vertices[index].z);
-
-				vec3 v0 = vertex0 - vertex2;
-				vec3 v1 = vertex1 - vertex2;
-				vec3 n = cross(v0, v1);
-
-				vec3 normalized = normalize(n);
-
-				mymesh->face_center_point[i] = (vertex0.x + vertex1.x + vertex2.x) / 3;
-				mymesh->face_center_point[i + 1] = (vertex0.y + vertex1.y + vertex2.y) / 3;
-				mymesh->face_center_point[i + 2] = (vertex0.z + vertex1.z + vertex2.z) / 3;
-
-				mymesh->face_normal[i] = normalized.x;
-				mymesh->face_normal[i + 1] = normalized.y;
-				mymesh->face_normal[i + 2] = normalized.z;
-			}
-		}
-
-		// UVs
-		if (ai_mesh->HasTextureCoords(0))
-		{
-			mymesh->uv_comp = ai_mesh->mNumUVComponents[0];
-			mymesh->n_uv = mymesh->n_vertices;
-			mymesh->uv_coords = new float2[mymesh->n_uv];
-
-			for (uint i = 0; i < mymesh->n_uv; i++)
-			{
-				memcpy(&mymesh->uv_coords[i], &ai_mesh->mTextureCoords[0][i], sizeof(float2));
-			}
-		}
-
-		// Materials
-		if (ai_mesh->mMaterialIndex >= 0)
-		{
-			aiString texture_path;
-			_scene->mMaterials[ai_mesh->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, 0, &texture_path);
-			if (texture_path.length > 0)
-			{
-				LoadTexture(texture_path.C_Str(), _object);
-				DefaultTexture(_object);
-			}
-			else
-			{
-				DefaultTexture(_object);
-			}
-		}
-
-		GLBuffer(mymesh);
-
-		ai_mesh = nullptr;
-	}
-
-	if (_node->mNumChildren > 0)
-	{
-		for (int i = 0; i < _node->mNumChildren; i++)
-		{
-			LoadNode(_node->mChildren[i], _scene, _object);
-		}
-	}
-
-
-}
-
-bool ModuleImport::LoadTexture(const char* _path, GameObject* go_fromfbx)
-{
-	bool ret = true;
-
-	// Name
-	std::string name_path = _path;
-	uint pos = name_path.find_last_of("\\/");
-	name_path = (name_path.substr(pos + 1)).c_str();
-	final_path = ASSETS_FOLDER + std::string(_path);
-
-	ComponentMaterial *component_material = nullptr;
-
-	if (go_fromfbx != nullptr)
-	{
-		
-		uint id_tex;
-		ilGenImages(1, &id_tex);
-		ilBindImage(id_tex);
-		
-		if (ilLoadImage(final_path.c_str()))
-		{
-			component_material = new ComponentMaterial(go_fromfbx);
-			component_material->id_texture = ilutGLBindTexImage();
-			component_material->path = final_path;
-			component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
-			component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
-			go_fromfbx->GetMesh()->id_texture = component_material->id_texture;
-
-			LOG("Added %s to %s", name_path.c_str(), go_fromfbx->GetName().c_str());
-		}
-		else
-		{
-			auto error = ilGetError();
-			LOG("Error loading texture %s. Error: %s", name_path.c_str(), ilGetString(error));
-			ret = false;
-		}
-
-		ilDeleteImages(1, &id_tex);
-	}
-	else if(App->scene->GetSelected() != nullptr)
-	{
-		if (App->scene->GetSelected()->GetChildren().size() > 0)
-		{
-			std::vector<GameObject*> children_game_objects = App->scene->GetSelected()->GetChildren();
-
-
-			for (uint j = 0; j < children_game_objects.size(); ++j)
-			{
-				LoadTexture(name_path.c_str(), children_game_objects[j]);
-			}
-		}
-		else
-		{
-			LoadTexture(name_path.c_str(), App->scene->GetSelected());
-		}
-	}
-
-	return ret;
-}
-
-void ModuleImport::DefaultTexture(GameObject* go_texturedefault)
-{
-	ComponentMaterial *component_material = new ComponentMaterial(go_texturedefault);
-
-	component_material->path = "DefaultTexture";
-	component_material->width = 128;
-	component_material->height = 128;
-	GLubyte checkImage[128][128][4];
-	for (int i = 0; i < 128; i++)
-	{
-		for (int j = 0; j < 128; j++)
-		{
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkImage[i][j][0] = (GLubyte)c;
-			checkImage[i][j][1] = (GLubyte)c;
-			checkImage[i][j][2] = (GLubyte)c;
-			checkImage[i][j][3] = (GLubyte)255;
-		}
-	}
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &component_material->id_texture);
-	glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	go_texturedefault->GetMesh()->id_default_texture = component_material->id_texture;
-
-}
-
-void ModuleImport::GLBuffer(ComponentMesh *mesh)
-{
-	glGenBuffers(1, &mesh->id_vertex);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * mesh->n_vertices, mesh->vertices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &mesh->id_index);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->n_indexes, mesh->indexes, GL_STATIC_DRAW);
-
-	//NORMALS
-	if (mesh->normals != nullptr) {
-		glGenBuffers(1, &mesh->id_normal);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normal);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * mesh->n_normals, mesh->normals, GL_STATIC_DRAW);
-	}
-
-	// UV
-	glGenBuffers(1, &mesh->id_uv);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float2) * mesh->n_uv, mesh->uv_coords, GL_STATIC_DRAW);
-	
-	
 
 }
