@@ -167,7 +167,7 @@ void ModuleImport::LoadNode(aiNode* _node, const aiScene* _scene, GameObject* _o
 
 		mymesh->n_vertices = ai_mesh->mNumVertices;
 		mymesh->vertices = new float3[mymesh->n_vertices];
-		memcpy(mymesh->vertices, ai_mesh->mVertices, sizeof(float) * mymesh->n_vertices * 3);
+		memcpy(mymesh->vertices, ai_mesh->mVertices, sizeof(float3) * mymesh->n_vertices);
 
 		// Faces
 		if (ai_mesh->HasFaces())
@@ -200,14 +200,14 @@ void ModuleImport::LoadNode(aiNode* _node, const aiScene* _scene, GameObject* _o
 
 			for (uint i = 0; i < mymesh->n_indexes; i += 3)
 			{
-				uint index = mymesh->indexes[i];
-				vec3 vertex0(mymesh->vertices[index * 3].x, mymesh->vertices[index * 3].y, mymesh->vertices[index * 3].z);
+				uint index = mymesh->indexes[i] * 3;
+				vec3 vertex0(mymesh->vertices[index].x, mymesh->vertices[index].y, mymesh->vertices[index].z);
 
-				index = mymesh->indexes[i + 1];
-				vec3 vertex1(mymesh->vertices[index * 3].x, mymesh->vertices[index * 3].y, mymesh->vertices[index * 3].z);
+				index = mymesh->indexes[i + 1] * 3;
+				vec3 vertex1(mymesh->vertices[index].x, mymesh->vertices[index].y, mymesh->vertices[index].z);
 
-				index = mymesh->indexes[i + 2];
-				vec3 vertex2(mymesh->vertices[index * 3].x, mymesh->vertices[index * 3].y, mymesh->vertices[index * 3].z);
+				index = mymesh->indexes[i + 2] * 3;
+				vec3 vertex2(mymesh->vertices[index].x, mymesh->vertices[index].y, mymesh->vertices[index].z);
 
 				vec3 v0 = vertex0 - vertex2;
 				vec3 v1 = vertex1 - vertex2;
@@ -368,7 +368,7 @@ void ModuleImport::GLBuffer(ComponentMesh *mesh)
 {
 	glGenBuffers(1, &mesh->id_vertex);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * mesh->n_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * mesh->n_vertices, mesh->vertices, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &mesh->id_index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
@@ -378,7 +378,7 @@ void ModuleImport::GLBuffer(ComponentMesh *mesh)
 	if (mesh->normals != nullptr) {
 		glGenBuffers(1, &mesh->id_normal);
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normal);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * mesh->n_normals * 3, mesh->normals, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * mesh->n_normals, mesh->normals, GL_STATIC_DRAW);
 	}
 
 	// UV

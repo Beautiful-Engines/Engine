@@ -16,6 +16,7 @@ WindowScene::~WindowScene()
 
 bool WindowScene::Draw()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	ImGui::Begin("Scene", &enabled, ImGuiWindowFlags_MenuBar);
 	w = ImGui::GetWindowWidth();
 	h = ImGui::GetWindowHeight();
@@ -29,6 +30,7 @@ bool WindowScene::Draw()
 		ImVec2(0, 1),
 		ImVec2(1, 0));
 	ImGui::End();
+
 	return true;
 }
 

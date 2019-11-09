@@ -30,13 +30,12 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
-	AddModule(gui);
 	AddModule(camera);
-	
 	AddModule(input);
 	AddModule(scene);
 	AddModule(file_system);
 	AddModule(importer);
+	AddModule(gui);
 
 	// Renderer last!
 	AddModule(renderer3D);

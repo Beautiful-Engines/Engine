@@ -41,13 +41,14 @@ bool ModuleGUI::Init()
 	window_scene = new WindowScene();
 
 	// Push windows into vector
+	windows_engine.push_back(window_scene);
 	windows_engine.push_back(window_hierarchy);
 	windows_engine.push_back(window_config);
 	windows_engine.push_back(window_about);
 	windows_engine.push_back(window_console);
 	windows_engine.push_back(window_primitives);
 	windows_engine.push_back(window_properties);
-	windows_engine.push_back(window_scene);
+	
 
 	// Initialize ImGUi
 	LOG("Creating ImGui context");

@@ -45,10 +45,13 @@ update_status ModuleScene::PreUpdate(float dt)
 
 update_status ModuleScene::Update(float dt)
 {
+
 	if (App->renderer3D->grid)
 		DrawGrid();
 
 	game_objects[0]->Update();
+
+	
 	
 	return UPDATE_CONTINUE;
 }
