@@ -128,11 +128,13 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBindFramebuffer(GL_FRAMEBUFFER, scene_buffer_id);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+
+	
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
@@ -142,6 +144,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
+
+	
 
 	return UPDATE_CONTINUE;
 }
