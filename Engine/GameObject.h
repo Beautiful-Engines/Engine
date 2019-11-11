@@ -2,6 +2,7 @@
 #define __GameObject_H__
 
 #include <vector>
+#include <algorithm>
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
@@ -27,10 +28,11 @@ public:
 	void SetName(std::string _name);
 	const std::vector<Component*> GetComponents() const;
 
-	const GameObject* GetParent() const;
+	GameObject* GetParent();
 	void SetParent(GameObject* _game_object);
 	const std::vector<GameObject*> GetChildren() const;
 	void DeleteChild(GameObject* _game_object);
+	const bool GameObject::IsChild(GameObject * _game_object) const;
 
 	ComponentTransform* GetTransform() const;
 

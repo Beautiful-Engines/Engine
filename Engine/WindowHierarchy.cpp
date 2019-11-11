@@ -4,7 +4,8 @@
 #include "ModuleGUI.h"
 #include "WindowHierarchy.h"
 
-#include "ImGui\imgui_stdlib.h"
+#include "ImGui/imgui_stdlib.h"
+#include "imgui/imgui_internal.h"
 
 WindowHierarchy::WindowHierarchy() : WindowEngine() 
 {
@@ -48,6 +49,9 @@ void WindowHierarchy::DrawNode(GameObject * go)
 	if (go->GetChildren().size() > 0)
 	{
 		bool node_open = ImGui::TreeNodeEx(go->GetName().c_str(), node_flags);
+
+		DragAndDrop(go);
+
 		if (ImGui::IsItemClicked()) {
 			node_clicked = select_iterator;
 			App->scene->SetSelected(go);
@@ -65,6 +69,9 @@ void WindowHierarchy::DrawNode(GameObject * go)
 	else {
 		node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
 		ImGui::TreeNodeEx(go->GetName().c_str(), node_flags);
+
+		DragAndDrop(go);
+
 		if (ImGui::IsItemClicked()) {
 			node_clicked = select_iterator;
 			App->scene->SetSelected(go);
@@ -79,5 +86,47 @@ void WindowHierarchy::DrawNode(GameObject * go)
 			selection_mask ^= (1 << node_clicked);          // CTRL+click to toggle
 		else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, this commented bit preserve selection when clicking on item that is part of the selection
 			selection_mask = (1 << node_clicked);           // Click to single-select
+	}
+}
+
+void WindowHierarchy::DragAndDrop(GameObject* _go)
+{
+	// Source
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+	{
+		ImGui::SetDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F, &_go, sizeof(GameObject));
+		ImGui::EndDragDropSource();
+	}
+
+	// Target
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
+		{
+			GameObject* game_object = *(GameObject**)payload->Data;
+
+			if (!game_object->IsChild(_go) && game_object != _go)
+			{
+				game_object->GetParent()->DeleteChild(game_object);
+				game_object->SetParent(_go);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	// To Root
+	if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), (ImGuiID)"Hierarchy"))
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
+		{
+			GameObject* game_object = *(GameObject**)payload->Data;
+
+			if (!game_object->IsChild(App->scene->GetGameObjects().at(0)))
+			{
+				game_object->GetParent()->DeleteChild(game_object);
+				game_object->SetParent(App->scene->GetGameObjects().at(0));
+			}
+		}
+		ImGui::EndDragDropTarget();
 	}
 }

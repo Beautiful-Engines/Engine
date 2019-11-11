@@ -17,7 +17,7 @@ public:
 
 	int select_iterator = -1;
 private:
-
+	void DragAndDrop(GameObject* go);
 };
 
 #endif // !__WindowHierarchy_H__

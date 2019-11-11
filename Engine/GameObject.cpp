@@ -102,7 +102,7 @@ const std::vector<Component*> GameObject::GetComponents() const
 	return components;
 }
 
-const GameObject* GameObject::GetParent() const
+GameObject* GameObject::GetParent()
 {
 	return parent;
 }
@@ -118,14 +118,32 @@ const std::vector<GameObject*> GameObject::GetChildren() const
 	return children;
 }
 
+const bool GameObject::IsChild(GameObject * _game_object) const
+{
+	bool ret = false;
+
+	for (int i = 0; i < children.size() && !ret; i++)
+	{
+		if (children[i] == _game_object)
+			return true;
+
+		ret = children[i]->IsChild(_game_object);
+	}
+
+	return ret;
+}
+
 void GameObject::DeleteChild(GameObject* _game_object)
 {
 	std::vector<GameObject*>::iterator iterator_go = children.begin();
-	for (; iterator_go != children.end(); ++iterator_go) {
+	for (; iterator_go != children.end();) {
 		if (*iterator_go != nullptr && (*iterator_go) == _game_object)
 		{
 			iterator_go = children.erase(iterator_go);
-			break;
+		}
+		else
+		{
+			iterator_go++;
 		}
 	}
 }
