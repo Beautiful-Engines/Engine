@@ -3,7 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 
-
+//tbch
 WindowScene::WindowScene()
 {
 	enabled = true;
@@ -22,7 +22,7 @@ bool WindowScene::Draw()
 	h = ImGui::GetWindowHeight();
 	screen_pos = ImGui::GetCursorScreenPos();
 	int image_w, image_h;
-	//GetSizeWithAspectRatio(App->window->GetWindowWidth(), App->window->GetWindowHeight(), w, h, image_w, image_h);
+	GetSizeWithAspectRatio(App->window->GetWindowWidth(), App->window->GetWindowHeight(), w, h, image_w, image_h);
 	ImGui::GetWindowDrawList()->AddImage(
 		(void *)App->renderer3D->scene_texture_id,
 		screen_pos,

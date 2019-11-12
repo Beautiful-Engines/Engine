@@ -22,6 +22,8 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
+
+	void ResizeScene(float w, float h);
 	
 	//Load and Save
 	bool LoadDefault(nlohmann::json &load_default_json);

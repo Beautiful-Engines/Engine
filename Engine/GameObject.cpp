@@ -159,6 +159,17 @@ ComponentTransform * GameObject::GetTransform() const
 	}
 }
 
+ComponentCamera * GameObject::GetCamera() const
+{
+	for (uint i = 0; i < this->GetComponents().size(); ++i)
+	{
+		if (this->GetComponents()[i]->GetType() == ComponentType::CAMERA)
+		{
+			return (ComponentCamera*)this->GetComponents()[i];
+		}
+	}
+}
+
 ComponentMesh * GameObject::GetMesh()
 {
 	for (uint i = 0; i < this->GetComponents().size(); ++i)

@@ -6,6 +6,7 @@
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
+#include "ComponentCamera.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
 #include "MathGeoLib\include\Geometry\OBB.h"
 
@@ -37,6 +38,8 @@ public:
 	ComponentTransform* GetTransform() const;
 
 	ComponentMesh* GetMesh();
+
+	ComponentCamera* GetCamera() const;
 
 	const bool IsFocused() const;
 	void SetFocus(bool focus);

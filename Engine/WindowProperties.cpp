@@ -122,6 +122,7 @@ bool WindowProperties::Draw()
 				if (go->GetTransform())
 				{
 					go->GetTransform()->GetTransformMatrix();
+					//go->GetCamera()->DrawFrustum();
 					/*if (go->GetMesh())
 					{
 						go->UpdateBB();

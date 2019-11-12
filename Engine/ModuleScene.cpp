@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Primitive.h"
 #include "ComponentTransform.h"
+#include "ComponentCamera.h"
 #include "ModuleImport.h"
 
 #include "ModuleScene.h"
@@ -33,6 +34,9 @@ bool ModuleScene::Start()
 	CreateGrid();
 
 	GameObject *root = CreateGameObject("root");
+	GameObject *camara = CreateGameObject("camara");
+	ComponentCamera* cam = new ComponentCamera(camara);
+	camara->AddComponent(cam);
 	App->importer->LoadFile("assets/BakerHouse.fbx");
 
 	return true;
