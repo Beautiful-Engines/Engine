@@ -8,6 +8,7 @@
 GameObject::GameObject()
 {
 	new ComponentTransform(this);
+	id = App->GenerateNewId();
 }
 
 GameObject::~GameObject()

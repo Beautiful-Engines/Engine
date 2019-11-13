@@ -58,6 +58,11 @@ bool Application::Init()
 {
 	bool ret = true;
 
+	// Seed
+	pcg_extras::seed_seq_from<std::random_device> seed_source;
+	pcg32 rng(seed_source);
+	uuid = rng;
+
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
 
@@ -206,6 +211,11 @@ std::vector<float> Application::GetFPSVector()
 std::vector<float> Application::GetLastFrameMSVector()
 {
 	return ms_log;
+}
+
+uint Application::GenerateNewId()
+{
+	return uuid();
 }
 
 void Application::FillFPS()
