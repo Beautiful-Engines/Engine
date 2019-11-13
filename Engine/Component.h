@@ -5,6 +5,7 @@ class GameObject;
 
 #include "Assimp/include/vector3.h"
 #include "Globals.h"
+#include "nlohmann/json.hpp"
 
 enum class ComponentType {
 	MESH,
@@ -25,6 +26,8 @@ public:
 	virtual void Enable();
 	virtual void Disable();
 	const bool IsEnabled() const;
+
+	virtual void Save(const nlohmann::json::iterator& _iterator);
 
 	const ComponentType GetType() const;
 	GameObject* GetMyGameObject();

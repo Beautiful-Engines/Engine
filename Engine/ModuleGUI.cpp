@@ -141,6 +141,7 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Save", "CTRL+S")) { App->scene->SaveScene(); }
 			if (ImGui::MenuItem("Quit", "ALT+F4")) { return UPDATE_STOP; }
 			ImGui::EndMenu();
 		}

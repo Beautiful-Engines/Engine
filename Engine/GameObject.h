@@ -9,6 +9,7 @@
 #include "ComponentCamera.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
 #include "MathGeoLib\include\Geometry\OBB.h"
+#include "nlohmann/json.hpp"
 
 class GameObject
 {
@@ -22,9 +23,12 @@ public:
 	void Disable();
 	const bool IsEnabled() const;
 
+	void Save(const nlohmann::json::iterator& _iterator);
+
 	Component* CreateComponent(ComponentType type);
 	void AddComponent(Component* component);
 
+	const uint GetId() const;
 	const std::string GetName() const;
 	void SetName(std::string _name);
 	const std::vector<Component*> GetComponents() const;

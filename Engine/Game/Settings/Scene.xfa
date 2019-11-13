@@ -1,0 +1,39 @@
+{
+    "GameObjects": [
+        {
+            "Components": [],
+            "Enable": true,
+            "Name": "root",
+            "ParentUID": 0,
+            "UID": 1522178637
+        },
+        {
+            "Components": [],
+            "Enable": true,
+            "Name": "camara",
+            "ParentUID": 1522178637,
+            "UID": 2378736167
+        },
+        {
+            "Components": [],
+            "Enable": true,
+            "Name": "bakerhouse",
+            "ParentUID": 1522178637,
+            "UID": 2242746910
+        },
+        {
+            "Components": [],
+            "Enable": true,
+            "Name": "bakerhouse1",
+            "ParentUID": 2242746910,
+            "UID": 1937073037
+        },
+        {
+            "Components": [],
+            "Enable": true,
+            "Name": "bakerhouse2",
+            "ParentUID": 2242746910,
+            "UID": 2757964900
+        }
+    ]
+}

@@ -1,18 +1,21 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleGUI.h"
+#include "ModuleInput.h"
+#include "ModuleImport.h"
+
 #include "GameObject.h"
 #include "Primitive.h"
 #include "ComponentTransform.h"
-#include "ModuleGUI.h"
-#include "WindowHierarchy.h"
 #include "ComponentCamera.h"
-#include "ModuleImport.h"
-
+#include "WindowHierarchy.h"
 #include "ModuleScene.h"
 
 #include "glew\glew.h"
 
+#include <fstream>
+#include <iomanip>
 
 ModuleScene::ModuleScene(bool start_enabled) : Module(start_enabled)
 {
@@ -57,7 +60,8 @@ update_status ModuleScene::Update(float dt)
 
 	game_objects[0]->Update();
 
-	
+	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+		SaveScene();
 	
 	return UPDATE_CONTINUE;
 }
@@ -72,6 +76,22 @@ bool ModuleScene::CleanUp()
 {
 	LOG("Cleaning Scene");
 	return true;
+}
+
+// Save
+void ModuleScene::SaveScene()
+{
+	LOG("Saving scene into &s", SETTINGS_FOLDER"Scene.xfa");
+	nlohmann::json json;
+
+	json = {
+		{"GameObjects", nlohmann::json::array()},
+	};
+	
+	game_objects[0]->Save(json.find("GameObjects"));
+	
+	std::ofstream ofstream(SETTINGS_FOLDER"Scene.xfa");
+	ofstream << std::setw(4) << json << std::endl;
 }
 
 GameObject* ModuleScene::CreateGameObject(std::string _name)

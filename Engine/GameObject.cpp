@@ -81,6 +81,33 @@ const bool GameObject::IsEnabled() const
 	return enabled;
 }
 
+// Save
+void GameObject::Save(const nlohmann::json::iterator& _iterator)
+{
+	LOG("%s saved", name.c_str());
+	nlohmann::json json = {
+		{"UID", id},
+		{"ParentUID", GetParent() ? GetParent()->GetId() : 0},
+		{"Name", name},
+		{"Enable", enabled},
+		{"Components",nlohmann::json::array()}
+	};
+
+	//Save Components
+	for (int i = 0; i < components.size(); ++i)
+	{
+		components[i]->Save(json.find("Components"));
+	}
+
+	_iterator.value().push_back(json);
+
+	// Recursive Save Children
+	for (int i = 0; i < children.size(); ++i)
+	{
+		children[i]->Save(_iterator);
+	}
+}
+
 // Components
 Component* GameObject::CreateComponent(ComponentType type)
 {
@@ -92,6 +119,14 @@ Component* GameObject::CreateComponent(ComponentType type)
 void GameObject::AddComponent(Component* component)
 {
 	components.push_back(component);
+}
+
+// Getters and Setters
+
+// Id
+const uint GameObject::GetId() const
+{
+	return id;
 }
 
 // Name

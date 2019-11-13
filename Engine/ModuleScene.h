@@ -19,6 +19,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void SaveScene();
+
 	GameObject* CreateGameObject(std::string name);
 	void AddGameObject(GameObject* game_object);
 	void ModuleScene::DeleteGameObject(GameObject* _game_object);

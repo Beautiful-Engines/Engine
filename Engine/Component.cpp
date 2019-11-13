@@ -35,6 +35,11 @@ const bool Component::IsEnabled() const
 	return enabled;
 }
 
+void Component::Save(const nlohmann::json::iterator& _iterator)
+{
+
+}
+
 const ComponentType Component::GetType() const
 {
 	return type;
