@@ -4,9 +4,12 @@
 
 Component::Component(GameObject* _my_game_object, ComponentType _type)
 {
-	my_game_object = _my_game_object;
-	type = _type;
-	_my_game_object->AddComponent(this);
+	if (_my_game_object != nullptr)
+	{
+		my_game_object = _my_game_object;
+		type = _type;
+		_my_game_object->AddComponent(this);
+	}
 }
 
 Component::~Component()

@@ -87,7 +87,13 @@ float ComponentCamera::GetFrustumAspectRatio()
 
 void ComponentCamera::LookAt(float3 position)
 {
+	//TODO using teacher's code atm, must be changed.
+	float3 vector = position - frustum.pos;
 
+	float3x3 matrix = float3x3::LookAt(frustum.front, vector.Normalized(), frustum.up, float3::unitY);
+
+	frustum.front = (matrix.MulDir(frustum.front).Normalized());
+	frustum.up = (matrix.MulDir(frustum.up).Normalized());
 }
 
 float4x4 ComponentCamera::GetOpenGLViewMatrix()
@@ -103,7 +109,12 @@ float4x4 ComponentCamera::GetOpenGLProjectionMatrix()
 
 void ComponentCamera::UpdateFrustumTransform()
 {
-	frustum.pos = GetMyGameObject()->GetTransform()->transform_matrix.TranslatePart();
+	if (GetMyGameObject()->GetTransform())
+	{
+		frustum.pos = GetMyGameObject()->GetTransform()->position;
+		frustum.up = GetMyGameObject()->GetTransform()->transform_matrix.WorldY();
+		frustum.front = GetMyGameObject()->GetTransform()->transform_matrix.WorldZ();
+	}
 }
 
 void ComponentCamera::DrawFrustum()

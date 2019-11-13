@@ -5,6 +5,8 @@
 #include "Light.h"
 #include "MathGeoLib\include\Math\float3.h"
 
+class ComponentCamera;
+
 #define MAX_LIGHTS 8
 #define MAX_MESHES 200
 #define CHECKERS_HEIGHT 5
@@ -53,6 +55,8 @@ public:
 	bool vertex_normals = true;
 
 	bool grid = true;
+
+	ComponentCamera* camera;
 
 };
 

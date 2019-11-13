@@ -44,7 +44,12 @@ void GameObject::Update()
 			mesh->Update();
 		}
 	}
-
+	if(GetTransform())GetTransform()->GetTransformMatrix();
+	if (GetCamera())
+	{
+		//GetCamera()->UpdateFrustumTransform();
+		GetCamera()->DrawFrustum();
+	}
 	if (children.size() > 0)
 	{
 		std::vector<GameObject*>::iterator iterator_go = children.begin();

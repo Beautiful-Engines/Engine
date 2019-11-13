@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
+#include "ComponentCamera.h"
 #include "MathGeoLib/include/Math/float2.h"
 
 #include "glew\glew.h"
@@ -134,13 +135,11 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	
-
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf((float*)&camera->GetOpenGLViewMatrix()/*App->camera->GetViewMatrix()*/);
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	lights[0].SetPos(camera->frustum.pos.x, camera->frustum.pos.y, camera->frustum.pos.z/*App->camera->Position.x, App->camera->Position.y, App->camera->Position.z*/);
 
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();

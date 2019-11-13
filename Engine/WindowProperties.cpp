@@ -119,15 +119,15 @@ bool WindowProperties::Draw()
 				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.y); ImGui::SameLine();
 				ImGui::Text("Z:"); ImGui::SameLine();
 				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.z);
-				if (go->GetTransform())
-				{
-					go->GetTransform()->GetTransformMatrix();
-					//go->GetCamera()->DrawFrustum();
-					/*if (go->GetMesh())
-					{
-						go->UpdateBB();
-					}*/
-				}
+				//if (go->GetTransform())
+				//{
+				//	go->GetTransform()->GetTransformMatrix();
+				//	//go->GetCamera()->DrawFrustum();
+				//	/*if (go->GetMesh())
+				//	{
+				//		go->UpdateBB();
+				//	}*/
+				//}
 			}
 		}
 		if (mesh != nullptr)
