@@ -81,16 +81,14 @@ bool ModuleScene::CleanUp()
 // Save
 void ModuleScene::SaveScene()
 {
-	LOG("Saving scene into &s", SETTINGS_FOLDER"Scene.xfa");
-	nlohmann::json json;
-
-	json = {
+	LOG("Saving scene into &s", ASSETS_FOLDER"Scene.xfa");
+	nlohmann::json json= {
 		{"GameObjects", nlohmann::json::array()},
 	};
 	
 	game_objects[0]->Save(json.find("GameObjects"));
 	
-	std::ofstream ofstream(SETTINGS_FOLDER"Scene.xfa");
+	std::ofstream ofstream(ASSETS_FOLDER"Scene.xfa");
 	ofstream << std::setw(4) << json << std::endl;
 }
 
