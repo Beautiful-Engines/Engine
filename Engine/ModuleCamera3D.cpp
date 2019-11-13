@@ -32,7 +32,7 @@ bool ModuleCamera3D::Start()
 	bool ret = true;
 
 	camera = new ComponentCamera(nullptr);
-
+	camera->active = true;
 	camera->frustum.pos = { 2.f, 5.f, 0.f };
 	LookAt({ 0.f, 0.f, 0.f });
 
@@ -162,6 +162,8 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 	camera->frustum.pos += newPos;
 	Reference += newPos;
+
+	camera->DrawFrustum();
 	return UPDATE_CONTINUE;
 }
 void ModuleCamera3D::Focus(float speed)

@@ -37,11 +37,13 @@ public:
 	void UpdateFrustumTransform();
 	void DrawFrustum();
 
+	bool active = false;
+
 private:
 
 	void Update(float dt);
 
-	bool active_camera = false;
+	
 
 };
 #endif

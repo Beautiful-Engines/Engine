@@ -109,12 +109,19 @@ float4x4 ComponentCamera::GetOpenGLProjectionMatrix()
 
 void ComponentCamera::UpdateFrustumTransform()
 {
-	if (GetMyGameObject()->GetTransform())
+	/*if (GetMyGameObject()->GetTransform())
 	{
 		frustum.pos = GetMyGameObject()->GetTransform()->position;
 		frustum.up = GetMyGameObject()->GetTransform()->transform_matrix.WorldY();
 		frustum.front = GetMyGameObject()->GetTransform()->transform_matrix.WorldZ();
 	}
+*/
+	float4x4 transform_matrix;
+	if (GetMyGameObject()) transform_matrix = GetMyGameObject()->GetTransform()->transform_matrix;
+	else transform_matrix = float4x4::identity;
+	frustum.pos = transform_matrix.TranslatePart();
+	frustum.up = transform_matrix.WorldY();
+	frustum.front = transform_matrix.WorldZ();
 }
 
 void ComponentCamera::DrawFrustum()

@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ComponentMaterial.h"
+#include "ModuleRenderer3D.h"
 #include "Primitive.h"
 #include "GameObject.h"
 
@@ -45,9 +46,9 @@ void GameObject::Update()
 		}
 	}
 	if(GetTransform())GetTransform()->GetTransformMatrix();
-	if (GetCamera())
+	if (GetCamera()->active == false)
 	{
-		//GetCamera()->UpdateFrustumTransform();
+		GetCamera()->UpdateFrustumTransform();
 		GetCamera()->DrawFrustum();
 	}
 	if (children.size() > 0)
@@ -61,6 +62,7 @@ void GameObject::Update()
 			}
 		}
 	}
+	float3 x = App->renderer3D->camera->frustum.pos;
 }
 
 void GameObject::Enable()
@@ -166,6 +168,7 @@ ComponentTransform * GameObject::GetTransform() const
 
 ComponentCamera * GameObject::GetCamera() const
 {
+	std::string x = GetName();
 	for (uint i = 0; i < this->GetComponents().size(); ++i)
 	{
 		if (this->GetComponents()[i]->GetType() == ComponentType::CAMERA)

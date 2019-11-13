@@ -58,8 +58,10 @@ void ComponentMesh::Update()
 				component_material = nullptr;
 		}
 	}
-
-	Draw(component_material);
+	if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
+	{
+		Draw(component_material);
+	}
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
 }
