@@ -3,6 +3,9 @@
 
 #define MAX_FPS 120
 
+#include "PCG/pcg_random.hpp"
+#include <random>
+
 #include <list>
 #include <vector>
 
@@ -48,6 +51,8 @@ private:
 	float	dt;
 	std::list<Module*> list_modules;
 
+	pcg32 uuid;
+
 public:
 
 	Application();
@@ -72,6 +77,7 @@ public:
 	bool LoadConfig();
 	void SaveConfig();
 	
+	uint GenerateNewId();
 
 private:
 

@@ -53,6 +53,7 @@ public:
 private:
 	bool enabled = true;
 
+	uint id = 0u;
 	std::string name;
 	std::vector<Component*> components;
 
