@@ -5,6 +5,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentCamera.h"
 #include "GameObject.h"
 #include "ModuleInput.h"
 #include "ModuleGUI.h"
@@ -18,7 +19,6 @@ WindowProperties::WindowProperties() : WindowEngine()
 	enabled = true;
 }
 
-
 WindowProperties::~WindowProperties()
 {
 }
@@ -29,7 +29,7 @@ bool WindowProperties::Draw()
 	ComponentTransform *trans = nullptr;
 	ComponentMesh *mesh = nullptr;
 	ComponentMaterial *material = nullptr;
-
+	ComponentCamera *camera = nullptr;
 
 	go = App->scene->GetSelected();
 
@@ -37,22 +37,10 @@ bool WindowProperties::Draw()
 	{
 		for (uint i = 0; i < go->GetComponents().size(); ++i)
 		{
-			if (go->GetComponents()[i]->GetType() == ComponentType::TRANSFORM)
-			{
-				trans = (ComponentTransform*)go->GetComponents()[i];
-			}
-		}
-		
-		for (uint i = 0; i < go->GetComponents().size(); ++i)
-		{
 			if (go->GetComponents()[i]->GetType() == ComponentType::MESH)
 			{
 				mesh = (ComponentMesh*)go->GetComponents()[i];
 			}
-		}
-
-		for (uint i = 0; i < go->GetComponents().size(); ++i)
-		{
 			if (go->GetComponents()[i]->GetType() == ComponentType::MATERIAL)
 			{
 				material = (ComponentMaterial*)go->GetComponents()[i];
@@ -61,7 +49,15 @@ bool WindowProperties::Draw()
 				else if (mesh->checkered && material->id_texture == mesh->id_default_texture)
 					break;
 			}
-		}
+			if (go->GetComponents()[i]->GetType() == ComponentType::TRANSFORM)
+			{
+				trans = (ComponentTransform*)go->GetComponents()[i];
+			}
+			if (go->GetComponents()[i]->GetType() == ComponentType::CAMERA)
+			{
+				camera = (ComponentCamera*)go->GetComponents()[i];
+			}
+		}	
 	}
 
 	ImGuiWindowFlags aboutFlags = 0;
@@ -70,8 +66,6 @@ bool WindowProperties::Draw()
 	if (ImGui::Begin("Properties", &enabled, aboutFlags))
 	{
 		ImGui::SetWindowFontScale(1);
-
-		
 
 		if (trans != nullptr)
 		{
@@ -119,15 +113,6 @@ bool WindowProperties::Draw()
 				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.y); ImGui::SameLine();
 				ImGui::Text("Z:"); ImGui::SameLine();
 				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.z);
-				//if (go->GetTransform())
-				//{
-				//	go->GetTransform()->GetTransformMatrix();
-				//	//go->GetCamera()->DrawFrustum();
-				//	/*if (go->GetMesh())
-				//	{
-				//		go->UpdateBB();
-				//	}*/
-				//}
 			}
 		}
 		if (mesh != nullptr)
@@ -162,6 +147,26 @@ bool WindowProperties::Draw()
 				ImGui::Image((void*)(intptr_t)material->id_texture, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
 
 				ImGui::Checkbox("Checker texture", &mesh->checkered);
+			}
+		}
+		if (camera != nullptr)
+		{
+			if (ImGui::CollapsingHeader("Camera"))
+			{
+				float npd = camera->GetNearPlaneDistance();
+				if (ImGui::SliderFloat("Near plane", &npd, 0.1f, 1.0f, "%.2f")) {
+					camera->SetNearPlaneDistance(npd);
+				}
+
+				float fpd = camera->GetFarPlaneDistance();
+				if (ImGui::SliderFloat("Far plane", &fpd, 1.f, 500.f, "%.2f")) {
+					camera->SetFarPlaneDistance(fpd);
+				}
+
+				float fov = camera->GetVerticalFOV();
+				if (ImGui::SliderAngle("FOV", &fov, 20.0f, 90.0f)) {
+					camera->SetFOV(fov);
+				}
 			}
 		}
 	}

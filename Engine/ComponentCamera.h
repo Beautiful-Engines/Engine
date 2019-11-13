@@ -15,19 +15,19 @@ public:
 
 	Frustum frustum;
 
-	Plane GetFrustumNearPlane();
-	float GetFrustumNearPlaneDistance();
-	Plane GetFrustumFarPlane();
-	float GetFrustumFarPlaneDistance();
+	Plane GetNearPlane();
+	float GetNearPlaneDistance();
+	Plane GetFarPlane();
+	float GetFarPlaneDistance();
 
-	void SetFrustumNearPlaneDistance(float distance);
-	void SetFrustumFarPlaneDistance(float distance);
+	void SetNearPlaneDistance(float distance);
+	void SetFarPlaneDistance(float distance);
 
-	void SetFrustumFOV(float fov, bool degrees = false);
+	void SetFOV(float fov, bool degrees = false);
 
-	float GetFrustumHorizontalFOV(bool degrees = false);
-	float GetFrustumVerticalFOV(bool degrees = false);
-	float GetFrustumAspectRatio();
+	float GetHorizontalFOV(bool degrees = false);
+	float GetVerticalFOV(bool degrees = false);
+	float GetAspectRatio();
 
 	void LookAt(float3 position);
 
@@ -38,12 +38,6 @@ public:
 	void DrawFrustum();
 
 	bool active = false;
-
-private:
-
-	void Update(float dt);
-
-	
 
 };
 #endif

@@ -16,7 +16,7 @@ ComponentCamera::ComponentCamera(GameObject* _game_object) : Component(_game_obj
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 
-	SetFrustumFOV(90);
+	SetFOV(60,true);
 }
 
 
@@ -24,37 +24,37 @@ ComponentCamera::~ComponentCamera()
 {
 }
 
-Plane ComponentCamera::GetFrustumNearPlane()
+Plane ComponentCamera::GetNearPlane()
 {
 	return frustum.NearPlane();
 }
 
-float ComponentCamera::GetFrustumNearPlaneDistance()
+float ComponentCamera::GetNearPlaneDistance()
 {
 	return frustum.nearPlaneDistance;
 }
 
-Plane ComponentCamera::GetFrustumFarPlane()
+Plane ComponentCamera::GetFarPlane()
 {
 	return frustum.FarPlane();
 }
 
-float ComponentCamera::GetFrustumFarPlaneDistance()
+float ComponentCamera::GetFarPlaneDistance()
 {
 	return frustum.farPlaneDistance;
 }
 
-void ComponentCamera::SetFrustumNearPlaneDistance(float distance)
+void ComponentCamera::SetNearPlaneDistance(float distance)
 {
 	frustum.nearPlaneDistance = distance;
 }
 
-void ComponentCamera::SetFrustumFarPlaneDistance(float distance)
+void ComponentCamera::SetFarPlaneDistance(float distance)
 {
 	frustum.farPlaneDistance = distance;
 }
 
-void ComponentCamera::SetFrustumFOV(float fov, bool degrees)
+void ComponentCamera::SetFOV(float fov, bool degrees)
 {
 	if (degrees)
 		frustum.verticalFov = DegToRad(fov);
@@ -64,7 +64,7 @@ void ComponentCamera::SetFrustumFOV(float fov, bool degrees)
 
 }
 
-float ComponentCamera::GetFrustumHorizontalFOV(bool degrees)
+float ComponentCamera::GetHorizontalFOV(bool degrees)
 {
 	if (degrees)
 		return (RadToDeg(frustum.horizontalFov));
@@ -72,7 +72,7 @@ float ComponentCamera::GetFrustumHorizontalFOV(bool degrees)
 		return frustum.horizontalFov;
 }
 
-float ComponentCamera::GetFrustumVerticalFOV(bool degrees)
+float ComponentCamera::GetVerticalFOV(bool degrees)
 {
 	if (degrees)
 		return RadToDeg(frustum.verticalFov);
@@ -80,14 +80,14 @@ float ComponentCamera::GetFrustumVerticalFOV(bool degrees)
 		return frustum.verticalFov;
 }
 
-float ComponentCamera::GetFrustumAspectRatio()
+float ComponentCamera::GetAspectRatio()
 {
 	return frustum.AspectRatio();
 }
 
 void ComponentCamera::LookAt(float3 position)
 {
-	//TODO using teacher's code atm, must be changed.
+	//tbch
 	float3 vector = position - frustum.pos;
 
 	float3x3 matrix = float3x3::LookAt(frustum.front, vector.Normalized(), frustum.up, float3::unitY);
@@ -109,16 +109,11 @@ float4x4 ComponentCamera::GetOpenGLProjectionMatrix()
 
 void ComponentCamera::UpdateFrustumTransform()
 {
-	/*if (GetMyGameObject()->GetTransform())
-	{
-		frustum.pos = GetMyGameObject()->GetTransform()->position;
-		frustum.up = GetMyGameObject()->GetTransform()->transform_matrix.WorldY();
-		frustum.front = GetMyGameObject()->GetTransform()->transform_matrix.WorldZ();
-	}
-*/
 	float4x4 transform_matrix;
-	if (GetMyGameObject()) transform_matrix = GetMyGameObject()->GetTransform()->transform_matrix;
-	else transform_matrix = float4x4::identity;
+	if (GetMyGameObject())
+		transform_matrix = GetMyGameObject()->GetTransform()->transform_matrix;
+	else 
+		transform_matrix = float4x4::identity;
 	frustum.pos = transform_matrix.TranslatePart();
 	frustum.up = transform_matrix.WorldY();
 	frustum.front = transform_matrix.WorldZ();
@@ -129,9 +124,4 @@ void ComponentCamera::DrawFrustum()
 	float3 corners[8];
 	frustum.GetCornerPoints(corners);
 	App->renderer3D->DebugDrawCube(corners, { 1.f, 1.f, 1.f, 1.f });
-}
-
-void ComponentCamera::Update(float dt)
-{
-	DrawFrustum();
 }
