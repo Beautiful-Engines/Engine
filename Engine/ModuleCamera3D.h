@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "glmath.h"
+#include "MathGeoLib\include\MathGeoLib.h"
 #include "MathGeoLib\include\Math\float3.h"
 
 class ComponentCamera;
@@ -21,6 +22,7 @@ public:
 	void Look(const float3 &Position, const float3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const float3 &Spot);
 	void Move(const float3 &Movement);
+	void OnClick(const float2 & mousePos);
 	float* GetViewMatrix();
 	bool focus = false;
 	float3 newPos = { 0, 0, 0 };
@@ -36,6 +38,7 @@ public:
 private:
 
 	ComponentCamera * camera;
+	LineSegment Ray;
 	mat4x4 ViewMatrix, ViewMatrixInverse;
 };
 

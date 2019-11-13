@@ -1,6 +1,8 @@
 #include "WindowScene.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "ModuleInput.h"
 #include "ModuleWindow.h"
 
 //tbch
@@ -30,7 +32,11 @@ bool WindowScene::Draw()
 		ImVec2(0, 1),
 		ImVec2(1, 0));
 	ImGui::End();
-
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		float2 mousePos = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+		App->camera->OnClick(mousePos);
+	}
 	return true;
 }
 

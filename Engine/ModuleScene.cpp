@@ -4,6 +4,8 @@
 #include "GameObject.h"
 #include "Primitive.h"
 #include "ComponentTransform.h"
+#include "ModuleGUI.h"
+#include "WindowHierarchy.h"
 #include "ComponentCamera.h"
 #include "ModuleImport.h"
 
@@ -162,6 +164,60 @@ void ModuleScene::SetSelected(GameObject* go)
 const std::vector<GameObject*> ModuleScene::GetGameObjects() const
 {
 	return game_objects;
+}
+
+void ModuleScene::MouseClicking(const LineSegment& segment)
+{
+	std::map<float, GameObject*> selected;
+	for (uint i = 0; i < game_objects.size(); i++)
+	{
+		if (segment.Intersects(game_objects[i]->abb))
+		{
+			float hit_near, hit_far;
+			if (segment.Intersects(game_objects[i]->obb, hit_near, hit_far))
+				selected[hit_near] = game_objects[i];
+		}
+	}
+
+	GameObject* Selected = nullptr;
+	for (std::map<float, GameObject*>::iterator it = selected.begin(); it != selected.end() && Selected == nullptr; it++)
+	{
+		const ComponentMesh* mesh = it->second->GetMesh();
+		if (mesh)
+		{
+				LineSegment local = segment;
+				local.Transform(it->second->GetTransform()->transform_matrix.Inverted());
+				for (uint v = 0; v < mesh->n_indexes; v += 3)
+				{
+					uint indexA = mesh->indexes[v] * 3;
+					float3 v1(mesh->vertices[indexA]);
+
+					uint indexB = mesh->indexes[v + 1] * 3;
+					float3 v2(mesh->vertices[indexB]);
+
+					uint indexC = mesh->indexes[v + 2] * 3;
+					float3 v3(mesh->vertices[indexC]);
+
+					Triangle triangle(v1, v2, v3);
+
+					if (local.Intersects(triangle, nullptr, nullptr))
+					{
+						Selected = it->second;
+						break;
+					}
+				}
+		}
+	}
+	for (uint i = 0; i < game_objects.size(); i++)
+	{
+		if (game_objects[i] == Selected)
+		{
+			//App->gui->window_hierarchy->select_iterator = i;
+			//App->gui->window_hierarchy->node_clicked = i;
+			App->scene->SetSelected(game_objects[i]);
+			App->scene->ChangeSelected(game_objects[i]);
+		}
+	}
 }
 
 void ModuleScene::DrawGrid()

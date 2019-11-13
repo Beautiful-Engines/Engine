@@ -3,6 +3,7 @@
 #include "ModuleScene.h"
 #include "GameObject.h"
 #include "ComponentTransform.h"
+#include "ModuleWindow.h"
 #include "ComponentCamera.h"
 #include "ComponentMesh.h"
 #include "ModuleRenderer3D.h"
@@ -220,6 +221,16 @@ void ModuleCamera3D::Move(const float3 &Movement)
 	Reference += Movement;
 
 	//CalculateViewMatrix();
+}
+
+void ModuleCamera3D::OnClick(const float2& mousePos)
+{
+	float mouseX = (mousePos.x / (float)App->window->GetWindowHeight() - 0.5) / 0.5;
+	float mouseY = ((mousePos.y / (float)App->window->GetWindowWidth())-0.5) / 0.5;
+
+	Ray = App->renderer3D->camera->frustum.UnProjectLineSegment(mouseX, mouseY);
+
+	App->scene->MouseClicking(Ray);
 }
 
 // -----------------------------------------------------------------

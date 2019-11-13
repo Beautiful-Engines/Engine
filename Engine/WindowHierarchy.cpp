@@ -39,7 +39,7 @@ void WindowHierarchy::DrawNode(GameObject * go)
 {
 	static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 	static int selection_mask = (1 << 2);
-	static int node_clicked = -1;
+	node_clicked = -1;
 	select_iterator++;
 
 	ImGuiTreeNodeFlags node_flags = base_flags;
@@ -73,9 +73,7 @@ void WindowHierarchy::DrawNode(GameObject * go)
 		DragAndDrop(go);
 
 		if (ImGui::IsItemClicked()) {
-			node_clicked = select_iterator;
-			App->scene->SetSelected(go);
-			App->scene->ChangeSelected(go);
+			SelectHierarchyItem(select_iterator, go);
 		}
 	}
 
@@ -129,4 +127,11 @@ void WindowHierarchy::DragAndDrop(GameObject* _go)
 		}
 		ImGui::EndDragDropTarget();
 	}
+}
+
+void WindowHierarchy::SelectHierarchyItem(int i, GameObject* go)
+{
+	node_clicked = i;
+	App->scene->SetSelected(go);
+	App->scene->ChangeSelected(go);
 }

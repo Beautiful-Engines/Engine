@@ -2,6 +2,7 @@
 #define __ModuleScene_H__
 
 #include "Module.h"
+#include "MathGeoLib\include\MathGeoLib.h"
 
 class GameObject;
 
@@ -25,6 +26,8 @@ public:
 	void ChangeSelected(GameObject* selected);
 	void SetSelected(GameObject * go);
 	const std::vector<GameObject*> GetGameObjects() const;
+
+	void MouseClicking(const LineSegment & segment);
 
 private:
 	std::vector<GameObject*> game_objects;
