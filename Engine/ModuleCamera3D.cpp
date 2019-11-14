@@ -164,7 +164,6 @@ update_status ModuleCamera3D::Update(float dt)
 	camera->frustum.pos += newPos;
 	Reference += newPos;
 
-	camera->DrawFrustum();
 	return UPDATE_CONTINUE;
 }
 void ModuleCamera3D::Focus(float speed)
@@ -225,11 +224,14 @@ void ModuleCamera3D::Move(const float3 &Movement)
 
 void ModuleCamera3D::OnClick(const float2& mousePos)
 {
-	float mouseX = (mousePos.x / (float)App->window->GetWindowHeight() - 0.5) / 0.5;
-	float mouseY = ((mousePos.y / (float)App->window->GetWindowWidth())-0.5) / 0.5;
+	float mouseX = mousePos.x;
+	float mouseY = -mousePos.y;
 
 	Ray = App->renderer3D->camera->frustum.UnProjectLineSegment(mouseX, mouseY);
-
+	//std::vector<float3> lines;
+	//lines.push_back(Ray.GetPoint(0.0f));
+	//lines.push_back(Ray.ExtremePoint(Ray.Dir()));
+	//App->renderer3D->DebugDrawLines(lines);
 	App->scene->MouseClicking(Ray);
 }
 

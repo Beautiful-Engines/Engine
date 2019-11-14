@@ -34,7 +34,8 @@ bool WindowScene::Draw()
 	ImGui::End();
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
-		float2 mousePos = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+		float2 mousePos = { ((float)App->input->GetMouseX()-(screen_pos.x+w/2)), ((float)App->input->GetMouseY()-(screen_pos.y+h/2)) };
+		mousePos = { mousePos.x / w * 2, mousePos.y / h * 2 };
 		App->camera->OnClick(mousePos);
 	}
 	return true;

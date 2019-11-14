@@ -234,6 +234,7 @@ void ModuleScene::MouseClicking(const LineSegment& segment)
 			//App->gui->window_hierarchy->node_clicked = i;
 			App->scene->SetSelected(game_objects[i]);
 			App->scene->ChangeSelected(game_objects[i]);
+			LOG("%s", game_objects[i]->GetName().c_str());
 		}
 	}
 }

@@ -311,4 +311,20 @@ void ModuleRenderer3D::DebugDrawCube(const float3 * vertices, Color color) const
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
+void ModuleRenderer3D::DebugDrawLines(std::vector<float3> lines)
+{
+	glColor3f(0.f, 1.0f, 0.0f);
+	glBegin(GL_LINES);
+	glLineWidth(5.0f);
+
+	for (int i = 0; i < lines.size(); i++)
+	{
+		glVertex3f((GLfloat)lines[i].x, (GLfloat)lines[i].y, (GLfloat)lines[i].z);
+	}
+
+	glLineWidth(1.0f);
+	glColor3f(1.f, 1.f, 1.f);
+	glEnd();
+}
+
 
