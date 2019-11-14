@@ -1,0 +1,313 @@
+{
+    "GameObjects": [
+        {
+            "1.UID": 2734979548,
+            "2.Name": "root",
+            "3.ParentUID": 0,
+            "4.Enable": true,
+            "5.Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ]
+        },
+        {
+            "1.UID": 1745724849,
+            "2.Name": "camara",
+            "3.ParentUID": 2734979548,
+            "4.Enable": true,
+            "5.Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ]
+        },
+        {
+            "1.UID": 2546951384,
+            "2.Name": "bakerhouse",
+            "3.ParentUID": 2734979548,
+            "4.Enable": true,
+            "5.Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ]
+        },
+        {
+            "1.UID": 3108941311,
+            "2.Name": "bakerhouse1",
+            "3.ParentUID": 2546951384,
+            "4.Enable": true,
+            "5.Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "is_primitive": false,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "height": 1024,
+                    "id_texture": 2,
+                    "path": "Library/Textures/baker_house.dds",
+                    "type": 1,
+                    "width": 1024
+                },
+                {
+                    "height": 128,
+                    "id_texture": 3,
+                    "path": "DefaultTexture",
+                    "type": 1,
+                    "width": 128
+                }
+            ]
+        },
+        {
+            "1.UID": 3367834391,
+            "2.Name": "bakerhouse2",
+            "3.ParentUID": 2546951384,
+            "4.Enable": true,
+            "5.Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "is_primitive": false,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "height": 1024,
+                    "id_texture": 4,
+                    "path": "Library/Textures/baker_house.dds",
+                    "type": 1,
+                    "width": 1024
+                },
+                {
+                    "height": 128,
+                    "id_texture": 5,
+                    "path": "DefaultTexture",
+                    "type": 1,
+                    "width": 128
+                }
+            ]
+        }
+    ]
+}

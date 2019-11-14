@@ -9,6 +9,8 @@ class ComponentTransform : public Component
 public:
 	ComponentTransform(GameObject* _game_object);
 	~ComponentTransform();
+
+	void Save(const nlohmann::json::iterator& _iterator);
 	
 	float3 position;
 	Quat rotation;

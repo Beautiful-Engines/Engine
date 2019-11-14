@@ -4,7 +4,7 @@
 #include "Component.h"
 #include "MathGeoLib\include\Math\float2.h"
 #include "MathGeoLib\include\Math\float3.h"
-class ComponentMaterial;
+class ComponentTexture;
 
 class ComponentMesh : public Component
 {
@@ -14,11 +14,13 @@ public:
 
 	void Update();
 
+	void Save(const nlohmann::json::iterator& _iterator);
+
 	float3 GetMinPoint();
 	AABB GetBB();
 	float3 GetMaxPoint();
 
-	void Draw(ComponentMaterial *component_material);
+	void Draw(ComponentTexture *component_texture);
 	void DrawNormals();
 
 public:

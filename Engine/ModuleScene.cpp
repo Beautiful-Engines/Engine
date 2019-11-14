@@ -81,7 +81,7 @@ bool ModuleScene::CleanUp()
 // Save
 void ModuleScene::SaveScene()
 {
-	LOG("Saving scene into &s", ASSETS_FOLDER"Scene.xfa");
+	LOG("Saving scene into %s", ASSETS_FOLDER"Scene.xfa");
 	nlohmann::json json= {
 		{"GameObjects", nlohmann::json::array()},
 	};

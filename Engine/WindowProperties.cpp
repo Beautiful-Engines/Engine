@@ -4,7 +4,7 @@
 #include "ModuleScene.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
-#include "ComponentMaterial.h"
+#include "ComponentTexture.h"
 #include "ComponentCamera.h"
 #include "GameObject.h"
 #include "ModuleInput.h"
@@ -28,7 +28,7 @@ bool WindowProperties::Draw()
 	GameObject *go = nullptr;
 	ComponentTransform *trans = nullptr;
 	ComponentMesh *mesh = nullptr;
-	ComponentMaterial *material = nullptr;
+	ComponentTexture *texture = nullptr;
 	ComponentCamera *camera = nullptr;
 
 	go = App->scene->GetSelected();
@@ -41,12 +41,12 @@ bool WindowProperties::Draw()
 			{
 				mesh = (ComponentMesh*)go->GetComponents()[i];
 			}
-			if (go->GetComponents()[i]->GetType() == ComponentType::MATERIAL)
+			if (go->GetComponents()[i]->GetType() == ComponentType::TEXTURE)
 			{
-				material = (ComponentMaterial*)go->GetComponents()[i];
-				if (!mesh->checkered && material->id_texture == mesh->id_texture)
+				texture = (ComponentTexture*)go->GetComponents()[i];
+				if (!mesh->checkered && texture->id_texture == mesh->id_texture)
 					break;
-				else if (mesh->checkered && material->id_texture == mesh->id_default_texture)
+				else if (mesh->checkered && texture->id_texture == mesh->id_default_texture)
 					break;
 			}
 			if (go->GetComponents()[i]->GetType() == ComponentType::TRANSFORM)
@@ -131,7 +131,7 @@ bool WindowProperties::Draw()
 				ImGui::Checkbox("Face Normals", &mesh->face_normals);
 			}
 		}
-		if (material != nullptr)
+		if (texture != nullptr)
 		{
 			if (ImGui::CollapsingHeader("Texture"))
 			{
@@ -139,12 +139,12 @@ bool WindowProperties::Draw()
 
 				ImGui::Text("Texture Size:");
 				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 },"%i * %i", material->width, material->height);
+				ImGui::TextColored({ 255, 255, 0, 255 },"%i * %i", texture->width, texture->height);
 				ImGui::Text("Texture Path:");
 				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 }, ("%s", material->path.c_str()));
+				ImGui::TextColored({ 255, 255, 0, 255 }, ("%s", texture->path.c_str()));
 
-				ImGui::Image((void*)(intptr_t)material->id_texture, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::Image((void*)(intptr_t)texture->id_texture, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
 
 				ImGui::Checkbox("Checker texture", &mesh->checkered);
 			}
