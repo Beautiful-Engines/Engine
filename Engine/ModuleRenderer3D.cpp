@@ -102,8 +102,7 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_TEXTURE_2D);
 
 	}
-	// Projection matrix for
-	/*OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());*/
+
 
 	// Initialize glew
 	GLenum error = glewInit();

@@ -1,7 +1,7 @@
 {
     "GameObjects": [
         {
-            "1.UID": 2734979548,
+            "1.UID": 2665491883,
             "2.Name": "root",
             "3.ParentUID": 0,
             "4.Enable": true,
@@ -54,9 +54,9 @@
             ]
         },
         {
-            "1.UID": 1745724849,
+            "1.UID": 2325725652,
             "2.Name": "camara",
-            "3.ParentUID": 2734979548,
+            "3.ParentUID": 2665491883,
             "4.Enable": true,
             "5.Components": [
                 {
@@ -107,9 +107,9 @@
             ]
         },
         {
-            "1.UID": 2546951384,
+            "1.UID": 4032856220,
             "2.Name": "bakerhouse",
-            "3.ParentUID": 2734979548,
+            "3.ParentUID": 2665491883,
             "4.Enable": true,
             "5.Components": [
                 {
@@ -160,9 +160,9 @@
             ]
         },
         {
-            "1.UID": 3108941311,
+            "1.UID": 3880117953,
             "2.Name": "bakerhouse1",
-            "3.ParentUID": 2546951384,
+            "3.ParentUID": 4032856220,
             "4.Enable": true,
             "5.Components": [
                 {
@@ -235,9 +235,9 @@
             ]
         },
         {
-            "1.UID": 3367834391,
+            "1.UID": 1839459141,
             "2.Name": "bakerhouse2",
-            "3.ParentUID": 2546951384,
+            "3.ParentUID": 4032856220,
             "4.Enable": true,
             "5.Components": [
                 {

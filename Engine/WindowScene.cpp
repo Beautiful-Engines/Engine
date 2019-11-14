@@ -23,8 +23,7 @@ bool WindowScene::Draw()
 	w = ImGui::GetWindowWidth();
 	h = ImGui::GetWindowHeight();
 	screen_pos = ImGui::GetCursorScreenPos();
-	int image_w, image_h;
-	GetSizeWithAspectRatio(App->window->GetWindowWidth(), App->window->GetWindowHeight(), w, h, image_w, image_h);
+	GetSizeWithAspectRatio(App->window->GetWindowWidth(), App->window->GetWindowHeight());
 	ImGui::GetWindowDrawList()->AddImage(
 		(void *)App->renderer3D->scene_texture_id,
 		screen_pos,
@@ -50,13 +49,13 @@ bool WindowScene::IsInside(const float2 & pos) const
 	return false;
 }
 
-void WindowScene::GetSizeWithAspectRatio(int current_width, int current_height, int wanted_width, int wanted_height, int & new_width, int & new_height)
+void WindowScene::GetSizeWithAspectRatio(int current_width, int current_height)
 {
-	float scale_height = (float)wanted_height / (float)current_height;
-	float scale_width = (float)wanted_width / (float)current_width;
+	float scale_height = (float)h / (float)current_height;
+	float scale_width = (float)w / (float)current_width;
 
 	float scale = (std::min)(scale_height, scale_width);
 
-	new_width = current_width * scale;
-	new_height = current_height * scale;
+	w = current_width * scale;
+	h = current_height * scale;
 }
