@@ -134,7 +134,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentCamera.h" />
     <ClInclude Include="ComponentMesh.h" />
-    <ClInclude Include="ComponentMaterial.h" />
+    <ClInclude Include="ComponentTexture.h" />
     <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="DeviL\include\devil_internal_exports.h" />
     <ClInclude Include="DeviL\include\il.h" />
@@ -161,6 +161,7 @@
     <ClInclude Include="ModuleImport.h" />
     <ClInclude Include="Par\par_shapes.h" />
     <ClInclude Include="Primitive.h" />
+    <ClInclude Include="Resource.h" />
     <ClInclude Include="WindowAbout.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
@@ -245,7 +246,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentCamera.cpp" />
-    <ClCompile Include="ComponentMaterial.cpp" />
+    <ClCompile Include="ComponentTexture.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -263,6 +264,7 @@
     <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImport.cpp" />
     <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="Resource.cpp" />
     <ClCompile Include="WindowAbout.cpp" />
     <ClCompile Include="WindowConfig.cpp" />
     <ClCompile Include="WindowConsole.cpp" />

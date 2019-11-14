@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "ComponentMaterial.h"
+#include "ComponentTexture.h"
 #include "ModuleRenderer3D.h"
 #include "Primitive.h"
 #include "GameObject.h"
@@ -86,17 +86,17 @@ void GameObject::Save(const nlohmann::json::iterator& _iterator)
 {
 	LOG("%s saved", name.c_str());
 	nlohmann::json json = {
-		{"UID", id},
-		{"ParentUID", GetParent() ? GetParent()->GetId() : 0},
-		{"Name", name},
-		{"Enable", enabled},
-		{"Components",nlohmann::json::array()}
+		{"1.UID", id},
+		{"2.Name", name},
+		{"3.ParentUID", GetParent() ? GetParent()->GetId() : 0},
+		{"4.Enable", enabled},
+		{"5.Components",nlohmann::json::array()}
 	};
 
 	//Save Components
 	for (int i = 0; i < components.size(); ++i)
 	{
-		components[i]->Save(json.find("Components"));
+		components[i]->Save(json.find("5.Components"));
 	}
 
 	_iterator.value().push_back(json);

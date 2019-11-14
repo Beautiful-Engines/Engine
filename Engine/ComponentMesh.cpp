@@ -2,7 +2,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleImport.h"
 #include "GameObject.h"
-#include "ComponentMaterial.h"
+#include "ComponentTexture.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentMesh.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
@@ -44,29 +44,43 @@ void ComponentMesh::Update()
 	std::vector<Component*> components = my_game_object->GetComponents();
 	std::vector<Component*>::iterator iterator_component = components.begin();
 
-	ComponentMaterial *component_material = nullptr;
+	ComponentTexture *component_texture = nullptr;
 	for (; iterator_component != components.end(); ++iterator_component) 
 	{
-		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MATERIAL)
+		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::TEXTURE)
 		{
-			component_material = (ComponentMaterial*)*iterator_component;
-			if (!checkered && component_material->id_texture == this->id_texture)
+			component_texture = (ComponentTexture*)*iterator_component;
+			if (!checkered && component_texture->id_texture == this->id_texture)
 				break;
-			else if (checkered && component_material->id_texture == this->id_default_texture)
+			else if (checkered && component_texture->id_texture == this->id_default_texture)
 				break;
 			else
-				component_material = nullptr;
+				component_texture = nullptr;
 		}
 	}
 	if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
 	{
-		Draw(component_material);
+		Draw(component_texture);
 	}
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
 }
 
-void ComponentMesh::Draw(ComponentMaterial *component_material)
+void ComponentMesh::Save(const nlohmann::json::iterator& _iterator)
+{
+	nlohmann::json json = {
+		{"type", type},
+		{"is_primitive", is_primitive },
+		{"vertex_normals",vertex_normals},
+		{"face_normals", face_normals},
+		{"textures", textures },
+		{"debug_bb", debug_bb }
+	};
+
+	_iterator.value().push_back(json);
+}
+
+void ComponentMesh::Draw(ComponentTexture *component_texture)
 {
 	glPushMatrix();
 	glMultMatrixf((float*)&GetMyGameObject()->GetTransform()->transform_matrix.Transposed());
@@ -78,9 +92,9 @@ void ComponentMesh::Draw(ComponentMaterial *component_material)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	if (component_material != nullptr && textures)
+	if (component_texture != nullptr && textures)
 	{
-		component_material->DrawTexture(this);
+		component_texture->DrawTexture(this);
 	}
 
 	if(is_primitive)

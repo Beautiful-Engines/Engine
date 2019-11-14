@@ -23,6 +23,24 @@ ComponentTransform::~ComponentTransform()
 {
 }
 
+// Save
+void ComponentTransform::Save(const nlohmann::json::iterator& _iterator)
+{
+	nlohmann::json json = {
+		{"type", type},
+		{"position", {position.x, position.y, position.z }},
+		{"rotation",{rotation.x, rotation.y, rotation.z, rotation.w }},
+		{"euler", {euler.x, euler.y, euler.z }},
+		{"scale", {scale.x, scale.y, scale.z }},
+		{"local_position", {local_position.x, local_position.y, local_position.z }},
+		{"local_rotation",{local_rotation.x, local_rotation.y, local_rotation.z, local_rotation.w }},
+		{"local_euler", {local_euler.x, local_euler.y, local_euler.z }},
+		{"local_scale", {local_scale.x, local_scale.y, local_scale.z }}
+	};
+
+	_iterator.value().push_back(json);
+}
+
 float3 ComponentTransform::TransformEulerAngles()
 {
 	return local_rotation.ToEulerXYZ();

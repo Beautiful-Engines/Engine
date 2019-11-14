@@ -47,6 +47,9 @@
     <Filter Include="Sources\Importers">
       <UniqueIdentifier>{c312935b-51e5-4d1d-b362-fea66911b9ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Resources">
+      <UniqueIdentifier>{33b72c20-3e08-4fa0-8b10-96131cb3381a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -322,9 +325,6 @@
     <ClInclude Include="Primitive.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentMaterial.h">
-      <Filter>Sources\Components</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentTransform.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
@@ -371,6 +371,12 @@
       <Filter>Sources\Importers</Filter>
     </ClInclude>
     <ClInclude Include="ComponentCamera.h">
+      <Filter>Sources\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentTexture.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -546,9 +552,6 @@
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Components</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentMaterial.cpp">
-      <Filter>Sources\Components</Filter>
-    </ClCompile>
     <ClCompile Include="ComponentTransform.cpp">
       <Filter>Sources\Components</Filter>
     </ClCompile>
@@ -586,6 +589,12 @@
       <Filter>Sources\Importers</Filter>
     </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
+      <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTexture.cpp">
       <Filter>Sources\Components</Filter>
     </ClCompile>
   </ItemGroup>

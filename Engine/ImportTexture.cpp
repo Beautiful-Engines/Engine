@@ -3,7 +3,7 @@
 #include "ModuleFileSystem.h"
 
 #include "GameObject.h"
-#include "ComponentMaterial.h"
+#include "ComponentTexture.h"
 
 #include "DeviL/include/il.h"
 #include "DeviL/include/ilu.h"
@@ -85,7 +85,7 @@ bool ImportTexture::LoadTexture(const char* _path, GameObject* go_fromfbx)
 	name_path = (name_path.substr(pos + 1)).c_str();
 	final_path = LIBRARY_TEXTURES_FOLDER + std::string(_path);
 
-	ComponentMaterial *component_material = nullptr;
+	ComponentTexture *component_texture = nullptr;
 
 	if (go_fromfbx != nullptr)
 	{
@@ -96,12 +96,12 @@ bool ImportTexture::LoadTexture(const char* _path, GameObject* go_fromfbx)
 		
 		if (ilLoadImage(final_path.c_str()))
 		{
-			component_material = new ComponentMaterial(go_fromfbx);
-			component_material->id_texture = ilutGLBindTexImage();
-			component_material->path = final_path;
-			component_material->width = ilGetInteger(IL_IMAGE_WIDTH);
-			component_material->height = ilGetInteger(IL_IMAGE_HEIGHT);
-			go_fromfbx->GetMesh()->id_texture = component_material->id_texture;
+			component_texture = new ComponentTexture(go_fromfbx);
+			component_texture->id_texture = ilutGLBindTexImage();
+			component_texture->path = final_path;
+			component_texture->width = ilGetInteger(IL_IMAGE_WIDTH);
+			component_texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
+			go_fromfbx->GetMesh()->id_texture = component_texture->id_texture;
 
 			LOG("Added %s to %s", name_path.c_str(), go_fromfbx->GetName().c_str());
 		}
@@ -136,11 +136,11 @@ bool ImportTexture::LoadTexture(const char* _path, GameObject* go_fromfbx)
 
 void ImportTexture::DefaultTexture(GameObject* go_texturedefault)
 {
-	ComponentMaterial *component_material = new ComponentMaterial(go_texturedefault);
+	ComponentTexture *component_texture = new ComponentTexture(go_texturedefault);
 
-	component_material->path = "DefaultTexture";
-	component_material->width = 128;
-	component_material->height = 128;
+	component_texture->path = "DefaultTexture";
+	component_texture->width = 128;
+	component_texture->height = 128;
 	GLubyte checkImage[128][128][4];
 	for (int i = 0; i < 128; i++)
 	{
@@ -154,8 +154,8 @@ void ImportTexture::DefaultTexture(GameObject* go_texturedefault)
 		}
 	}
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &component_material->id_texture);
-	glBindTexture(GL_TEXTURE_2D, component_material->id_texture);
+	glGenTextures(1, &component_texture->id_texture);
+	glBindTexture(GL_TEXTURE_2D, component_texture->id_texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -163,7 +163,7 @@ void ImportTexture::DefaultTexture(GameObject* go_texturedefault)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	go_texturedefault->GetMesh()->id_default_texture = component_material->id_texture;
+	go_texturedefault->GetMesh()->id_default_texture = component_texture->id_texture;
 
 }
 

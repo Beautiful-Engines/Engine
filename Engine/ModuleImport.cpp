@@ -1,6 +1,6 @@
 #include "Application.h"
 #include "ComponentMesh.h"
-#include "ComponentMaterial.h"
+#include "ComponentTexture.h"
 #include "ComponentTransform.h"
 #include "GameObject.h"
 #include "ModuleScene.h"
