@@ -42,7 +42,7 @@ bool ModuleScene::Start()
 	GameObject *camara = CreateGameObject("camara");
 	ComponentCamera* cam = new ComponentCamera(camara);
 	camara->AddComponent(cam);
-	App->importer->LoadFile("assets/BakerHouse.fbx");
+	App->importer->ImportFile("assets/bakerhouse.fbx");
 
 	return true;
 }

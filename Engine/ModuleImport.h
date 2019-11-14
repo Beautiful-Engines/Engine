@@ -18,7 +18,7 @@ public:
 	bool CleanUp() override;
 
 
-	void LoadFile(const char* path);
+	void ImportFile(const char* path);
 
 public:
 

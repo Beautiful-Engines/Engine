@@ -15,6 +15,7 @@ public:
 	void Update();
 
 	void Save(const nlohmann::json::iterator& _iterator);
+	void Load(const nlohmann::json _json);
 
 	float3 GetMinPoint();
 	AABB GetBB();
