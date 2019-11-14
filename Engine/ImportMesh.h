@@ -17,6 +17,7 @@ public:
 
 	void Import(const aiScene* scene, const aiMesh* ai_mesh, GameObject* _object);
 	bool Save(ComponentMesh* mesh);
+	void Load(ComponentMesh* mesh);
 
 private:
 	void GLBuffer(ComponentMesh *mesh);

@@ -114,7 +114,6 @@ void ImportMesh::Import(const aiScene* scene, const aiMesh* ai_mesh, GameObject*
 
 	GLBuffer(mymesh);
 	Save(mymesh);
-
 }
 
 bool ImportMesh::Save(ComponentMesh* mesh)
@@ -160,6 +159,11 @@ bool ImportMesh::Save(ComponentMesh* mesh)
 	RELEASE_ARRAY(data);
 
 	return ret;
+}
+
+void ImportMesh::Load(ComponentMesh* mesh)
+{
+	
 }
 
 

@@ -16,6 +16,9 @@
 
 #include "ImportScene.h"
 
+#include <fstream>
+#include <iomanip>
+
 void LogCallback(const char* text, char* data)
 {
 	std::string temp_string = text;
@@ -49,7 +52,7 @@ bool ImportScene::CleanUp()
 	return false;
 }
 
-bool ImportScene::LoadFBX(const char* _path)
+bool ImportScene::ImportFBX(const char* _path)
 {
 	bool ret = true;
 
@@ -61,6 +64,13 @@ bool ImportScene::LoadFBX(const char* _path)
 	std::string name_object = name_path.substr(0, pos);
 
 	GameObject *go = App->scene->CreateGameObject(name_object);
+
+	// Create meta
+	nlohmann::json json = {
+		{ "original_file", name_path },
+		{ "id", go->GetId() },
+		{ "meshes",nlohmann::json::array()}
+	};
 
 	// Scene
 	const aiScene *scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -74,8 +84,14 @@ bool ImportScene::LoadFBX(const char* _path)
 			GameObject *meshgameobject = new GameObject();
 			meshgameobject->SetName(name_object);
 			meshgameobject->SetParent(go);
+			// adding meshes to meta
+			nlohmann::json::iterator _iterator = json.find("meshes");
+			nlohmann::json json_mesh = {
+				{"id", meshgameobject->GetId()}
+			};
+			_iterator.value().push_back(json_mesh);
 
-			LoadNode(scene->mRootNode->mChildren[i], scene, meshgameobject);
+			ImportNode(scene->mRootNode->mChildren[i], scene, meshgameobject);
 		}
 		aiReleaseImport(scene);
 	}
@@ -85,11 +101,17 @@ bool ImportScene::LoadFBX(const char* _path)
 		ret = false;
 	}
 
+	// writting to .meta
+	std::string meta_path = _path;
+	meta_path += ".meta";
+	std::ofstream ofstream(meta_path);
+	ofstream << std::setw(4) << json << std::endl;
+
 	return ret;
 
 }
 
-void ImportScene::LoadNode(const aiNode* _node, const aiScene* _scene, GameObject* _object)
+void ImportScene::ImportNode(const aiNode* _node, const aiScene* _scene, GameObject* _object)
 {
 	// Transform
 	ComponentTransform *mytransform = _object->GetTransform();
@@ -144,7 +166,7 @@ void ImportScene::LoadNode(const aiNode* _node, const aiScene* _scene, GameObjec
 	{
 		for (int i = 0; i < _node->mNumChildren; i++)
 		{
-			LoadNode(_node->mChildren[i], _scene, _object);
+			ImportNode(_node->mChildren[i], _scene, _object);
 		}
 	}
 

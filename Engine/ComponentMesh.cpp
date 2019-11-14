@@ -80,6 +80,16 @@ void ComponentMesh::Save(const nlohmann::json::iterator& _iterator)
 	_iterator.value().push_back(json);
 }
 
+void ComponentMesh::Load(const nlohmann::json _json)
+{
+	type = _json["type"];
+	is_primitive = _json["is_primitive"];
+	vertex_normals = _json["vertex_normals"];
+	face_normals = _json["face_normals"];
+	textures = _json["textures"];
+	debug_bb = _json["debug_bb"];
+}
+
 void ComponentMesh::Draw(ComponentTexture *component_texture)
 {
 	glPushMatrix();

@@ -134,7 +134,7 @@ update_status ModuleInput::PreUpdate(float dt)
 		}
 		case SDL_DROPFILE:
 			char* file = e.drop.file;
-			App->importer->LoadFile(file);
+			App->importer->ImportFile(file);
 			SDL_free(file);
 			break;
 		}
