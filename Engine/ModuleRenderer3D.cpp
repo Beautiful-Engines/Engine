@@ -128,6 +128,11 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
+
+	if (camera->update_camera_projection) {
+		UpdateProjectionMatrix();
+		camera->update_camera_projection = false;
+	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBindFramebuffer(GL_FRAMEBUFFER, scene_buffer_id);
 
@@ -180,6 +185,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
 }
 
 void ModuleRenderer3D::ResizeScene(float w, float h)
@@ -191,6 +197,16 @@ void ModuleRenderer3D::ResizeScene(float w, float h)
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
 }
 
+void ModuleRenderer3D::UpdateProjectionMatrix()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glLoadMatrixf((GLfloat*)&camera->GetOpenGLProjectionMatrix());
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
 
 //Load and Save
 bool ModuleRenderer3D::LoadDefault(nlohmann::json &load_default_json)
@@ -315,7 +331,7 @@ void ModuleRenderer3D::DebugDrawLines(std::vector<float3> lines)
 	glColor3f(0.f, 1.0f, 0.0f);
 	glBegin(GL_LINES);
 	glLineWidth(5.0f);
-
+	float lenght = 0.4f;
 	for (int i = 0; i < lines.size(); i++)
 	{
 		glVertex3f((GLfloat)lines[i].x, (GLfloat)lines[i].y, (GLfloat)lines[i].z);

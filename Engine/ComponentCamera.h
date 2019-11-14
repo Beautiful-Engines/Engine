@@ -38,6 +38,7 @@ public:
 	void DrawFrustum();
 
 	bool active = false;
+	bool update_camera_projection = false;
 
 };
 #endif

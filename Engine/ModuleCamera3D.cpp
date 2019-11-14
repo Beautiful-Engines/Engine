@@ -228,10 +228,8 @@ void ModuleCamera3D::OnClick(const float2& mousePos)
 	float mouseY = -mousePos.y;
 
 	Ray = App->renderer3D->camera->frustum.UnProjectLineSegment(mouseX, mouseY);
-	//std::vector<float3> lines;
-	//lines.push_back(Ray.GetPoint(0.0f));
-	//lines.push_back(Ray.ExtremePoint(Ray.Dir()));
-	//App->renderer3D->DebugDrawLines(lines);
+	lines.push_back(Ray.GetPoint(0));
+	lines.push_back(Ray.ExtremePoint(Ray.Dir()));
 	App->scene->MouseClicking(Ray);
 }
 

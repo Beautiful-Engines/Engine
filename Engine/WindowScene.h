@@ -14,10 +14,9 @@ public:
 	void Start();
 	bool IsInside(const float2& pos) const;
 	void GetSizeWithAspectRatio(int current_width, int current_height);
-	int image_w, image_h;
+	float w, h;
 
 private:
 	ImVec2 screen_pos;
-	float w, h;
 };
 #endif

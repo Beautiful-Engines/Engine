@@ -61,7 +61,7 @@ void ComponentCamera::SetFOV(float fov, bool degrees)
 	else frustum.verticalFov = fov;
 
 	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * App->window->GetWindowWidth() / App->window->GetWindowHeight());
-
+	update_camera_projection = true;
 }
 
 float ComponentCamera::GetHorizontalFOV(bool degrees)

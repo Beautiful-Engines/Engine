@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "ComponentTexture.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
 #include "ComponentMesh.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
 
@@ -156,6 +157,8 @@ AABB ComponentMesh::GetBB()
 		App->renderer3D->DebugDrawCube(corners, { 0, 255, 0, 255 });
 		GetMyGameObject()->obb.GetCornerPoints(corners);
 		App->renderer3D->DebugDrawCube(corners, { 0, 0, 255, 255 });
+		if (App->camera->lines.size()>0)
+			App->renderer3D->DebugDrawLines(App->camera->lines);
 	}
 	AABB bounding_box;
 	bounding_box.SetNegativeInfinity();

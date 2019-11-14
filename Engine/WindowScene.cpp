@@ -1,6 +1,7 @@
 #include "WindowScene.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
@@ -37,6 +38,7 @@ bool WindowScene::Draw()
 		mousePos = { mousePos.x / w * 2, mousePos.y / h * 2 };
 		App->camera->OnClick(mousePos);
 	}
+
 	return true;
 }
 

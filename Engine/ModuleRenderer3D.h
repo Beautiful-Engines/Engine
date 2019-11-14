@@ -26,6 +26,8 @@ public:
 	void OnResize(int width, int height);
 
 	void ResizeScene(float w, float h);
+
+	void UpdateProjectionMatrix();
 	
 	//Load and Save
 	bool LoadDefault(nlohmann::json &load_default_json);

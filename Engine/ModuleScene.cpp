@@ -216,13 +216,13 @@ void ModuleScene::MouseClicking(const LineSegment& segment)
 					uint indexC = mesh->indexes[v + 2] * 3;
 					float3 v3(mesh->vertices[indexC]);
 
-					Triangle triangle(v1, v2, v3);
+						Triangle triangle(v1, v2, v3);
 
-					if (local.Intersects(triangle, nullptr, nullptr))
-					{
-						Selected = it->second;
-						break;
-					}
+						if (local.Intersects(triangle, nullptr, nullptr))
+						{
+							Selected = it->second;
+							break;
+						}
 				}
 		}
 	}
