@@ -47,10 +47,12 @@ void GameObject::Update()
 		}
 	}
 	if(GetTransform())GetTransform()->GetTransformMatrix();
-	if (GetCamera()->active == false)
-	{
-		GetCamera()->UpdateFrustumTransform();
-		GetCamera()->DrawFrustum();
+	if (GetCamera()) {
+		if (GetCamera()->active == false)
+		{
+			GetCamera()->UpdateFrustumTransform();
+			GetCamera()->DrawFrustum();
+		}
 	}
 	if (children.size() > 0)
 	{

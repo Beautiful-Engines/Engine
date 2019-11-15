@@ -118,7 +118,7 @@ bool ModuleRenderer3D::Init()
 		LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		LOG("Vendor: %s", glGetString(GL_VENDOR));
 		LOG("Renderer: %s", glGetString(GL_RENDERER));
-		OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
+		//OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
 		CreateSceneBuffer();
 	}
 

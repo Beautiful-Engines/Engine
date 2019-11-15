@@ -207,16 +207,17 @@ void ModuleScene::MouseClicking(const LineSegment& segment)
 				local.Transform(it->second->GetTransform()->transform_matrix.Inverted());
 				for (uint v = 0; v < mesh->n_indexes; v += 3)
 				{
-					uint indexA = mesh->indexes[v] * 3;
+					uint indexA = mesh->indexes[v];
 					float3 v1(mesh->vertices[indexA]);
 
-					uint indexB = mesh->indexes[v + 1] * 3;
+					uint indexB = mesh->indexes[v + 1];
 					float3 v2(mesh->vertices[indexB]);
 
-					uint indexC = mesh->indexes[v + 2] * 3;
+					uint indexC = mesh->indexes[v + 2];
 					float3 v3(mesh->vertices[indexC]);
-
+			
 						Triangle triangle(v1, v2, v3);
+						LOG("%f,%f,%f", v1, v2, v3);
 
 						if (local.Intersects(triangle, nullptr, nullptr))
 						{
