@@ -59,6 +59,7 @@ void ComponentMesh::Update()
 				component_texture = nullptr;
 		}
 	}
+	//Intersects function edited
 	if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
 	{
 		Draw(component_texture);
