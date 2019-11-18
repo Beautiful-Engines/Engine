@@ -76,7 +76,7 @@ bool ImportTexture::Import(const char* _import_file, std::string& _output_file)
 			nlohmann::json json = {
 				{ "exported_file", _output_file },
 				{ "name", _import_file },
-				{ "id", LoadTexture(_output_file.c_str()) }
+				{ "id", App->GenerateNewId() }
 			};
 			// writting to .meta
 			std::string meta_path = _import_file;
@@ -97,7 +97,7 @@ uint ImportTexture::LoadTexture(const char* _path, ResourceMesh* resource_mesh, 
 	std::string name_path = _path;
 	uint pos = name_path.find_last_of("\\/");
 	name_path = (name_path.substr(pos + 1)).c_str();
-
+	
 	ResourceTexture* resource_texture = _resource_texture;
 
 	if (resource_mesh != nullptr)
@@ -177,9 +177,11 @@ uint ImportTexture::LoadTexture(const char* _path, ResourceMesh* resource_mesh, 
 
 void ImportTexture::DefaultTexture(ResourceMesh* go_texturedefault)
 {
-	ResourceTexture *resource_texture = new ResourceTexture();
+	ResourceTexture *resource_texture = (ResourceTexture*)App->resource->CreateResource(OUR_TEXTURE_EXTENSION);
 
 	resource_texture->path = "DefaultTexture";
+	resource_texture->SetName("DefaultTexture");
+	resource_texture->SetFile("DefaultTexture");
 	resource_texture->width = 128;
 	resource_texture->height = 128;
 	GLubyte checkImage[128][128][4];
@@ -204,6 +206,7 @@ void ImportTexture::DefaultTexture(ResourceMesh* go_texturedefault)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	go_texturedefault->id_default_texture = resource_texture->id_texture;
+	if(go_texturedefault != nullptr)
+		go_texturedefault->id_default_texture = resource_texture->id_texture;
 
 }

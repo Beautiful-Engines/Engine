@@ -5,6 +5,7 @@
 #include "MathGeoLib\include\MathGeoLib.h"
 
 class GameObject;
+class ResourceModel;
 
 class ModuleScene : public Module
 {
@@ -28,6 +29,8 @@ public:
 	void ChangeSelected(GameObject* selected);
 	void SetSelected(GameObject * go);
 	const std::vector<GameObject*> GetGameObjects() const;
+
+	GameObject* CreateGameObjectModel(ResourceModel* _resource_model);
 
 	void MouseClicking(const LineSegment & segment);
 

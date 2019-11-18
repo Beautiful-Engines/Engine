@@ -36,13 +36,16 @@ bool WindowProject::Draw()
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
 	App->file_system->DiscoverFiles(ASSETS_FOLDER, files_temp, directories);
-	for (int i = 0; i < files_temp.size(); ++i)
+	if (!files_temp.empty())
 	{
-		if (files_temp[i].find(".meta") > 1000)
-			files.push_back(files_temp[i]);
+		for (int i = 0; i < files_temp.size(); ++i)
+		{
+			if (files_temp[i].find(".meta") > 1000)
+				files.push_back(files_temp[i]);
+		}
 	}
+	
 	int line = 0;
-
 	for (int i = 0; i < directories.size(); ++i)
 	{
 		ImGui::PushID(i);
@@ -75,18 +78,24 @@ bool WindowProject::Draw()
 		ImGui::SetCursorPosX(pos.x + (i - (line * columns)) * (image_size + spacing) + offset);
 		ImGui::SetCursorPosY(pos.y + line * (image_size + spacing) + offset);
 
-		if (App->resource->Get(App->resource->GetId(ASSETS_FOLDER + files[i])) != nullptr &&
-			App->resource->Get(App->resource->GetId(ASSETS_FOLDER + files[i]))->GetType() == Resource::RESOURCE_TYPE::RESOURCE_TEXTURE)
+		if (App->resource->Get(App->resource->GetId(ASSETS_FOLDER + files[i])) != nullptr)
 		{
-
-			ImGui::Image((void*)(intptr_t)((ResourceTexture*)App->resource->Get(App->resource->GetId(ASSETS_FOLDER + files[i])))->id_texture,
-				ImVec2(image_size, image_size), ImVec2(0, 1), ImVec2(1, 0));
+			if (App->resource->Get(App->resource->GetId(ASSETS_FOLDER + files[i]))->GetType() == Resource::RESOURCE_TYPE::RESOURCE_TEXTURE)
+			{
+				ImGui::Image((void*)(intptr_t)((ResourceTexture*)App->resource->Get(App->resource->GetId(ASSETS_FOLDER + files[i])))->id_texture,
+					ImVec2(image_size, image_size), ImVec2(0, 1), ImVec2(1, 0));
+			}
+			else
+			{
+				ImGui::Image((void*)(intptr_t)((ResourceTexture*)App->resource->Get(App->resource->GetId("DefaultTexture")))->id_texture,
+					ImVec2(image_size, image_size), ImVec2(0, 1), ImVec2(1, 0));
+			}
 		}
 
 
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 		{
-			uint id = (uint)App->resource->Get(App->resource->GetId(ASSETS_FOLDER + files[i]));
+			uint id = App->resource->GetId(ASSETS_FOLDER + files[i]);
 			ImGui::SetDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F, &id, sizeof(uint));
 			ImGui::EndDragDropSource();
 		}

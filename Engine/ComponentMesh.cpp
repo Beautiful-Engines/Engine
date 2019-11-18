@@ -168,6 +168,11 @@ float3 ComponentMesh::GetMinPoint()
 	return minP;
 }
 
+void ComponentMesh::AddResourceMesh(ResourceMesh* _resource_mesh)
+{
+	resource_mesh = _resource_mesh;
+}
+
 ResourceMesh* ComponentMesh::GetResourceMesh()
 {
 	return resource_mesh;

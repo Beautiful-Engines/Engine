@@ -23,8 +23,9 @@ public:
 	AABB GetBB();
 	float3 GetMaxPoint();
 
+	void AddResourceMesh(ResourceMesh* _resource_mesh);
 	ResourceMesh* GetResourceMesh();
-
+	
 	void Draw(ComponentTexture *component_texture);
 	void DrawNormals();
 

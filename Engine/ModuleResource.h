@@ -16,9 +16,10 @@ public:
 	Resource* Get(uint uid);
 	uint GetId(std::string _file);
 	Resource* CreateResource(const char* extension, uint UID = 0);
+	void LoadAllAssets();
 	
 private:
-	void LoadAllAssets();
+	
 
 protected:
 	std::map<uint, Resource*> resources;

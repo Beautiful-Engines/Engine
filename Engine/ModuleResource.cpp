@@ -14,6 +14,7 @@
 
 ModuleResource::ModuleResource(bool start_enabled) : Module(start_enabled)
 {
+	name = "Resource";
 }
 
 ModuleResource::~ModuleResource()
@@ -67,26 +68,34 @@ Resource* ModuleResource::Get(uint _UID)
 uint ModuleResource::GetId(std::string _file)
 {
 	for (std::map<uint, Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
+	{
 		if (it->second->GetName() == _file)
 			return it->first;
-
+	}
+		
 	return 0;
 }
 
 void ModuleResource::LoadAllAssets()
 {
+	std::vector<std::string> files_temp;
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
-	std::string extension;
-	App->file_system->DiscoverFiles(ASSETS_FOLDER, files, directories);
+	App->file_system->DiscoverFiles(ASSETS_FOLDER, files_temp, directories);
+	for (int i = 0; i < files_temp.size(); ++i)
+	{
+		if (files_temp[i].find(".meta") > 1000)
+			files.push_back(files_temp[i]);
+	}
 
 	std::vector<std::string>::iterator iterator = files.begin();
 
 	for (; iterator != files.end(); ++iterator)
 	{
-		App->file_system->SplitFilePath((*iterator).c_str(), nullptr, nullptr, &extension);
+		App->file_system->SplitFilePath((*iterator).c_str(), nullptr, nullptr);
 		App->importer->ImportFile((ASSETS_FOLDER + (*iterator)).c_str());
 	}
+	App->importer->import_texture->DefaultTexture();
 }
 
 void ModuleResource::LoadFile(const char * _path)
@@ -94,7 +103,7 @@ void ModuleResource::LoadFile(const char * _path)
 	std::string spath = _path;
 	std::ifstream ifstream(spath);
 	nlohmann::json json = nlohmann::json::parse(ifstream);
-	
+
 	uint UID = json["id"];
 	std::string exported_file = json["exported_file"];
 	std::string name = json["name"];
@@ -104,21 +113,22 @@ void ModuleResource::LoadFile(const char * _path)
 	if ("." + extension == OUR_MESH_EXTENSION)
 	{
 		resource = CreateResource(OUR_MESH_EXTENSION, UID);
-		App->importer->import_mesh->LoadMeshFromResource((ResourceMesh*)resource);
 		resource->SetFile(exported_file);
 		resource->SetName(name);
+		App->importer->import_mesh->LoadMeshFromResource((ResourceMesh*)resource);
+		
 	}
 	else if ("." + extension == OUR_TEXTURE_EXTENSION)
 	{
 		resource = CreateResource(OUR_TEXTURE_EXTENSION, UID);
-		App->importer->import_texture->LoadTexture(exported_file.c_str(), nullptr, (ResourceTexture*)resource);
 		resource->SetName(name);
+		App->importer->import_texture->LoadTexture(exported_file.c_str(), nullptr, (ResourceTexture*)resource);
 	}
 	else if ("." + extension == OUR_MODEL_EXTENSION)
 	{
-		Resource* resource = CreateResource(OUR_MODEL_EXTENSION);
-		resource->SetFile(_path);
-		/*App->importer->import_model->LoadModel();*/
+		resource = CreateResource(OUR_MODEL_EXTENSION, UID);
+		resource->SetFile(exported_file);
+		resource->SetName(name);
+		App->importer->import_model->LoadModel((ResourceModel*)resource);
 	}
-		
 }

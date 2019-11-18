@@ -16,9 +16,12 @@ public:
 	bool CleanUp();
 
 	uint ImportFBX(const char* _path);
+	bool LoadModel(ResourceModel* resource);
 
 private:
 	ResourceModel::ModelNode ImportNode(const aiNode* _node, const aiScene* _scene, ResourceMesh* _object);
+	bool LoadNode(nlohmann::json::iterator it, ResourceModel* _resource);
+	void CreateOurModelFile(ResourceModel* _resource);
 };
 
-#endif // !__ImportScene_H_
+#endif // !__ImportModel_H_

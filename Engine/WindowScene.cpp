@@ -4,7 +4,14 @@
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
+#include "ModuleScene.h"
 #include "ModuleWindow.h"
+#include "ModuleResource.h"
+
+#include "ResourceModel.h"
+
+#include "ImGui/imgui_stdlib.h"
+#include "imgui/imgui_internal.h"
 
 //tbch
 WindowScene::WindowScene()
@@ -31,6 +38,20 @@ bool WindowScene::Draw()
 		ImVec2(screen_pos.x + w, screen_pos.y + h),
 		ImVec2(0, 1),
 		ImVec2(1, 0));
+
+	// Get Item from WindowProject
+	if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), (ImGuiID)"Scene"))
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
+		{
+			uint* id = (uint*)payload->Data;
+			if(App->resource->Get(*id)->GetType() == Resource::RESOURCE_TYPE::RESOURCE_MODEL)
+				App->scene->CreateGameObjectModel((ResourceModel*)App->resource->Get(*id));
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+
 	ImGui::End();
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{

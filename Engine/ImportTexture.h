@@ -17,7 +17,7 @@ public:
 
 	bool Import(const char* _import_file, std::string& _output_file);
 	uint LoadTexture(const char* _path, ResourceMesh* _resource_mesh = nullptr, ResourceTexture* _resource_texture = nullptr);
-	void DefaultTexture(ResourceMesh* _resource_mesh);
+	void DefaultTexture(ResourceMesh* _resource_mesh = nullptr);
 };
 
 #endif // !__ImportTexture_H_

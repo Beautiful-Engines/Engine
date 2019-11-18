@@ -136,6 +136,7 @@ const std::string GameObject::GetName() const
 {
 	return name;
 }
+
 void GameObject::SetName(std::string _name)
 {
 	name = _name;

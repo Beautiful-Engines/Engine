@@ -67,7 +67,7 @@ void ModuleImport::ImportFile(const char* _path)
 		if (extension == "fbx")
 		{
 			// Import
-			uint UID = import_model->ImportFBX(final_path.c_str());
+			import_model->ImportFBX(final_path.c_str());
 		}
 		else if (extension == "png" || extension == "dds")
 		{
@@ -76,11 +76,10 @@ void ModuleImport::ImportFile(const char* _path)
 			import_texture->Import(final_path.c_str(), output_file);
 		}
 	}
-	else if(App->file_system->Exists(meta_path.c_str()))
+	if(App->file_system->Exists(meta_path.c_str()))
 	{
 		// Use meta file
 		App->resource->LoadFile(meta_path.c_str());
-
 	}
 }
 

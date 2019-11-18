@@ -4,13 +4,17 @@
 #include "ModuleGUI.h"
 #include "ModuleInput.h"
 #include "ModuleImport.h"
-#include "ResourceMesh.h"
+#include "ModuleResource.h"
 #include "GameObject.h"
 #include "Primitive.h"
 #include "ComponentTransform.h"
 #include "ComponentCamera.h"
 #include "WindowHierarchy.h"
 #include "ModuleScene.h"
+
+#include "ResourceModel.h"
+#include "ResourceMesh.h"
+#include "ImportMesh.h"
 
 #include "glew\glew.h"
 
@@ -33,7 +37,6 @@ bool ModuleScene::Init()
 	return true;
 }
 
-
 bool ModuleScene::Start()
 {
 	CreateGrid();
@@ -42,7 +45,6 @@ bool ModuleScene::Start()
 	GameObject *camara = CreateGameObject("camara");
 	ComponentCamera* cam = new ComponentCamera(camara);
 	camara->AddComponent(cam);
-	/*App->importer->ImportFile("assets/bakerhouse.fbx");*/
 
 	return true;
 }
@@ -182,6 +184,50 @@ void ModuleScene::SetSelected(GameObject* go)
 const std::vector<GameObject*> ModuleScene::GetGameObjects() const
 {
 	return game_objects;
+}
+
+GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
+{
+	if (_resource_model != nullptr)
+	{
+		GameObject* go_model = CreateGameObject(_resource_model->GetName());
+		go_model->CreateComponent(ComponentType::TRANSFORM);
+
+		for each (ResourceModel::ModelNode node in _resource_model->nodes)
+		{
+			GameObject* go_meshes = new GameObject();
+			go_meshes->SetName(node.name);
+			go_meshes->SetParent(go_model);
+			ComponentTransform* transform = (ComponentTransform*)go_meshes->CreateComponent(ComponentType::TRANSFORM);
+			ComponentMesh* mesh = (ComponentMesh*)go_meshes->CreateComponent(ComponentType::MESH);
+			ComponentTexture* texture = (ComponentTexture*)go_meshes->CreateComponent(ComponentType::TEXTURE);
+
+			transform->position = node.position;
+			transform->rotation = node.rotation;
+			transform->scale = node.scale;
+
+			if (node.mesh > 0)
+			{
+				ResourceMesh* resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION, node.mesh);
+				resource_mesh->SetFile(LIBRARY_MESH_FOLDER + std::to_string(node.mesh) + OUR_MESH_EXTENSION);
+				App->importer->import_mesh->LoadMeshFromResource(resource_mesh);
+				mesh->AddResourceMesh(resource_mesh);
+			}
+				
+			//if(node.texture > 0)
+			//	//texture
+			//else
+			//	//texture
+
+
+			/*gameobjects.emplace(go->GetId(), go);
+			temp_go.push_back(go);
+			go->transform->UpdateTransformMatrix();
+			count++;*/
+		}
+		return go_model;
+	}
+	return nullptr;
 }
 
 void ModuleScene::MouseClicking(const LineSegment& segment)
