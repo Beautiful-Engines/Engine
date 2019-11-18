@@ -10,6 +10,7 @@ class WindowAbout;
 class WindowConsole;
 class WindowProperties;
 class WindowPrimitives;
+class WindowProject;
 class WindowScene;
 
 class ModuleGUI : public Module
@@ -37,6 +38,7 @@ public:
 	WindowConsole* window_console = nullptr;
 	WindowPrimitives* window_primitives = nullptr;
 	WindowProperties* window_properties = nullptr;
+	WindowProject* window_project = nullptr;
 	WindowScene* window_scene = nullptr;
 
 private:

@@ -3,7 +3,7 @@
 
 #include "Module.h"
 
-class ImportScene;
+class ImportModel;
 class ImportMesh;
 class ImportTexture;
 
@@ -22,7 +22,7 @@ public:
 
 public:
 
-	ImportScene* import_scene;
+	ImportModel* import_model;
 	ImportMesh* import_mesh;
 	ImportTexture* import_texture;
 

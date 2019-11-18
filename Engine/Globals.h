@@ -71,7 +71,10 @@ enum update_status
 #define LIBRARY_MODEL_FOLDER "Library/Models/"
 #define LIBRARY_MATERIAL_FOLDER "Library/Materials/"
 #define LIBRARY_STATE_MACHINE_FOLDER "Library/StateMachines/"
-#define OUR_EXTENSION ".axf"
+#define OUR_MESH_EXTENSION ".axf" // Apruebanos x favor
+#define OUR_TEXTURE_EXTENSION ".dds"
+#define OUR_SCENE_EXTENSION ".mgr" // Marc Garrigó Rules
+#define OUR_MODEL_EXTENSION ".xfa" // X favor apruebanos
 
 
 #endif // !__Globals_H_

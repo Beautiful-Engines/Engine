@@ -4,7 +4,7 @@
 #include "ModuleGUI.h"
 #include "ModuleInput.h"
 #include "ModuleImport.h"
-
+#include "ResourceMesh.h"
 #include "GameObject.h"
 #include "Primitive.h"
 #include "ComponentTransform.h"
@@ -42,7 +42,7 @@ bool ModuleScene::Start()
 	GameObject *camara = CreateGameObject("camara");
 	ComponentCamera* cam = new ComponentCamera(camara);
 	camara->AddComponent(cam);
-	App->importer->ImportFile("assets/bakerhouse.fbx");
+	/*App->importer->ImportFile("assets/bakerhouse.fbx");*/
 
 	return true;
 }
@@ -200,7 +200,7 @@ void ModuleScene::MouseClicking(const LineSegment& segment)
 	GameObject* Selected = nullptr;
 	for (std::map<float, GameObject*>::iterator it = selected.begin(); it != selected.end() && Selected == nullptr; it++)
 	{
-		const ComponentMesh* mesh = it->second->GetMesh();
+		const ResourceMesh* mesh = it->second->GetMesh()->GetResourceMesh();
 		if (mesh)
 		{
 				LineSegment local = segment;

@@ -7,6 +7,7 @@
 #include "ComponentTexture.h"
 #include "ComponentCamera.h"
 #include "GameObject.h"
+#include "ResourceMesh.h"
 #include "ModuleInput.h"
 #include "ModuleGUI.h"
 #include "WindowProperties.h"
@@ -44,9 +45,9 @@ bool WindowProperties::Draw()
 			if (go->GetComponents()[i]->GetType() == ComponentType::TEXTURE)
 			{
 				texture = (ComponentTexture*)go->GetComponents()[i];
-				if (!mesh->checkered && texture->id_texture == mesh->id_texture)
+				if (!mesh->checkered && texture->id_texture == mesh->GetResourceMesh()->id_texture)
 					break;
-				else if (mesh->checkered && texture->id_texture == mesh->id_default_texture)
+				else if (mesh->checkered && texture->id_texture == mesh->GetResourceMesh()->id_default_texture)
 					break;
 			}
 			if (go->GetComponents()[i]->GetType() == ComponentType::TRANSFORM)
@@ -121,11 +122,11 @@ bool WindowProperties::Draw()
 			{
 				ImGui::Text("Vertex Count:");
 				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 }, "%i", mesh->n_vertices / 3);
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%i", mesh->GetResourceMesh()->n_vertices / 3);
 
 				ImGui::Text("Triangle Count:");
 				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 }, "%i", mesh->n_indexes / 3);
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%i", mesh->GetResourceMesh()->n_indexes / 3);
 
 				ImGui::Checkbox("Vertex Normals", &mesh->vertex_normals);
 				ImGui::Checkbox("Face Normals", &mesh->face_normals);

@@ -1,9 +1,12 @@
 #include "Application.h"
 #include "ModuleScene.h"
 #include "ModuleFileSystem.h"
+#include "ModuleResource.h"
 
 #include "GameObject.h"
 #include "ComponentTexture.h"
+#include "ResourceMesh.h"
+#include "ResourceTexture.h"
 
 #include "DeviL/include/il.h"
 #include "DeviL/include/ilu.h"
@@ -14,6 +17,9 @@
 #pragma comment (lib, "DeviL/lib/ILUT.lib")
 
 #include "ImportTexture.h"
+
+#include <fstream>
+#include <iomanip>
 
 ImportTexture::ImportTexture()
 {
@@ -67,6 +73,16 @@ bool ImportTexture::Import(const char* _import_file, std::string& _output_file)
 		{
 			_output_file = LIBRARY_TEXTURES_FOLDER + name_object + ".dds";
 			App->file_system->Save(_output_file.c_str(), data, size);
+			nlohmann::json json = {
+				{ "exported_file", _output_file },
+				{ "name", _import_file },
+				{ "id", LoadTexture(_output_file.c_str()) }
+			};
+			// writting to .meta
+			std::string meta_path = _import_file;
+			meta_path += ".meta";
+			std::ofstream ofstream(meta_path);
+			ofstream << std::setw(4) << json << std::endl;
 		}
 		RELEASE_ARRAY(data);
 	}
@@ -75,41 +91,39 @@ bool ImportTexture::Import(const char* _import_file, std::string& _output_file)
 	return true;
 }
 
-bool ImportTexture::LoadTexture(const char* _path, GameObject* go_fromfbx)
+uint ImportTexture::LoadTexture(const char* _path, ResourceMesh* resource_mesh, ResourceTexture* _resource_texture)
 {
-	bool ret = true;
-
 	// Name
 	std::string name_path = _path;
 	uint pos = name_path.find_last_of("\\/");
 	name_path = (name_path.substr(pos + 1)).c_str();
-	final_path = LIBRARY_TEXTURES_FOLDER + std::string(_path);
 
-	ComponentTexture *component_texture = nullptr;
+	ResourceTexture* resource_texture = _resource_texture;
 
-	if (go_fromfbx != nullptr)
+	if (resource_mesh != nullptr)
 	{
-		
 		uint id_tex;
 		ilGenImages(1, &id_tex);
 		ilBindImage(id_tex);
 		
-		if (ilLoadImage(final_path.c_str()))
+		if (ilLoadImage(_path))
 		{
-			component_texture = new ComponentTexture(go_fromfbx);
-			component_texture->id_texture = ilutGLBindTexImage();
-			component_texture->path = final_path;
-			component_texture->width = ilGetInteger(IL_IMAGE_WIDTH);
-			component_texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
-			go_fromfbx->GetMesh()->id_texture = component_texture->id_texture;
+			if(resource_texture == nullptr)
+				resource_texture = (ResourceTexture*)App->resource->CreateResource(OUR_TEXTURE_EXTENSION);
 
-			LOG("Added %s to %s", name_path.c_str(), go_fromfbx->GetName().c_str());
+			resource_texture->id_texture = ilutGLBindTexImage();
+			resource_texture->path = _path;
+			resource_texture->SetFile(_path);
+			resource_texture->width = ilGetInteger(IL_IMAGE_WIDTH);
+			resource_texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
+			resource_mesh->id_texture = resource_texture->id_texture;
+
+			LOG("Added %s to %s", name_path.c_str(), resource_mesh->GetName());
 		}
 		else
 		{
 			auto error = ilGetError();
 			LOG("Error loading texture %s. Error: %s", name_path.c_str(), ilGetString(error));
-			ret = false;
 		}
 
 		ilDeleteImages(1, &id_tex);
@@ -122,25 +136,52 @@ bool ImportTexture::LoadTexture(const char* _path, GameObject* go_fromfbx)
 
 			for (uint j = 0; j < children_game_objects.size(); ++j)
 			{
-				LoadTexture(name_path.c_str(), children_game_objects[j]);
+				LoadTexture(name_path.c_str(), children_game_objects[j]->GetMesh()->GetResourceMesh());
 			}
 		}
 		else
 		{
-			LoadTexture(name_path.c_str(), App->scene->GetSelected());
+			LoadTexture(name_path.c_str(), App->scene->GetSelected()->GetMesh()->GetResourceMesh());
 		}
 	}
+	else
+	{
+		uint id_tex;
+		ilGenImages(1, &id_tex);
+		ilBindImage(id_tex);
 
-	return ret;
+		if (ilLoadImage(_path))
+		{
+			if (resource_texture == nullptr)
+				resource_texture = (ResourceTexture*)App->resource->CreateResource(OUR_TEXTURE_EXTENSION);
+
+			resource_texture->id_texture = ilutGLBindTexImage();
+			resource_texture->path = _path;
+			resource_texture->SetFile(_path);
+			resource_texture->width = ilGetInteger(IL_IMAGE_WIDTH);
+			resource_texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+			LOG("Added %s to Engine", name_path.c_str());
+		}
+		else
+		{
+			auto error = ilGetError();
+			LOG("Error loading texture %s. Error: %s", name_path.c_str(), ilGetString(error));
+		}
+
+		ilDeleteImages(1, &id_tex);
+	}
+
+	return resource_texture->GetId();
 }
 
-void ImportTexture::DefaultTexture(GameObject* go_texturedefault)
+void ImportTexture::DefaultTexture(ResourceMesh* go_texturedefault)
 {
-	ComponentTexture *component_texture = new ComponentTexture(go_texturedefault);
+	ResourceTexture *resource_texture = new ResourceTexture();
 
-	component_texture->path = "DefaultTexture";
-	component_texture->width = 128;
-	component_texture->height = 128;
+	resource_texture->path = "DefaultTexture";
+	resource_texture->width = 128;
+	resource_texture->height = 128;
 	GLubyte checkImage[128][128][4];
 	for (int i = 0; i < 128; i++)
 	{
@@ -154,8 +195,8 @@ void ImportTexture::DefaultTexture(GameObject* go_texturedefault)
 		}
 	}
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &component_texture->id_texture);
-	glBindTexture(GL_TEXTURE_2D, component_texture->id_texture);
+	glGenTextures(1, &resource_texture->id_texture);
+	glBindTexture(GL_TEXTURE_2D, resource_texture->id_texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -163,78 +204,6 @@ void ImportTexture::DefaultTexture(GameObject* go_texturedefault)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	go_texturedefault->GetMesh()->id_default_texture = component_texture->id_texture;
+	go_texturedefault->id_default_texture = resource_texture->id_texture;
 
 }
-
-
-//bool ImportTexture::Import(const char* import_file, std::string& output_file)
-//{
-//	uint image_id;
-//
-//	ilGenImages(1, &image_id); // Grab a new image name.
-//	ilBindImage(image_id);
-//	ilLoadImage(import_file);
-//
-//	ILuint size;
-//	ILubyte *data;
-//	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5); // To pick a specific DXT compression use 
-//	size = ilSaveL(IL_DDS, NULL, 0); // Get the size of the data buffer 
-//	if (size > 0) {
-//		data = new ILubyte[size]; // allocate data buffer   
-//		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function        
-//		{
-//			std::string file;
-//			App->fsystem->SplitFilePath(import_file, nullptr, &file, nullptr);
-//			output_file = LIBRARY_TEXTURES_FOLDER + file + ".dds";
-//			App->fsystem->Save(output_file.c_str(), data, size);
-//		}
-//		RELEASE_ARRAY(data);
-//	}
-//	ilDeleteImages(1, &image_id);
-//
-//	return true;
-//}
-//
-//Texture* TextureImporter::LoadDefault()
-//{
-//	if (!default_texture)
-//	{
-//		default_texture = new Texture();
-//
-//		default_texture->path = "CheckersTexture";
-//		default_texture->width = 128;
-//		default_texture->height = 128;
-//		GLubyte checkImage[128][128][4];
-//
-//		for (int i = 0; i < 128; i++)
-//		{
-//			for (int j = 0; j < 128; j++)
-//			{
-//				int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-//				checkImage[i][j][0] = (GLubyte)c;
-//				checkImage[i][j][1] = (GLubyte)c;
-//				checkImage[i][j][2] = (GLubyte)c;
-//				checkImage[i][j][3] = (GLubyte)255;
-//			}
-//		}
-//
-//		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//		glGenTextures(1, &default_texture->id);
-//		glBindTexture(GL_TEXTURE_2D, default_texture->id);
-//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
-//		glBindTexture(GL_TEXTURE_2D, 0);
-//
-//		default_texture->mips = 0;
-//		default_texture->depth = 0;
-//		default_texture->format = "rgba";
-//		default_texture->bpp = 0;
-//		default_texture->size = sizeof(GLubyte) * 4 * 128 * 128;
-//	}
-//
-//	return default_texture;
-//}

@@ -21,6 +21,7 @@ class ModuleGUI;
 class ModuleScene;
 class ModuleImport;
 class ModuleFileSystem;
+class ModuleResource;
 
 
 
@@ -35,6 +36,7 @@ public:
 	ModuleScene* scene;
 	ModuleImport* importer;
 	ModuleFileSystem* file_system;
+	ModuleResource*  resource;
 
 private:
 

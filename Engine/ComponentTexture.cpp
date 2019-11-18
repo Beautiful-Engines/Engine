@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "GameObject.h"
 #include "ModuleImport.h"
-#include "ComponentMesh.h"
+#include "ResourceMesh.h"
 #include "ComponentTexture.h"
 
 #include "glew/glew.h"
@@ -30,13 +30,22 @@ void ComponentTexture::Save(const nlohmann::json::iterator& _iterator)
 	_iterator.value().push_back(json);
 }
 
-void ComponentTexture::DrawTexture(ComponentMesh* _component_mesh)
+void ComponentTexture::Load(const nlohmann::json _json)
 {
-	if (id_texture > 0 && _component_mesh->n_uv > 0) {
+	type = _json["type"];
+	id_texture = _json["id_texture"];
+	width = _json["width"];
+	height = _json["height"];
+	path = _json["path"].get<std::string>();
+}
+
+void ComponentTexture::DrawTexture(ResourceMesh* _resource_mesh)
+{
+	if (id_texture > 0 && _resource_mesh->n_uv > 0) {
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		
-		glBindBuffer(GL_ARRAY_BUFFER, _component_mesh->id_uv);
+		glBindBuffer(GL_ARRAY_BUFFER, _resource_mesh->id_uv);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 		
 		glBindTexture(GL_TEXTURE_2D, id_texture);

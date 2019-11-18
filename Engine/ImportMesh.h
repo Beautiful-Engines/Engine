@@ -1,12 +1,12 @@
 #ifndef __ImportMesh_H_
 #define __ImportMesh_H_
 
-#include "Importer.h"
-
 struct aiScene;
 struct aiMesh;
+class GameObject;
+class ResourceMesh;
 
-class ImportMesh : public Importer
+class ImportMesh 
 {
 public:
 	ImportMesh();
@@ -15,12 +15,12 @@ public:
 	bool Init();
 	bool CleanUp();
 
-	void Import(const aiScene* scene, const aiMesh* ai_mesh, GameObject* _object);
-	bool Save(ComponentMesh* mesh);
-	void Load(ComponentMesh* mesh);
+	void Import(const aiScene* scene, const aiMesh* ai_mesh, ResourceMesh* _resource_mesh);
+	bool CreateOurMesh(ResourceMesh* mesh);
+	void LoadMeshFromResource(ResourceMesh* mesh);
 
 private:
-	void GLBuffer(ComponentMesh *mesh);
+	void GLBuffer(ResourceMesh *mesh);
 };
 
 #endif // !__ImportMesh_H_

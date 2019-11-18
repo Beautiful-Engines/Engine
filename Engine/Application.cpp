@@ -8,6 +8,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleImport.h"
 #include "ModuleFileSystem.h"
+#include "ModuleResource.h"
 
 #include "nlohmann\json.hpp"
 #include <fstream>
@@ -23,6 +24,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D();
 	importer = new ModuleImport();
 	file_system = new ModuleFileSystem(ASSETS_FOLDER);
+	resource = new ModuleResource();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -32,11 +34,12 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	AddModule(resource);
 	AddModule(scene);
 	AddModule(file_system);
 	AddModule(importer);
 	AddModule(gui);
-
+	
 	// Renderer last!
 	AddModule(renderer3D);
 }

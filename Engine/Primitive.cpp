@@ -4,6 +4,7 @@
 #include "ModuleImport.h"
 #include "ComponentTransform.h"
 #include "Primitive.h"
+#include "ResourceMesh.h"
 
 #include "glew/glew.h"
 #include "glmath.h"
@@ -129,7 +130,7 @@ void Primitive::NormalsCalc()
 
 void Primitive::AddToMesh()
 {
-	ComponentMesh* primitive_mesh = new ComponentMesh(this);
+	ResourceMesh* primitive_mesh = new ResourceMesh(1);
 	primitive_mesh->id_index = id_index;
 	primitive_mesh->n_indexes = n_indexes;
 	primitive_mesh->indexes = indexes;

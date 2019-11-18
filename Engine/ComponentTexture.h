@@ -2,7 +2,7 @@
 #define __ComponentTexture_H__
 
 #include "Component.h"
-class ComponentMesh;
+class ResourceMesh;
 
 class ComponentTexture : public Component
 {
@@ -11,8 +11,9 @@ public:
 	~ComponentTexture();
 
 	void Save(const nlohmann::json::iterator& _iterator);
+	void Load(const nlohmann::json _json);
 
-	void DrawTexture(ComponentMesh* _component_mesh);
+	void DrawTexture(ResourceMesh* _resource_mesh);
 
 public:
 	uint id_texture = 0u;  

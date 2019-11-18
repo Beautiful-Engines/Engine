@@ -6,8 +6,9 @@
 #include "ModuleScene.h"
 #include "ModuleImport.h"
 #include "ModuleFileSystem.h"
+#include "ModuleResource.h"
 
-#include "ImportScene.h"
+#include "ImportModel.h"
 #include "ImportMesh.h"
 #include "ImportTexture.h"
 
@@ -22,8 +23,8 @@ ModuleImport::~ModuleImport()
 
 bool ModuleImport::Init()
 {
-	import_scene = new ImportScene();
-	import_scene->Init();
+	import_model = new ImportModel();
+	import_model->Init();
 
 	import_mesh = new ImportMesh();
 	import_mesh->Init();
@@ -45,7 +46,7 @@ bool ModuleImport::CleanUp()
 
 void ModuleImport::ImportFile(const char* _path)
 {
-	
+
 	//copy file
 	std::string normalized_path = _path;
 	App->file_system->NormalizePath(normalized_path);
@@ -53,41 +54,33 @@ void ModuleImport::ImportFile(const char* _path)
 	App->file_system->SplitFilePath(normalized_path.c_str(), nullptr, &file, &extension);
 
 	std::string final_path = ASSETS_FOLDER + file;
+	std::string meta_path = final_path + ".meta";
 
 	if (!App->file_system->Exists(final_path.c_str()))
 	{
 		// Copy to assets folder
 		App->file_system->CopyFromOutsideFS(normalized_path.c_str(), final_path.c_str());
-
+	}
+	if (!App->file_system->Exists(meta_path.c_str()))
+	{
 		// Importing
 		if (extension == "fbx")
 		{
-			import_scene->ImportFBX(final_path.c_str());
+			// Import
+			uint UID = import_model->ImportFBX(final_path.c_str());
 		}
 		else if (extension == "png" || extension == "dds")
 		{
+			// Import
 			std::string output_file;
 			import_texture->Import(final_path.c_str(), output_file);
-			import_texture->LoadTexture(output_file.c_str());
 		}
 	}
-	else
+	else if(App->file_system->Exists(meta_path.c_str()))
 	{
 		// Use meta file
+		App->resource->LoadFile(meta_path.c_str());
 
-		// DELETE THIS PART AND LOAD META
-		if (extension == "fbx")
-		{
-			import_scene->ImportFBX(final_path.c_str());
-		}
-		else if (extension == "png" || extension == "dds")
-		{
-			std::string output_file;
-			import_texture->Import(final_path.c_str(), output_file);
-			import_texture->LoadTexture(output_file.c_str());
-		}
 	}
-	
-	
-
 }
+

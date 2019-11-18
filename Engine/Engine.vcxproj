@@ -153,15 +153,18 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
-    <ClInclude Include="Importer.h" />
     <ClInclude Include="ImportMesh.h" />
-    <ClInclude Include="ImportScene.h" />
+    <ClInclude Include="ImportModel.h" />
     <ClInclude Include="ImportTexture.h" />
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleImport.h" />
+    <ClInclude Include="ModuleResource.h" />
     <ClInclude Include="Par\par_shapes.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceMesh.h" />
+    <ClInclude Include="ResourceModel.h" />
+    <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="WindowAbout.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
@@ -238,6 +241,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="WindowEngine.h" />
     <ClInclude Include="WindowPrimitives.h" />
+    <ClInclude Include="WindowProject.h" />
     <ClInclude Include="WindowProperties.h" />
     <ClInclude Include="WindowScene.h" />
   </ItemGroup>
@@ -259,12 +263,16 @@
     <ClCompile Include="ImGui\imgui_stdlib.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="ImportMesh.cpp" />
-    <ClCompile Include="ImportScene.cpp" />
+    <ClCompile Include="ImportModel.cpp" />
     <ClCompile Include="ImportTexture.cpp" />
     <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImport.cpp" />
+    <ClCompile Include="ModuleResource.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceMesh.cpp" />
+    <ClCompile Include="ResourceModel.cpp" />
+    <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="WindowAbout.cpp" />
     <ClCompile Include="WindowConfig.cpp" />
     <ClCompile Include="WindowConsole.cpp" />
@@ -312,6 +320,7 @@
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="WindowPrimitives.cpp" />
+    <ClCompile Include="WindowProject.cpp" />
     <ClCompile Include="WindowProperties.cpp" />
     <ClCompile Include="WindowScene.cpp" />
   </ItemGroup>

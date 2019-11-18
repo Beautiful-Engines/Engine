@@ -355,17 +355,11 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>Sources\Containers\ExtLibraries\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Importer.h">
-      <Filter>Sources\Importers</Filter>
-    </ClInclude>
     <ClInclude Include="ImportMesh.h">
       <Filter>Sources\Importers</Filter>
     </ClInclude>
     <ClInclude Include="WindowScene.h">
       <Filter>Sources\EngineWindows</Filter>
-    </ClInclude>
-    <ClInclude Include="ImportScene.h">
-      <Filter>Sources\Importers</Filter>
     </ClInclude>
     <ClInclude Include="ImportTexture.h">
       <Filter>Sources\Importers</Filter>
@@ -378,6 +372,24 @@
     </ClInclude>
     <ClInclude Include="ComponentTexture.h">
       <Filter>Sources\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleResource.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMesh.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceModel.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceTexture.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowProject.h">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="ImportModel.h">
+      <Filter>Sources\Importers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -582,9 +594,6 @@
     <ClCompile Include="WindowScene.cpp">
       <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
-    <ClCompile Include="ImportScene.cpp">
-      <Filter>Sources\Importers</Filter>
-    </ClCompile>
     <ClCompile Include="ImportTexture.cpp">
       <Filter>Sources\Importers</Filter>
     </ClCompile>
@@ -596,6 +605,24 @@
     </ClCompile>
     <ClCompile Include="ComponentTexture.cpp">
       <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleResource.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMesh.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceModel.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceTexture.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowProject.cpp">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="ImportModel.cpp">
+      <Filter>Sources\Importers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

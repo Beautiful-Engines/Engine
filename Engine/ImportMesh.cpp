@@ -6,7 +6,7 @@
 #include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h"
 
-#include "ComponentMesh.h"
+#include "ResourceMesh.h"
 #include "GameObject.h"
 
 #include "glew/glew.h"
@@ -34,20 +34,18 @@ bool ImportMesh::CleanUp()
 	return true;
 }
 
-void ImportMesh::Import(const aiScene* scene, const aiMesh* ai_mesh, GameObject* _object)
+void ImportMesh::Import(const aiScene* scene, const aiMesh* ai_mesh, ResourceMesh* _resource_mesh)
 {
 
-	ComponentMesh *mymesh = new ComponentMesh(_object);
-
-	mymesh->n_vertices = ai_mesh->mNumVertices;
-	mymesh->vertices = new float3[mymesh->n_vertices];
-	memcpy(mymesh->vertices, ai_mesh->mVertices, sizeof(float3) * mymesh->n_vertices);
+	_resource_mesh->n_vertices = ai_mesh->mNumVertices;
+	_resource_mesh->vertices = new float3[_resource_mesh->n_vertices];
+	memcpy(_resource_mesh->vertices, ai_mesh->mVertices, sizeof(float3) * _resource_mesh->n_vertices);
 
 	// Faces
 	if (ai_mesh->HasFaces())
 	{
-		mymesh->n_indexes = ai_mesh->mNumFaces * 3;
-		mymesh->indexes = new uint[mymesh->n_indexes];
+		_resource_mesh->n_indexes = ai_mesh->mNumFaces * 3;
+		_resource_mesh->indexes = new uint[_resource_mesh->n_indexes];
 
 		for (uint j = 0; j < ai_mesh->mNumFaces; ++j)
 		{
@@ -57,20 +55,20 @@ void ImportMesh::Import(const aiScene* scene, const aiMesh* ai_mesh, GameObject*
 			}
 			else
 			{
-				memcpy(&mymesh->indexes[j * 3], ai_mesh->mFaces[j].mIndices, sizeof(uint) * 3);
+				memcpy(&_resource_mesh->indexes[j * 3], ai_mesh->mFaces[j].mIndices, sizeof(uint) * 3);
 			}
 		}
-		LOG("New mesh %s, with %i vertices and %i faces has been added", _object->GetName(), mymesh->n_vertices, mymesh->n_indexes / 3);
+		LOG("New resource mesh %s, with %i vertices and %i faces has been added", _resource_mesh->GetName(), _resource_mesh->n_vertices, _resource_mesh->n_indexes / 3);
 	}
 	// Normals
 	if (ai_mesh->HasNormals())
 	{
-		mymesh->normals = new float3[mymesh->n_vertices];
-		mymesh->n_normals = mymesh->n_vertices;
-		memcpy(mymesh->normals, ai_mesh->mNormals, sizeof(float3) * mymesh->n_normals);
+		_resource_mesh->normals = new float3[_resource_mesh->n_vertices];
+		_resource_mesh->n_normals = _resource_mesh->n_vertices;
+		memcpy(_resource_mesh->normals, ai_mesh->mNormals, sizeof(float3) * _resource_mesh->n_normals);
 
-		mymesh->face_center_point = new float3[ai_mesh->mNumFaces];
-		mymesh->face_normal = new float3[ai_mesh->mNumFaces];
+		_resource_mesh->face_center_point = new float3[ai_mesh->mNumFaces];
+		_resource_mesh->face_normal = new float3[ai_mesh->mNumFaces];
 
 		/*for (uint i = 0; i < mymesh->n_indexes; i += 3)
 		{
@@ -102,23 +100,22 @@ void ImportMesh::Import(const aiScene* scene, const aiMesh* ai_mesh, GameObject*
 	// UVs
 	if (ai_mesh->HasTextureCoords(0))
 	{
-		mymesh->uv_comp = ai_mesh->mNumUVComponents[0];
-		mymesh->n_uv = mymesh->n_vertices;
-		mymesh->uv_coords = new float2[mymesh->n_uv];
+		_resource_mesh->uv_comp = ai_mesh->mNumUVComponents[0];
+		_resource_mesh->n_uv = _resource_mesh->n_vertices;
+		_resource_mesh->uv_coords = new float2[_resource_mesh->n_uv];
 
-		for (uint i = 0; i < mymesh->n_uv; i++)
+		for (uint i = 0; i < _resource_mesh->n_uv; i++)
 		{
-			memcpy(&mymesh->uv_coords[i], &ai_mesh->mTextureCoords[0][i], sizeof(float2));
+			memcpy(&_resource_mesh->uv_coords[i], &ai_mesh->mTextureCoords[0][i], sizeof(float2));
 		}
 	}
 
-	GLBuffer(mymesh);
-	Save(mymesh);
+	CreateOurMesh(_resource_mesh);
 }
 
-bool ImportMesh::Save(ComponentMesh* mesh)
+bool ImportMesh::CreateOurMesh(ResourceMesh* mesh)
 {
-	// amount of indices / vertices / colors / normals / texture_coords / AABB
+	// amount of indexes / vertices / normals / texture_coords
 	uint ranges[4] = { mesh->n_indexes, mesh->n_vertices, mesh->n_normals, mesh->n_uv };
 	uint size = sizeof(ranges) + sizeof(uint) * mesh->n_indexes + sizeof(float3) * mesh->n_vertices + sizeof(float3) * mesh->n_normals + sizeof(float2) * mesh->n_uv;
 
@@ -155,19 +152,64 @@ bool ImportMesh::Save(ComponentMesh* mesh)
 		memcpy(cursor, mesh->uv_coords, bytes);
 		cursor += bytes;
 	}
-	uint ret = App->file_system->Save(std::string(LIBRARY_MESH_FOLDER + mesh->GetMyGameObject()->GetName() + OUR_EXTENSION).c_str(), data, size);
+	std::string file = LIBRARY_MESH_FOLDER + std::to_string(mesh->GetId()) + OUR_MESH_EXTENSION;
+	uint ret = App->file_system->Save(file.c_str(), data, size);
 	RELEASE_ARRAY(data);
 
 	return ret;
 }
 
-void ImportMesh::Load(ComponentMesh* mesh)
+void ImportMesh::LoadMeshFromResource(ResourceMesh* _resource_mesh)
 {
-	
+	char* buffer;
+	uint size = App->file_system->Load(_resource_mesh->GetFile(), &buffer);
+
+	char* cursor = buffer;
+	// amount of indexes / vertices / normals / texture_coords
+	uint ranges[4];
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+	_resource_mesh->n_indexes = ranges[0];
+	_resource_mesh->n_vertices = ranges[1];
+	_resource_mesh->n_normals = ranges[2];
+	_resource_mesh->n_uv = ranges[3];
+	cursor += bytes;
+
+	// Load indexes
+	bytes = sizeof(uint) * _resource_mesh->n_indexes;
+	_resource_mesh->indexes = new uint[_resource_mesh->n_indexes];
+	memcpy(_resource_mesh->indexes, cursor, bytes);
+	cursor += bytes;
+
+	// Load vertices
+	bytes = sizeof(float3) * _resource_mesh->n_vertices;
+	_resource_mesh->vertices = new float3[_resource_mesh->n_vertices];
+	memcpy(_resource_mesh->vertices, cursor, bytes);
+	cursor += bytes;
+
+	if (_resource_mesh->n_normals)
+	{
+		// Load normal
+		bytes = sizeof(float3) * _resource_mesh->n_normals;
+		_resource_mesh->normals = new float3[_resource_mesh->n_normals];
+		memcpy(_resource_mesh->normals, cursor, bytes);
+		cursor += bytes;
+	}
+	if (_resource_mesh->n_uv)
+	{
+		// Load uv
+		bytes = sizeof(float2) * _resource_mesh->n_uv;
+		_resource_mesh->uv_coords = new float2[_resource_mesh->n_uv];
+		memcpy(_resource_mesh->uv_coords, cursor, bytes);
+		cursor += bytes;
+	}
+	GLBuffer(_resource_mesh);
+
+	RELEASE_ARRAY(buffer);
+
 }
 
-
-void ImportMesh::GLBuffer(ComponentMesh *mesh)
+void ImportMesh::GLBuffer(ResourceMesh *mesh)
 {
 	// VERTICES
 	glGenBuffers(1, &mesh->id_vertex);

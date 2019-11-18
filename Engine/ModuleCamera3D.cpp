@@ -6,6 +6,7 @@
 #include "ModuleWindow.h"
 #include "ComponentCamera.h"
 #include "ComponentMesh.h"
+#include "ResourceMesh.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 
@@ -103,7 +104,7 @@ update_status ModuleCamera3D::Update(float dt)
 		if (App->scene->GetSelected() != nullptr)
 		{
 			LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
-			if (App->scene->GetSelected()->GetMesh() && App->scene->GetSelected()->GetMesh()->is_primitive == false)
+			if (App->scene->GetSelected()->GetMesh() && App->scene->GetSelected()->GetMesh()->GetResourceMesh()->is_primitive == false)
 			{
 				focus = true;
 			}
