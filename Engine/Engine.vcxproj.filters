@@ -391,6 +391,9 @@
     <ClInclude Include="ImportModel.h">
       <Filter>Sources\Importers</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuizmo.h">
+      <Filter>Sources\Containers\ExtLibraries</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -623,6 +626,9 @@
     </ClCompile>
     <ClCompile Include="ImportModel.cpp">
       <Filter>Sources\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuizmo.cpp">
+      <Filter>Sources\Containers\ExtLibraries</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

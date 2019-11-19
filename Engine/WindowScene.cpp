@@ -3,12 +3,15 @@
 #include "ModuleRenderer3D.h"
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
+#include "GameObject.h"
 #include "ModuleInput.h"
 #include "ModuleScene.h"
 #include "ModuleWindow.h"
 #include "ModuleResource.h"
-
+#include "ComponentTransform.h"
+#include "ImGui/imgui.h"
 #include "ResourceModel.h"
+#include "MathGeoLib/include/Math/float4x4.h"
 
 #include "ImGui/imgui_stdlib.h"
 #include "imgui/imgui_internal.h"
@@ -17,6 +20,8 @@
 WindowScene::WindowScene()
 {
 	enabled = true;
+	guizmo_mode = ImGuizmo::MODE::LOCAL;
+	guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
 }
 
 
@@ -30,6 +35,7 @@ bool WindowScene::Draw()
 	ImGui::Begin("Scene", &enabled, ImGuiWindowFlags_MenuBar);
 	w = ImGui::GetWindowWidth();
 	h = ImGui::GetWindowHeight();
+
 	screen_pos = ImGui::GetCursorScreenPos();
 	GetSizeWithAspectRatio(App->window->GetWindowWidth(), App->window->GetWindowHeight());
 	ImGui::GetWindowDrawList()->AddImage(
@@ -51,7 +57,10 @@ bool WindowScene::Draw()
 		ImGui::EndDragDropTarget();
 	}
 
-
+	if (App->scene->GetSelected()) {
+		TransformInputs();
+		DrawGuizmo();
+	}
 	ImGui::End();
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
@@ -59,7 +68,6 @@ bool WindowScene::Draw()
 		mousePos = { mousePos.x / w * 2, mousePos.y / h * 2 };
 		App->camera->OnClick(mousePos);
 	}
-
 	return true;
 }
 
@@ -81,4 +89,37 @@ void WindowScene::GetSizeWithAspectRatio(int current_width, int current_height)
 
 	w = current_width * scale;
 	h = current_height * scale;
+}
+
+void WindowScene::TransformInputs()
+{
+	if (!ImGuizmo::IsUsing())
+	{
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+			guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+			guizmo_operation = ImGuizmo::OPERATION::ROTATE;
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+			guizmo_operation = ImGuizmo::OPERATION::SCALE;
+	}
+}
+
+void WindowScene::DrawGuizmo()
+{
+	ImGuizmo::Enable(true);
+	float4x4 delta, transform, view, projection;
+
+	transform = App->scene->GetSelected()->GetTransform()->transform_matrix.Transposed();
+	projection = App->renderer3D->camera->GetOpenGLProjectionMatrix();
+	view = App->renderer3D->camera->GetOpenGLViewMatrix();
+
+	ImGuiIO& io = ImGui::GetIO();
+	ImGuizmo::SetRect(float(ImGui::GetCursorScreenPos().x), float(ImGui::GetCursorScreenPos().y), float(w), float(h));
+	ImGuizmo::SetDrawlist();
+	ImGuizmo::Manipulate((const float*)&view,(const float*)&projection,guizmo_operation,guizmo_mode,(float*)&transform,(float*)&delta);
+
+	if (ImGuizmo::IsUsing())
+	{
+		App->scene->GetSelected()->GetTransform()->SetTransformMatrix(transform.Transposed());
+	}
 }

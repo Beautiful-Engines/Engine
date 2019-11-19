@@ -87,8 +87,10 @@ bool WindowProperties::Draw()
 				float* p = (float*)&trans->local_position;
 				ImGui::InputFloat3("Position", p, 2);
 
-				float* r = (float*)&trans->local_euler;
-				ImGui::InputFloat3("Rotation", r, 2);
+				float* r = (float*)&go->GetTransform()->GetLocalRotationToEuler();
+				if(ImGui::InputFloat3("Rotation", r, 2)) {
+					go->GetTransform()->SetLocalRotationFromEuler((float3)r);
+				};
 
 				float* s = (float*)&trans->local_scale;
 				ImGui::InputFloat3("Scale", s, 2);

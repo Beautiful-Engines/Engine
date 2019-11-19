@@ -41,14 +41,32 @@ void ComponentTransform::Save(const nlohmann::json::iterator& _iterator)
 	_iterator.value().push_back(json);
 }
 
+void ComponentTransform::UpdateLocalTransformMatrix()
+{
+	local_transform_matrix = GetMyGameObject()->GetParent()->GetTransform()->transform_matrix.Inverted() * transform_matrix;
+
+	local_transform_matrix.Decompose(local_position, local_rotation, local_scale);
+}
+
+float3 ComponentTransform::GetLocalRotationToEuler()
+{
+	return local_rotation.ToEulerXYZ() * RADTODEG;
+}
+
 float3 ComponentTransform::TransformEulerAngles()
 {
 	return local_rotation.ToEulerXYZ();
 }
 
+void ComponentTransform::SetLocalRotationFromEuler(float3 euler_rotation)
+{
+	local_rotation = Quat::FromEulerXYZ(euler_rotation.x * DEGTORAD, euler_rotation.y* DEGTORAD, euler_rotation.z* DEGTORAD);
+	local_transform_matrix = float4x4::FromTRS(local_position, local_rotation, local_scale);
+}
+
 float4x4 ComponentTransform::GetTransformMatrix()
 {
-	local_rotation = Quat::FromEulerXYZ(local_euler.x * DEGTORAD, local_euler.y* DEGTORAD, local_euler.z* DEGTORAD);
+	//local_rotation = Quat::FromEulerXYZ(local_euler.x * DEGTORAD, local_euler.y* DEGTORAD, local_euler.z* DEGTORAD);
 	local_transform_matrix = float4x4::FromTRS(local_position, local_rotation, local_scale);
 
 	if (GetMyGameObject()->GetParent())
@@ -70,4 +88,13 @@ float4x4 ComponentTransform::GetTransformMatrix()
 
 	transform_matrix.Decompose(position, rotation, scale);
 	return transform_matrix;
+}
+
+void ComponentTransform::SetTransformMatrix(float4x4 transform_matrix)
+{
+	this->transform_matrix = transform_matrix;
+	UpdateLocalTransformMatrix();
+	GetTransformMatrix();
+
+	transform_matrix.Decompose(position, rotation, scale);
 }

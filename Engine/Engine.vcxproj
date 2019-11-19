@@ -144,6 +144,7 @@
     <ClInclude Include="DeviL\include\ilu_region.h" />
     <ClInclude Include="DeviL\include\il_wrap.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_opengl3.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
+    <ClCompile Include="ImGuizmo.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />

@@ -11,6 +11,10 @@ public:
 	~ComponentTransform();
 
 	void Save(const nlohmann::json::iterator& _iterator);
+
+	void UpdateLocalTransformMatrix();
+
+	float3 GetLocalRotationToEuler();
 	
 	float3 position;
 	Quat rotation;
@@ -24,7 +28,10 @@ public:
 	float3 local_scale;
 
 	float3 TransformEulerAngles();
+	void SetLocalRotationFromEuler(float3 euler_rotation);
 	float4x4 GetTransformMatrix();
+
+	void SetTransformMatrix(float4x4 transform_matrix);
 
 	float4x4 local_transform_matrix;
 	float4x4 transform_matrix;

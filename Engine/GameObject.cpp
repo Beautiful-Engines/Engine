@@ -203,6 +203,7 @@ ComponentTransform * GameObject::GetTransform() const
 	}
 }
 
+
 ComponentCamera * GameObject::GetCamera() const
 {
 	std::string x = GetName();
