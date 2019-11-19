@@ -294,6 +294,7 @@ update_status ModuleGUI::CreateMainMenuBar()
 		{
 			ImGui::Checkbox("Configuration", &window_config->enabled);
 			ImGui::Checkbox("Console", &window_console->enabled);
+			ImGui::Checkbox("Project", &window_project->enabled);
 			ImGui::Checkbox("Hierarchy", &window_hierarchy->enabled);
 			ImGui::Checkbox("Demo Window", &demo);
 			ImGui::EndMenu();
