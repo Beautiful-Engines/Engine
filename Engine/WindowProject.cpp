@@ -36,14 +36,13 @@ bool WindowProject::Draw()
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
 	App->file_system->DiscoverFiles(ASSETS_FOLDER, files_temp, directories);
-	if (!files_temp.empty())
+	
+	for (int i = 0; i < files_temp.size(); ++i)
 	{
-		for (int i = 0; i < files_temp.size(); ++i)
-		{
-			if (files_temp[i].find(".meta") > 1000)
-				files.push_back(files_temp[i]);
-		}
+		if (files_temp[i].find(".meta") > 1000)
+			files.push_back(files_temp[i]);
 	}
+	
 	
 	int line = 0;
 	for (int i = 0; i < directories.size(); ++i)

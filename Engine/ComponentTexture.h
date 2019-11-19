@@ -2,6 +2,7 @@
 #define __ComponentTexture_H__
 
 #include "Component.h"
+
 class ResourceMesh;
 
 class ComponentTexture : public Component
@@ -19,7 +20,7 @@ public:
 	uint id_texture = 0u;  
 	uint width = 0;
 	uint height = 0;
-	std::string path;
+	std::string path = "";
 
 };
 

@@ -8,13 +8,17 @@
 #include "GameObject.h"
 #include "Primitive.h"
 #include "ComponentTransform.h"
+#include "ComponentTexture.h"
+#include "ComponentMesh.h"
 #include "ComponentCamera.h"
 #include "WindowHierarchy.h"
 #include "ModuleScene.h"
 
 #include "ResourceModel.h"
 #include "ResourceMesh.h"
+#include "ResourceTexture.h"
 #include "ImportMesh.h"
+
 
 #include "glew\glew.h"
 
@@ -191,16 +195,16 @@ GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
 	if (_resource_model != nullptr)
 	{
 		GameObject* go_model = CreateGameObject(_resource_model->GetName());
-		go_model->CreateComponent(ComponentType::TRANSFORM);
 
 		for each (ResourceModel::ModelNode node in _resource_model->nodes)
 		{
 			GameObject* go_meshes = new GameObject();
+			AddGameObject(go_meshes);
 			go_meshes->SetName(node.name);
 			go_meshes->SetParent(go_model);
-			ComponentTransform* transform = (ComponentTransform*)go_meshes->CreateComponent(ComponentType::TRANSFORM);
-			ComponentMesh* mesh = (ComponentMesh*)go_meshes->CreateComponent(ComponentType::MESH);
-			ComponentTexture* texture = (ComponentTexture*)go_meshes->CreateComponent(ComponentType::TEXTURE);
+			ComponentTransform* transform = go_meshes->GetTransform();
+			go_meshes->CreateComponent(ComponentType::MESH);
+			ComponentTexture* texture = new ComponentTexture(go_meshes);
 
 			transform->position = node.position;
 			transform->rotation = node.rotation;
@@ -210,20 +214,30 @@ GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
 			{
 				ResourceMesh* resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION, node.mesh);
 				resource_mesh->SetFile(LIBRARY_MESH_FOLDER + std::to_string(node.mesh) + OUR_MESH_EXTENSION);
+				resource_mesh->id_texture = node.texture;
+				resource_mesh->id_default_texture = App->resource->GetId("DefaultTexture");
 				App->importer->import_mesh->LoadMeshFromResource(resource_mesh);
-				mesh->AddResourceMesh(resource_mesh);
+				go_meshes->GetMesh()->AddResourceMesh(resource_mesh);
+
 			}
 				
-			//if(node.texture > 0)
-			//	//texture
-			//else
-			//	//texture
-
-
-			/*gameobjects.emplace(go->GetId(), go);
-			temp_go.push_back(go);
-			go->transform->UpdateTransformMatrix();
-			count++;*/
+			if (node.texture > 0)
+			{
+				ResourceTexture* resource_texture = (ResourceTexture*)App->resource->Get(node.texture);
+				texture->id_texture = resource_texture->id_texture;
+				texture->width = resource_texture->width;
+				texture->height = resource_texture->height;
+				texture->path = resource_texture->path;
+			}
+			else
+			{
+				ResourceTexture* resource_texture = (ResourceTexture*)App->resource->Get(App->resource->GetId("DefaultTexture"));
+				texture->id_texture = resource_texture->id_texture;
+				texture->width = resource_texture->width;
+				texture->height = resource_texture->height;
+				texture->path = resource_texture->path;
+			}
+				
 		}
 		return go_model;
 	}

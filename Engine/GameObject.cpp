@@ -114,7 +114,6 @@ void GameObject::Save(const nlohmann::json::iterator& _iterator)
 Component* GameObject::CreateComponent(ComponentType type)
 {
 	Component *component = new Component(this, type);
-	components.push_back(component);
 	return component;
 }
 

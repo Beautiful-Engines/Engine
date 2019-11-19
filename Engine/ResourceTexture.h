@@ -11,7 +11,7 @@ public:
 	
 	uint id_texture = 0u;
 	uint width, height;
-	std::string path;
+	std::string path = "";
 };
 
 

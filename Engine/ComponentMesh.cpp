@@ -86,10 +86,10 @@ void ComponentMesh::Draw(ComponentTexture *component_texture)
 
 	if (component_texture != nullptr && textures)
 	{
-		component_texture->DrawTexture(GetResourceMesh());
+		component_texture->DrawTexture(resource_mesh);
 	}
 
-	if (GetResourceMesh()->is_primitive)
+	if (resource_mesh->is_primitive)
 		glDrawElements(GL_TRIANGLES, resource_mesh->n_indexes, GL_UNSIGNED_SHORT, NULL);
 	else
 		glDrawElements(GL_TRIANGLES, resource_mesh->n_indexes, GL_UNSIGNED_INT, NULL);
