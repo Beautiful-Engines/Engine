@@ -48,7 +48,7 @@ bool ImportTexture::CleanUp()
 	return true;
 }
 
-bool ImportTexture::Import(const char* _import_file, std::string& _output_file)
+bool ImportTexture::Import(const char* _import_file)
 {
 	uint image_id;
 
@@ -71,7 +71,7 @@ bool ImportTexture::Import(const char* _import_file, std::string& _output_file)
 		data = new ILubyte[size]; // allocate data buffer   
 		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function        
 		{
-			_output_file = LIBRARY_TEXTURES_FOLDER + name_object + ".dds";
+			std::string _output_file = LIBRARY_TEXTURES_FOLDER + name_object + ".dds";
 			App->file_system->Save(_output_file.c_str(), data, size);
 			nlohmann::json json = {
 				{ "exported_file", _output_file },
@@ -175,7 +175,7 @@ uint ImportTexture::LoadTexture(const char* _path, ResourceMesh* resource_mesh, 
 	return resource_texture->GetId();
 }
 
-void ImportTexture::DefaultTexture(ResourceMesh* go_texturedefault)
+void ImportTexture::DefaultTexture()
 {
 	ResourceTexture *resource_texture = (ResourceTexture*)App->resource->CreateResource(OUR_TEXTURE_EXTENSION);
 
@@ -205,8 +205,5 @@ void ImportTexture::DefaultTexture(ResourceMesh* go_texturedefault)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	if(go_texturedefault != nullptr)
-		go_texturedefault->id_buffer_default_texture = resource_texture->id_texture;
 
 }

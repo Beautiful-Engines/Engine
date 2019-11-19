@@ -107,14 +107,14 @@ GameObject* ModuleScene::CreateGameObject(std::string _name)
 			game_object->SetParent(game_objects[i]);
 	}
 	game_object->SetName(_name);
-	game_objects.push_back(game_object);
+	AddGameObject(game_object);
 
 	return game_object;
 }
 
 void ModuleScene::AddGameObject(GameObject* _game_object)
 {
-	game_objects.push_back(_game_object);
+	game_objects.push_back(ChangeNameByCantities(_game_object));
 }
 
 void ModuleScene::DeleteGameObject(GameObject* _game_object)
@@ -171,7 +171,6 @@ void ModuleScene::ChangeSelected(GameObject* selected)
 			 game_objects[i]->SetFocus(false);
 		}
 	}
-	
 }
 
 void ModuleScene::SetSelected(GameObject* go)
@@ -199,7 +198,6 @@ GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
 		for each (ResourceModel::ModelNode node in _resource_model->nodes)
 		{
 			GameObject* go_meshes = new GameObject();
-			AddGameObject(go_meshes);
 			go_meshes->SetName(node.name);
 			go_meshes->SetParent(go_model);
 			ComponentTransform* transform = go_meshes->GetTransform();
@@ -230,11 +228,33 @@ GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
 			resource_texture = (ResourceTexture*)App->resource->Get(App->resource->GetId("DefaultTexture"));
 			texture->default_texture = resource_texture;
 			resource_mesh->id_buffer_default_texture = resource_texture->id_texture;
+
+			AddGameObject(go_meshes);
 				
 		}
 		return go_model;
 	}
 	return nullptr;
+}
+
+GameObject* ModuleScene::ChangeNameByCantities(GameObject* _game_object)
+{
+	uint cont = 1;
+	std::string name = _game_object->GetName();
+	
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i]->GetName() == name + "_" + std::to_string(cont))
+		{
+			cont++;
+			i = 0;
+		}
+	}
+
+	if (name != "root")
+		_game_object->SetName(name.append("_" + std::to_string(cont)));
+
+	return _game_object;
 }
 
 void ModuleScene::MouseClicking(const LineSegment& segment)

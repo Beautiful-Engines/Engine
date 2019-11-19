@@ -84,7 +84,6 @@ uint ImportModel::ImportFBX(const char* _path)
 		for (int i = 0; i < scene->mRootNode->mNumChildren; ++i)
 		{
 			ResourceMesh* resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION);
-			name_object = name_path.substr(0, pos) + std::to_string(i + 1);
 			resource_mesh->SetName(name_object);
 			resource_mesh->SetFile(LIBRARY_MESH_FOLDER + std::to_string(resource_mesh->GetId()) + OUR_MESH_EXTENSION);
 
@@ -128,7 +127,7 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 	_node->mTransformation.Decompose(scaling, rotation, translation);
 
 	ResourceModel::ModelNode resource_node;
-	resource_node.name = _resource_mesh->GetName();
+	resource_node.name = _node->mName.C_Str();
 	resource_node.id = _resource_mesh->GetId();
 	resource_node.position = float3(translation.x, translation.y, translation.z);
 	resource_node.scale = float3(scaling.x, scaling.y, scaling.z);
@@ -147,6 +146,7 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 		aiMesh *ai_mesh = nullptr;
 		ai_mesh = _scene->mMeshes[_node->mMeshes[0]];
 		resource_node.mesh = _resource_mesh->GetId();
+		resource_node.name += "_mesh";
 		App->importer->import_mesh->Import(_scene, ai_mesh, _resource_mesh);
 
 		// Texture

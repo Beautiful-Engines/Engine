@@ -78,6 +78,8 @@ uint ModuleResource::GetId(std::string _file)
 
 void ModuleResource::LoadAllAssets()
 {
+	App->importer->import_texture->DefaultTexture();
+
 	std::vector<std::string> files_temp;
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
@@ -95,7 +97,6 @@ void ModuleResource::LoadAllAssets()
 		App->file_system->SplitFilePath((*iterator).c_str(), nullptr, nullptr);
 		App->importer->ImportFile((ASSETS_FOLDER + (*iterator)).c_str());
 	}
-	App->importer->import_texture->DefaultTexture();
 }
 
 void ModuleResource::LoadFile(const char * _path)

@@ -31,6 +31,7 @@ public:
 	const std::vector<GameObject*> GetGameObjects() const;
 
 	GameObject* CreateGameObjectModel(ResourceModel* _resource_model);
+	GameObject* ChangeNameByCantities(GameObject* _game_object);
 
 	void MouseClicking(const LineSegment & segment);
 

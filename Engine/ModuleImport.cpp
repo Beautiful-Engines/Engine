@@ -12,6 +12,8 @@
 #include "ImportMesh.h"
 #include "ImportTexture.h"
 
+#include <fstream>
+
 ModuleImport::ModuleImport(bool start_enabled) : Module(start_enabled)
 {
 	name = "Import";
@@ -67,19 +69,30 @@ void ModuleImport::ImportFile(const char* _path)
 		if (extension == "fbx")
 		{
 			// Import
+
 			import_model->ImportFBX(final_path.c_str());
 		}
 		else if (extension == "png" || extension == "dds")
 		{
 			// Import
-			std::string output_file;
-			import_texture->Import(final_path.c_str(), output_file);
+			import_texture->Import(final_path.c_str());
 		}
 	}
 	if(App->file_system->Exists(meta_path.c_str()))
 	{
 		// Use meta file
-		App->resource->LoadFile(meta_path.c_str());
+		std::ifstream ifstream(meta_path);
+		nlohmann::json json = nlohmann::json::parse(ifstream);
+		std::string exported_file = json["exported_file"];
+
+		if(App->file_system->Exists(exported_file.c_str()))
+			App->resource->LoadFile(meta_path.c_str());
+		else
+		{
+			App->file_system->Remove(meta_path.c_str());
+			ImportFile(_path);
+		}
+
 	}
 }
 

@@ -42,7 +42,6 @@ void GameObject::Update()
 	for (; iterator_component != components.end(); ++iterator_component) {
 		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MESH)
 		{
-			/*ComponentMesh* mesh = (ComponentMesh*)*iterator_component;*/
 			(*iterator_component)->Update();
 		}
 	}

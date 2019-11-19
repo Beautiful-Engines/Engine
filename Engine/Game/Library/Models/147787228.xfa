@@ -1,9 +1,9 @@
 [
     {
         "id": 0,
-        "mesh": 4242440301,
-        "name": "bakerhouse1",
-        "parent": 3640994567,
+        "mesh": 567506512,
+        "name": "Chimney_mesh",
+        "parent": 147787228,
         "position": [
             0.0,
             0.0,
@@ -20,13 +20,13 @@
             100.0,
             100.0
         ],
-        "texture": 4234655329
+        "texture": 3290964702
     },
     {
         "id": 1,
-        "mesh": 1188717357,
-        "name": "bakerhouse2",
-        "parent": 3640994567,
+        "mesh": 2263956431,
+        "name": "Baker_house_mesh",
+        "parent": 147787228,
         "position": [
             0.0,
             0.0,
@@ -43,6 +43,6 @@
             100.0,
             100.0
         ],
-        "texture": 4234655329
+        "texture": 3290964702
     }
 ]
