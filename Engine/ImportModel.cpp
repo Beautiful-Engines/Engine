@@ -66,11 +66,12 @@ uint ImportModel::ImportFBX(const char* _path)
 	std::string name_object = name_path.substr(0, pos);
 
 	ResourceModel* model = (ResourceModel*)App->resource->CreateResource(OUR_MODEL_EXTENSION);
+	model->SetName(_path);
 	
 	// Create meta
 	nlohmann::json json = {
 		{ "exported_file", LIBRARY_MODEL_FOLDER + std::to_string(model->GetId()) + OUR_MODEL_EXTENSION },
-		{ "name", _path},
+		{ "name", model->GetName()},
 		{ "id", model->GetId() },
 		{ "meshes",nlohmann::json::array()}
 	};
