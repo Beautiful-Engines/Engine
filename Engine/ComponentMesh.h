@@ -32,8 +32,6 @@ public:
 
 public:
 
-	bool checkered = false;
-
 	bool vertex_normals = false;
 	bool face_normals = false;
 	bool textures = true;

@@ -8,6 +8,7 @@
 #include "ComponentCamera.h"
 #include "GameObject.h"
 #include "ResourceMesh.h"
+#include "ResourceTexture.h"
 #include "ModuleInput.h"
 #include "ModuleGUI.h"
 #include "WindowProperties.h"
@@ -31,6 +32,7 @@ bool WindowProperties::Draw()
 	ComponentMesh *mesh = nullptr;
 	ComponentTexture *texture = nullptr;
 	ComponentCamera *camera = nullptr;
+	ResourceTexture* resource_texture = nullptr;
 
 	go = App->scene->GetSelected();
 
@@ -45,10 +47,10 @@ bool WindowProperties::Draw()
 			if (go->GetComponents()[i]->GetType() == ComponentType::TEXTURE)
 			{
 				texture = (ComponentTexture*)go->GetComponents()[i];
-				if (!mesh->checkered && texture->id_texture == mesh->GetResourceMesh()->id_texture)
-					break;
-				else if (mesh->checkered && texture->id_texture == mesh->GetResourceMesh()->id_default_texture)
-					break;
+				if(!texture->checkered)
+					resource_texture = texture->texture;
+				else
+					resource_texture = texture->default_texture;
 			}
 			if (go->GetComponents()[i]->GetType() == ComponentType::TRANSFORM)
 			{
@@ -140,14 +142,14 @@ bool WindowProperties::Draw()
 
 				ImGui::Text("Texture Size:");
 				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 },"%i * %i", texture->width, texture->height);
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%i * %i", resource_texture->width, resource_texture->height);
 				ImGui::Text("Texture Path:");
 				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 }, ("%s", texture->path.c_str()));
+				ImGui::TextColored({ 255, 255, 0, 255 }, ("%s", resource_texture->path.c_str()));
 
-				ImGui::Image((void*)(intptr_t)texture->id_texture, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
-
-				ImGui::Checkbox("Checker texture", &mesh->checkered);
+				ImGui::Image((void*)(intptr_t)resource_texture->id_texture, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
+				
+				ImGui::Checkbox("Checker texture", &texture->checkered);
 			}
 		}
 		if (camera != nullptr)

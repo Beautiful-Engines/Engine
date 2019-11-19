@@ -33,8 +33,8 @@ public:
 
 	bool is_primitive = false;
 
-	uint id_texture = 0;
-	uint id_default_texture = 0;
+	uint id_buffer_texture = 0;
+	uint id_buffer_default_texture = 0;
 };
 
 #endif // !_ResourceMesh_H_

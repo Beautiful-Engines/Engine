@@ -116,7 +116,7 @@ uint ImportTexture::LoadTexture(const char* _path, ResourceMesh* resource_mesh, 
 			resource_texture->SetFile(_path);
 			resource_texture->width = ilGetInteger(IL_IMAGE_WIDTH);
 			resource_texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
-			resource_mesh->id_texture = resource_texture->id_texture;
+			resource_mesh->id_buffer_texture = resource_texture->id_texture;
 
 			LOG("Added %s to %s", name_path.c_str(), resource_mesh->GetName());
 		}
@@ -207,6 +207,6 @@ void ImportTexture::DefaultTexture(ResourceMesh* go_texturedefault)
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	if(go_texturedefault != nullptr)
-		go_texturedefault->id_default_texture = resource_texture->id_texture;
+		go_texturedefault->id_buffer_default_texture = resource_texture->id_texture;
 
 }

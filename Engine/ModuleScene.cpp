@@ -203,19 +203,18 @@ GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
 			go_meshes->SetName(node.name);
 			go_meshes->SetParent(go_model);
 			ComponentTransform* transform = go_meshes->GetTransform();
-			go_meshes->CreateComponent(ComponentType::MESH);
+			ComponentMesh* mesh = new ComponentMesh(go_meshes);
 			ComponentTexture* texture = new ComponentTexture(go_meshes);
-
+			ResourceMesh* resource_mesh = nullptr;
+			ResourceTexture* resource_texture = nullptr;
 			transform->position = node.position;
 			transform->rotation = node.rotation;
 			transform->scale = node.scale;
 
 			if (node.mesh > 0)
 			{
-				ResourceMesh* resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION, node.mesh);
+				resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION, node.mesh);
 				resource_mesh->SetFile(LIBRARY_MESH_FOLDER + std::to_string(node.mesh) + OUR_MESH_EXTENSION);
-				resource_mesh->id_texture = node.texture;
-				resource_mesh->id_default_texture = App->resource->GetId("DefaultTexture");
 				App->importer->import_mesh->LoadMeshFromResource(resource_mesh);
 				go_meshes->GetMesh()->AddResourceMesh(resource_mesh);
 
@@ -223,20 +222,14 @@ GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
 				
 			if (node.texture > 0)
 			{
-				ResourceTexture* resource_texture = (ResourceTexture*)App->resource->Get(node.texture);
-				texture->id_texture = resource_texture->id_texture;
-				texture->width = resource_texture->width;
-				texture->height = resource_texture->height;
-				texture->path = resource_texture->path;
+				resource_texture = (ResourceTexture*)App->resource->Get(node.texture);
+				texture->texture = resource_texture;
+				resource_mesh->id_buffer_texture = resource_texture->id_texture;
 			}
-			else
-			{
-				ResourceTexture* resource_texture = (ResourceTexture*)App->resource->Get(App->resource->GetId("DefaultTexture"));
-				texture->id_texture = resource_texture->id_texture;
-				texture->width = resource_texture->width;
-				texture->height = resource_texture->height;
-				texture->path = resource_texture->path;
-			}
+
+			resource_texture = (ResourceTexture*)App->resource->Get(App->resource->GetId("DefaultTexture"));
+			texture->default_texture = resource_texture;
+			resource_mesh->id_buffer_default_texture = resource_texture->id_texture;
 				
 		}
 		return go_model;

@@ -32,12 +32,6 @@ void ComponentMesh::Update()
 		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::TEXTURE)
 		{
 			component_texture = (ComponentTexture*)*iterator_component;
-			if (!checkered && component_texture->id_texture == GetResourceMesh()->id_texture)
-				break;
-			else if (checkered && component_texture->id_texture == GetResourceMesh()->id_default_texture)
-				break;
-			else
-				component_texture = nullptr;
 		}
 	}
 

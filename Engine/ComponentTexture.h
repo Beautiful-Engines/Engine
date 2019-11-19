@@ -4,6 +4,7 @@
 #include "Component.h"
 
 class ResourceMesh;
+class ResourceTexture;
 
 class ComponentTexture : public Component
 {
@@ -17,10 +18,10 @@ public:
 	void DrawTexture(ResourceMesh* _resource_mesh);
 
 public:
-	uint id_texture = 0u;  
-	uint width = 0;
-	uint height = 0;
-	std::string path = "";
+	ResourceTexture* texture = nullptr;
+	ResourceTexture* default_texture = nullptr;
+
+	bool checkered= false;
 
 };
 
