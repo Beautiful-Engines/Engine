@@ -19,7 +19,7 @@ public:
 	bool LoadModel(ResourceModel* resource);
 
 private:
-	ResourceModel::ModelNode ImportNode(const aiNode* _node, const aiScene* _scene, ResourceMesh* _object);
+	ResourceModel::ModelNode ImportNode(const aiNode* _node, const aiScene* _scene, ResourceMesh* _object, ResourceModel* _resource_model, ResourceModel::ModelNode* _resource_node = nullptr);
 	bool LoadNode(nlohmann::json::iterator it, ResourceModel* _resource);
 	void CreateOurModelFile(ResourceModel* _resource);
 };

@@ -129,6 +129,17 @@ const uint GameObject::GetId() const
 	return id;
 }
 
+// IdNode
+const uint GameObject::GetIdNode() const
+{
+	return id_node;
+}
+
+const uint GameObject::GetIdNodeParent() const
+{
+	return id_node_parent;
+}
+
 // Name
 const std::string GameObject::GetName() const
 {
@@ -149,6 +160,16 @@ const std::vector<Component*> GameObject::GetComponents() const
 GameObject* GameObject::GetParent()
 {
 	return parent;
+}
+
+void GameObject::SetIdNode(uint _id_node)
+{
+	id_node = _id_node;
+}
+
+void GameObject::SetIdNodeParent(uint _id_node_parent)
+{
+	id_node_parent = _id_node_parent;
 }
 
 void GameObject::SetParent(GameObject* _game_object)
@@ -240,7 +261,7 @@ void GameObject::SetFocus(bool _focus)
 
 void GameObject :: UpdateBB()
 {
-	if (GetMesh())
+	if (GetMesh()->GetResourceMesh())
 	{
 		obb = GetMesh()->GetBB();
 		obb.Transform(GetTransform()->transform_matrix);

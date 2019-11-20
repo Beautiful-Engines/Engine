@@ -96,7 +96,7 @@ uint ImportModel::ImportFBX(const char* _path)
 			};
 			_iterator.value().push_back(json_mesh);
 
-			model->nodes.push_back(ImportNode(scene->mRootNode->mChildren[i], scene, resource_mesh));
+			model->nodes.push_back(ImportNode(scene->mRootNode->mChildren[i], scene, resource_mesh, model));
 		}
 		aiReleaseImport(scene);
 	}
@@ -120,7 +120,7 @@ uint ImportModel::ImportFBX(const char* _path)
 
 }
 
-ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiScene* _scene, ResourceMesh* _resource_mesh)
+ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiScene* _scene, ResourceMesh* _resource_mesh, ResourceModel* _resource_model, ResourceModel::ModelNode* _resource_node)
 {
 	// Transform
 	aiVector3D translation, scaling;
@@ -129,7 +129,11 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 
 	ResourceModel::ModelNode resource_node;
 	resource_node.name = _node->mName.C_Str();
-	resource_node.id = _resource_mesh->GetId();
+	resource_node.id = App->GenerateNewId();
+	if(_resource_node == nullptr)
+		resource_node.parent = _resource_model->GetId();
+	else
+		resource_node.parent = _resource_node->id;
 	resource_node.position = float3(translation.x, translation.y, translation.z);
 	resource_node.scale = float3(scaling.x, scaling.y, scaling.z);
 	resource_node.rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
@@ -144,10 +148,9 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 	if (_node->mNumMeshes > 0)
 	{
 		// Mesh
-		aiMesh *ai_mesh = nullptr;
-		ai_mesh = _scene->mMeshes[_node->mMeshes[0]];
-		resource_node.mesh = _resource_mesh->GetId();
+		aiMesh *ai_mesh = _scene->mMeshes[_node->mMeshes[0]];
 		resource_node.name += "_mesh";
+		resource_node.mesh = _resource_mesh->GetId();
 		App->importer->import_mesh->Import(_scene, ai_mesh, _resource_mesh);
 
 		// Texture
@@ -169,7 +172,6 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 					if (App->file_system->Exists((LIBRARY_TEXTURES_FOLDER + file_name + ".dds").c_str()))
 						resource_node.texture = App->importer->import_texture->LoadTexture((LIBRARY_TEXTURES_FOLDER + file_name + ".dds").c_str(), _resource_mesh);
 				}
-				
 			}
 		}
 
@@ -180,7 +182,8 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 	{
 		for (int i = 0; i < _node->mNumChildren; i++)
 		{
-			ImportNode(_node->mChildren[i], _scene, _resource_mesh);
+			ResourceMesh* resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION);
+			_resource_model->nodes.push_back(ImportNode(_node->mChildren[i], _scene, resource_mesh, _resource_model, &resource_node));
 		}
 	}
 
@@ -192,20 +195,19 @@ void ImportModel::CreateOurModelFile(ResourceModel* _resource)
 	// Json Model
 	nlohmann::json json_model;
 	std::vector<ResourceModel::ModelNode>::iterator iterator_node = _resource->nodes.begin();
-	uint cont = 0;
+
 	for (; iterator_node != _resource->nodes.end(); ++iterator_node) {
 		nlohmann::json json_nodes = {
+			{"id", iterator_node->id},
 			{"name", iterator_node->name},
-			{"id", cont},
-			{"parent", _resource->GetId()},
 			{"position", {iterator_node->position.x, iterator_node->position.y, iterator_node->position.z }},
-			{"rotation",{iterator_node->rotation.x, iterator_node->rotation.y, iterator_node->rotation.z, iterator_node->rotation.w }},
 			{"scale", {iterator_node->scale.x, iterator_node->scale.y, iterator_node->scale.z }},
-			{"mesh", iterator_node->mesh},
-			{"texture", iterator_node->texture}
+			{"rotation",{iterator_node->rotation.x, iterator_node->rotation.y, iterator_node->rotation.z, iterator_node->rotation.w }},
+			{"parent", iterator_node->parent},
+			{"texture", iterator_node->texture},
+			{"mesh", iterator_node->mesh}
 		};
 		json_model.push_back(json_nodes);
-		++cont;
 	}
 	std::ofstream ofstreammodel(LIBRARY_MODEL_FOLDER + std::to_string(_resource->GetId()) + OUR_MODEL_EXTENSION);
 	ofstreammodel << std::setw(4) << json_model << std::endl;
@@ -230,6 +232,7 @@ bool ImportModel::LoadNode(nlohmann::json::iterator _iterator, ResourceModel* _r
 {
 	ResourceModel::ModelNode node;
 
+	node.id = (*_iterator)["id"];
 	node.name = (*_iterator)["name"].get<std::string>();
 
 	node.position.x = (*_iterator)["position"][0];

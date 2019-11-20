@@ -18,7 +18,7 @@ public:
 	bool CleanUp() override;
 
 
-	void ImportFile(const char* path);
+	void ImportFile(const char* _path, bool _change_meta = false);
 
 public:
 

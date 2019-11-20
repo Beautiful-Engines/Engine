@@ -46,7 +46,7 @@ bool ModuleImport::CleanUp()
 	return true;
 }
 
-void ModuleImport::ImportFile(const char* _path)
+void ModuleImport::ImportFile(const char* _path, bool _change_meta)
 {
 
 	//copy file
@@ -63,7 +63,7 @@ void ModuleImport::ImportFile(const char* _path)
 		// Copy to assets folder
 		App->file_system->CopyFromOutsideFS(normalized_path.c_str(), final_path.c_str());
 	}
-	if (!App->file_system->Exists(meta_path.c_str()))
+	if (!App->file_system->Exists(meta_path.c_str()) || _change_meta)
 	{
 		// Importing
 		if (extension == "fbx")
@@ -72,7 +72,7 @@ void ModuleImport::ImportFile(const char* _path)
 
 			import_model->ImportFBX(final_path.c_str());
 		}
-		else if (extension == "png" || extension == "dds")
+		else if (extension == "png" || extension == "dds" || extension == "tga")
 		{
 			// Import
 			import_texture->Import(final_path.c_str());
@@ -89,8 +89,7 @@ void ModuleImport::ImportFile(const char* _path)
 			App->resource->LoadFile(meta_path.c_str());
 		else
 		{
-			App->file_system->Remove(meta_path.c_str());
-			ImportFile(_path);
+			ImportFile(_path, true);
 		}
 
 	}

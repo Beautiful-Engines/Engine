@@ -29,11 +29,15 @@ public:
 	void AddComponent(Component* component);
 
 	const uint GetId() const;
+	const uint GetIdNode() const;
+	const uint GetIdNodeParent() const;
 	const std::string GetName() const;
 	void SetName(std::string _name);
 	const std::vector<Component*> GetComponents() const;
-
 	GameObject* GetParent();
+	
+	void SetIdNode(uint _id_node);
+	void SetIdNodeParent(uint _id_node_parent);
 	void SetParent(GameObject* _game_object);
 	const std::vector<GameObject*> GetChildren() const;
 	void DeleteChild(GameObject* _game_object);
@@ -58,6 +62,8 @@ private:
 	bool enabled = true;
 
 	uint id = 0u;
+	uint id_node = 0u;
+	uint id_node_parent = 0u;
 	std::string name;
 	std::vector<Component*> components;
 

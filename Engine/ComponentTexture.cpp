@@ -36,14 +36,14 @@ void ComponentTexture::Load(const nlohmann::json _json)
 
 void ComponentTexture::DrawTexture(ResourceMesh* _resource_mesh)
 {
-	if (texture->id_texture > 0 && _resource_mesh->n_uv > 0) {
+	if (_resource_mesh->n_uv > 0) {
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		
 		glBindBuffer(GL_ARRAY_BUFFER, _resource_mesh->id_uv);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 		
-		if(!checkered)
+		if(!checkered && texture != nullptr)
 			glBindTexture(GL_TEXTURE_2D, texture->id_texture);
 		else
 			glBindTexture(GL_TEXTURE_2D, default_texture->id_texture);

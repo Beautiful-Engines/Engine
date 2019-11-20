@@ -47,7 +47,7 @@ bool WindowProperties::Draw()
 			if (go->GetComponents()[i]->GetType() == ComponentType::TEXTURE)
 			{
 				texture = (ComponentTexture*)go->GetComponents()[i];
-				if(!texture->checkered)
+				if(!texture->checkered && texture->texture != nullptr)
 					resource_texture = texture->texture;
 				else
 					resource_texture = texture->default_texture;
