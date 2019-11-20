@@ -35,11 +35,13 @@ void ComponentMesh::Update()
 		}
 	}
 
-	//Intersects function edited
-	if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
+	////Intersects function edited
+	/*if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
 	{
 		Draw(component_texture);
-	}
+	}*/
+	Draw(component_texture);
+
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
 }

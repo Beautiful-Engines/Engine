@@ -45,7 +45,7 @@ void GameObject::Update()
 			(*iterator_component)->Update();
 		}
 	}
-	if(GetTransform())GetTransform()->GetTransformMatrix();
+	/*if(GetTransform())GetTransform()->GetTransformMatrix();*/
 	if (GetCamera()) {
 		if (GetCamera()->active == false)
 		{
