@@ -31,7 +31,6 @@ public:
 	void SetSelected(GameObject * go);
 	const std::vector<GameObject*> GetGameObjects() const;
 
-	GameObject* CreateGameObjectModel(ResourceModel* _resource_model);
 	GameObject* ChangeNameByQuantities(GameObject* _game_object);
 
 	void MouseClicking(const LineSegment & segment);

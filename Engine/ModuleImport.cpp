@@ -85,7 +85,7 @@ void ModuleImport::ImportFile(const char* _path, bool _change_meta)
 		nlohmann::json json = nlohmann::json::parse(ifstream);
 		std::string exported_file = json["exported_file"];
 
-		if(App->file_system->Exists(exported_file.c_str()))
+		if (App->file_system->Exists(exported_file.c_str()))
 			App->resource->LoadFile(meta_path.c_str());
 		else
 		{

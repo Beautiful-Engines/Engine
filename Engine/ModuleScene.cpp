@@ -14,10 +14,7 @@
 #include "WindowHierarchy.h"
 #include "ModuleScene.h"
 
-#include "ResourceModel.h"
 #include "ResourceMesh.h"
-#include "ResourceTexture.h"
-#include "ImportMesh.h"
 
 
 #include "glew\glew.h"
@@ -200,86 +197,6 @@ void ModuleScene::SetSelected(GameObject* go)
 const std::vector<GameObject*> ModuleScene::GetGameObjects() const
 {
 	return game_objects;
-}
-
-GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
-{
-	if (_resource_model != nullptr)
-	{
-		GameObject* go_model = CreateGameObject(_resource_model->GetName());
-		go_model->SetIdNode(_resource_model->GetId());
-
-		for each (ResourceModel::ModelNode node in _resource_model->nodes)
-		{
-			GameObject* go_node = new GameObject();
-			go_node->SetName(node.name);
-			go_node->SetIdNode(node.id);
-			go_node->SetIdNodeParent(node.parent);
-
-			// Parent
-			for (uint i = 0; i < game_objects.size(); ++i)
-			{
-				if (game_objects[i]->GetIdNode() == node.parent)
-				{
-					go_node->SetParent(game_objects[i]);
-					break;
-				}
-			}
-				
-			for (uint i = 0; i < game_objects.size(); ++i)
-			{
-				if (game_objects[i]->GetIdNodeParent() == node.id)
-				{
-					for (uint j = 0; j < game_objects.size(); ++j)
-					{
-						if (game_objects[j]->IsChild(game_objects[i]))
-						{
-							game_objects[j]->DeleteChild(game_objects[i]);
-						}
-					}
-					game_objects[i]->SetParent(go_node);
-				}
-			}
-
-			if (go_node->GetParent() == nullptr)
-				go_node->SetParent(go_model);
-			
-			// Transform
-			ComponentTransform* transform = go_node->GetTransform();
-			transform->position = node.position;
-			transform->rotation = node.rotation;
-			transform->scale = node.scale;
-
-			// Mesh
-			if (node.mesh > 0)
-			{
-				ComponentMesh* mesh = new ComponentMesh(go_node);
-				ComponentTexture* texture = new ComponentTexture(go_node);
-				ResourceMesh* resource_mesh = nullptr;
-				ResourceTexture* resource_texture = nullptr;
-				resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION, node.mesh);
-				resource_mesh->SetFile(LIBRARY_MESH_FOLDER + std::to_string(node.mesh) + OUR_MESH_EXTENSION);
-				App->importer->import_mesh->LoadMeshFromResource(resource_mesh);
-				go_node->GetMesh()->AddResourceMesh(resource_mesh);
-
-				// Texture
-				if (node.texture > 0)
-				{
-					resource_texture = (ResourceTexture*)App->resource->Get(node.texture);
-					texture->texture = resource_texture;
-					resource_mesh->id_buffer_texture = resource_texture->id_texture;
-				}
-
-				resource_texture = (ResourceTexture*)App->resource->Get(App->resource->GetId("DefaultTexture"));
-				texture->default_texture = resource_texture;
-				resource_mesh->id_buffer_default_texture = resource_texture->id_texture;
-			}
-
-			AddGameObject(go_node);
-		}
-		return go_model;
-	}
-	return nullptr;
 }
 
 GameObject* ModuleScene::ChangeNameByQuantities(GameObject* _game_object)

@@ -8,6 +8,7 @@ Resource::Resource(RESOURCE_TYPE _type, uint UID)
 		id = App->GenerateNewId();
 	else
 		id = UID;
+
 	type = _type;
 }
 
@@ -48,4 +49,14 @@ const char* Resource::GetFile() const
 void Resource::SetFile(std::string _file)
 {
 	file = _file;
+}
+
+const uint Resource::GetCantities() const
+{
+	return cantity;
+}
+
+void Resource::SetCantities(uint _cantity)
+{
+	cantity += _cantity;
 }
