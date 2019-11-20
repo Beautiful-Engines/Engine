@@ -36,8 +36,8 @@ void ComponentMesh::Update()
 		}
 	}
 
-	//Intersects function edited
-	if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
+
+	/*if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
 	{
 		for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
 		{
@@ -58,6 +58,12 @@ void ComponentMesh::Update()
 			}
 		}
 	}
+		Draw(component_texture);
+	}*/
+	/*if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
+	{*/
+		Draw(component_texture);
+	//}
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
 }
@@ -110,6 +116,15 @@ void ComponentMesh::Draw(ComponentTexture *component_texture)
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glPopMatrix();
+
+	if (debug_bb) {
+		static float3 corners[8];
+		GetMyGameObject()->abb.GetCornerPoints(corners);
+		App->renderer3D->DebugDrawCube(corners, { 255, 0, 0, 255 });
+		GetMyGameObject()->obb.GetCornerPoints(corners);
+		App->renderer3D->DebugDrawCube(corners, { 0, 0, 255, 255 });
+	}
+
 }
 
 
@@ -153,7 +168,7 @@ float3 ComponentMesh::GetMaxPoint()
 }
 AABB ComponentMesh::GetBB()
 {
-	if (debug_bb)
+	/*if (debug_bb)
 	{
 		static float3 corners[8];
 		GetMyGameObject()->abb.GetCornerPoints(corners);
@@ -162,7 +177,7 @@ AABB ComponentMesh::GetBB()
 		App->renderer3D->DebugDrawCube(corners, { 0, 0, 255, 255 });
 		if (App->camera->lines.size() > 0)
 			App->renderer3D->DebugDrawLines(App->camera->lines);
-	}
+	}*/
 	AABB bounding_box;
 	bounding_box.SetNegativeInfinity();
 	bounding_box.Enclose(resource_mesh->vertices, resource_mesh->n_vertices);

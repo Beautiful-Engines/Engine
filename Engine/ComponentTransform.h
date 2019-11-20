@@ -12,6 +12,10 @@ public:
 
 	void Save(const nlohmann::json::iterator& _iterator);
 
+	void SetLocalPosition(float3 position);
+
+	void SetLocalScale(float3 _scale);
+
 	void UpdateLocalTransformMatrix();
 
 	float3 GetLocalRotationToEuler();

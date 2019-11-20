@@ -74,7 +74,6 @@ bool WindowProperties::Draw()
 		{
 			if (ImGui::Button("Delete", { 100,20 }))
 				App->scene->DeleteGameObject(go);
-
 			ImGui::Checkbox("Hide", &go->hide);
 			if (go->hide)
 				go->Disable();
@@ -83,9 +82,12 @@ bool WindowProperties::Draw()
 
 			if (ImGui::CollapsingHeader("Transform"))
 			{
-
 				float* p = (float*)&trans->local_position;
-				ImGui::InputFloat3("Position", p, 2);
+				if (ImGui::InputFloat3("Position", p, 2))
+				{
+					go->GetTransform()->SetLocalPosition((float3)p);
+				}
+				
 
 				float* r = (float*)&go->GetTransform()->GetLocalRotationToEuler();
 				if(ImGui::InputFloat3("Rotation", r, 2)) {
@@ -93,9 +95,13 @@ bool WindowProperties::Draw()
 				};
 
 				float* s = (float*)&trans->local_scale;
-				ImGui::InputFloat3("Scale", s, 2);
+				if (ImGui::InputFloat3("Scale", s, 2))
+				{
+					go->GetTransform()->SetLocalScale((float3)s);
+				}
 			
-				ImGui::Text("Position"); ImGui::SameLine();
+				//go->GetTransform()->GetTransformMatrix();
+				/*ImGui::Text("Position"); ImGui::SameLine();
 				ImGui::Text("X:"); ImGui::SameLine();  ImGui::PushItemWidth(60);
 				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->local_position.x); ImGui::SameLine();
 				ImGui::Text("Y:"); ImGui::SameLine();
@@ -117,7 +123,7 @@ bool WindowProperties::Draw()
 				ImGui::Text("Y:"); ImGui::SameLine();
 				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.y); ImGui::SameLine();
 				ImGui::Text("Z:"); ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.z);
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%f", trans->scale.z);*/
 			}
 		}
 		if (mesh != nullptr)
@@ -134,6 +140,9 @@ bool WindowProperties::Draw()
 
 				ImGui::Checkbox("Vertex Normals", &mesh->vertex_normals);
 				ImGui::Checkbox("Face Normals", &mesh->face_normals);
+				ImGui::Checkbox("Bounding Box", &mesh->debug_bb);
+				//if (mesh->debug_bb)
+				//	go->UpdateBB();
 			}
 		}
 		if (texture != nullptr)

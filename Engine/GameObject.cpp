@@ -45,7 +45,6 @@ void GameObject::Update()
 			(*iterator_component)->Update();
 		}
 	}
-	if(GetTransform())GetTransform()->GetTransformMatrix();
 	if (GetCamera()) {
 		if (GetCamera()->active == false)
 		{
@@ -87,17 +86,17 @@ void GameObject::Save(const nlohmann::json::iterator& _iterator)
 {
 	LOG("%s saved", name.c_str());
 	nlohmann::json json = {
-		{"1.UID", id},
-		{"2.Name", name},
-		{"3.ParentUID", GetParent() ? GetParent()->GetId() : 0},
-		{"4.Enable", enabled},
-		{"5.Components",nlohmann::json::array()}
+		{"UID", id},
+		{"Name", name},
+		{"ParentUID", GetParent() ? GetParent()->GetId() : 0},
+		{"Enable", enabled},
+		{"Components",nlohmann::json::array()}
 	};
 
 	//Save Components
 	for (int i = 0; i < components.size(); ++i)
 	{
-		components[i]->Save(json.find("5.Components"));
+		components[i]->Save(json.find("Components"));
 	}
 
 	_iterator.value().push_back(json);
@@ -215,6 +214,7 @@ void GameObject::DeleteChild(GameObject* _game_object)
 
 ComponentTransform * GameObject::GetTransform() const
 {
+
 	for (uint i = 0; i < this->GetComponents().size(); ++i)
 	{
 		if (this->GetComponents()[i]->GetType() == ComponentType::TRANSFORM)
