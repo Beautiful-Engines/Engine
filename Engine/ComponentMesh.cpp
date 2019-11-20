@@ -35,35 +35,10 @@ void ComponentMesh::Update()
 			component_texture = (ComponentTexture*)*iterator_component;
 		}
 	}
-
-
-	/*if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
+	if (draw)
 	{
-		for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
-		{
-			if (App->scene->GetGameObjects()[i]->GetCamera() != nullptr)
-			{
-				if (App->scene->GetGameObjects()[i]->GetCamera()->frustum_culling == true)
-				{
-					if (App->scene->GetGameObjects()[i]->GetCamera()->frustum.Intersects(GetMyGameObject()->abb))
-					{
-						Draw(component_texture);
-						break;
-					}
-				}
-				else
-				{
-					Draw(component_texture);
-				}
-			}
-		}
+		Draw(component_texture);
 	}
-		Draw(component_texture);
-	}*/
-	/*if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
-	{*/
-		Draw(component_texture);
-	//}
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
 }
@@ -120,7 +95,7 @@ void ComponentMesh::Draw(ComponentTexture *component_texture)
 	if (debug_bb) {
 		static float3 corners[8];
 		GetMyGameObject()->abb.GetCornerPoints(corners);
-		App->renderer3D->DebugDrawCube(corners, { 255, 0, 0, 255 });
+		App->renderer3D->DebugDrawCube(corners, { 0, 255, 0, 255 });
 		GetMyGameObject()->obb.GetCornerPoints(corners);
 		App->renderer3D->DebugDrawCube(corners, { 0, 0, 255, 255 });
 	}

@@ -37,6 +37,7 @@ public:
 	bool textures = true;
 	
 	bool debug_bb = true;
+	bool draw = true;
 
 private:
 	ResourceMesh* resource_mesh = nullptr;

@@ -61,11 +61,11 @@ update_status ModuleScene::PreUpdate(float dt)
 
 update_status ModuleScene::Update(float dt)
 {
-
 	if (App->renderer3D->grid)
 		DrawGrid();
 
 	game_objects[0]->Update();
+	FrustrumCulling();
 
 	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
 		SaveScene();
@@ -120,7 +120,6 @@ void ModuleScene::AddGameObject(GameObject* _game_object)
 
 void ModuleScene::DeleteGameObject(GameObject* _game_object)
 {
-
 	// Delete children, recursive
 	for (uint i = 0; i < game_objects.size(); ++i)
 	{
@@ -280,6 +279,47 @@ GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
 		return go_model;
 	}
 	return nullptr;
+}
+
+void ModuleScene::FrustrumCulling()
+{
+	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
+	{
+		if (App->scene->GetGameObjects()[i]->GetCamera() != nullptr)
+		{
+			if (App->scene->GetGameObjects()[i]->GetCamera()->frustum_culling == true)
+			{
+				for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
+				{
+					if (App->scene->GetGameObjects()[j]->GetMesh())
+					{
+						if (App->scene->GetGameObjects()[i]->GetCamera()->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
+						{
+							if (App->renderer3D->camera->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
+							{
+								App->scene->GetGameObjects()[j]->GetMesh()->draw = true;
+							}
+						}
+						else
+						{
+							App->scene->GetGameObjects()[j]->GetMesh()->draw = false;
+						}
+					}
+				}
+			}
+			else
+			{
+				for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
+				{
+					if (App->scene->GetGameObjects()[j]->GetMesh())
+						if (App->renderer3D->camera->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
+						{
+							App->scene->GetGameObjects()[j]->GetMesh()->draw = true;
+						}
+				}
+			}
+		}
+	}
 }
 
 GameObject* ModuleScene::ChangeNameByQuantities(GameObject* _game_object)
