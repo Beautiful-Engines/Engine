@@ -8,6 +8,7 @@
 #include "ImGui\imgui_impl_sdl.h"
 #include "ImGui\imgui_impl_opengl3.h"
 #include "ModuleGUI.h"
+#include "ModuleTimeManager.h"
 
 #include "WindowEngine.h"
 #include "WindowHierarchy.h"
@@ -305,7 +306,21 @@ update_status ModuleGUI::CreateMainMenuBar()
 			ImGui::Checkbox("About", &window_about->enabled);
 			ImGui::EndMenu();
 		}
+		if (ImGui::Checkbox("Play", &App->timemanager->play))
+			if(App->timemanager->play)
+			App->timemanager->state = WANTS_PLAY;
+			else
+			App->timemanager->state = WANTS_EDITOR;
 
+		if (ImGui::Checkbox("Pause", &App->timemanager->pause))
+			if(App->timemanager->pause)
+			App->timemanager->state = WANTS_PAUSE;
+
+		ImGui::Text("Game Timer:"); ImGui::SameLine();
+		ImGui::TextColored({ 255, 255, 0, 255 }, "%f", App->timemanager->GetTimeSincePlay()); ImGui::SameLine();
+
+		ImGui::Text("Real Timer:"); ImGui::SameLine();
+		ImGui::TextColored({ 255, 255, 0, 255 }, "%f", App->timemanager->GetRealTimeSinceStartup()); ImGui::SameLine();
 	}
 	ImGui::EndMainMenuBar();
 
@@ -324,7 +339,6 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 void ModuleGUI::LogInput(int key, const char* state, bool mouse)
 {
-	
 	window_config->LogInput(key, state, mouse);
 }
 

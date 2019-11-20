@@ -158,6 +158,9 @@ bool WindowProperties::Draw()
 		{
 			if (ImGui::CollapsingHeader("Camera"))
 			{
+				ImGui::Checkbox("Main Camera", &camera->main_camera);
+				ImGui::Checkbox("Frustum Culling", &camera->frustum_culling);
+
 				float npd = camera->GetNearPlaneDistance();
 				if (ImGui::SliderFloat("Near plane", &npd, 0.1f, 1.0f, "%.2f")) {
 					camera->SetNearPlaneDistance(npd);

@@ -14,11 +14,14 @@ public:
 	void Start();
 	void Stop();
 
+	void Pause();
+
 	Uint32 Read();
 	Uint32 ReadSec();
 
 private:
 
+	bool	paused = false;
 	bool	running;
 	Uint32	started_at;
 	Uint32	stopped_at;

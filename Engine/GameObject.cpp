@@ -222,6 +222,7 @@ ComponentTransform * GameObject::GetTransform() const
 			return (ComponentTransform*)this->GetComponents()[i];
 		}
 	}
+	return nullptr;
 }
 
 
@@ -235,6 +236,7 @@ ComponentCamera * GameObject::GetCamera() const
 			return (ComponentCamera*)this->GetComponents()[i];
 		}
 	}
+	return nullptr;
 }
 
 ComponentMesh * GameObject::GetMesh()

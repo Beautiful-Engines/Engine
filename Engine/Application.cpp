@@ -9,6 +9,7 @@
 #include "ModuleImport.h"
 #include "ModuleFileSystem.h"
 #include "ModuleResource.h"
+#include "ModuleTimeManager.h"
 
 #include "nlohmann\json.hpp"
 #include <fstream>
@@ -25,6 +26,7 @@ Application::Application()
 	importer = new ModuleImport();
 	file_system = new ModuleFileSystem(ASSETS_FOLDER);
 	resource = new ModuleResource();
+	timemanager = new ModuleTimeManager();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -39,6 +41,7 @@ Application::Application()
 	AddModule(file_system);
 	AddModule(importer);
 	AddModule(gui);
+	AddModule(timemanager);
 	
 	// Renderer last!
 	AddModule(renderer3D);
@@ -96,6 +99,7 @@ void Application::PrepareUpdate()
 {
 	dt = (float)ms_timer.Read() / 1000.0f;
 	ms_timer.Start();
+	timemanager->PrepareUpdate();
 }
 
 // ---------------------------------------------
@@ -128,7 +132,7 @@ update_status Application::Update()
 
 	while (item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		ret = (*item)->PreUpdate(dt);
+		ret = (*item)->PreUpdate(timemanager->GetDt());
 		item++;
 	}
 
@@ -136,7 +140,7 @@ update_status Application::Update()
 
 	while (item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		ret = (*item)->Update(dt);
+		ret = (*item)->Update(timemanager->GetDt());
 		item++;
 	}
 
@@ -144,7 +148,7 @@ update_status Application::Update()
 
 	while (item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		ret = (*item)->PostUpdate(dt);
+		ret = (*item)->PostUpdate(timemanager->GetDt());
 		item++;
 	}
 
@@ -214,6 +218,16 @@ std::vector<float> Application::GetFPSVector()
 std::vector<float> Application::GetLastFrameMSVector()
 {
 	return ms_log;
+}
+
+float Application::GetDt()
+{
+	return dt;
+}
+
+void Application::SetDt(float _dt)
+{
+	dt = _dt;
 }
 
 uint Application::GenerateNewId()

@@ -5,6 +5,7 @@
 #include "ComponentTexture.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
+#include "ModuleScene.h"
 #include "ResourceMesh.h"
 #include "ComponentMesh.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
@@ -38,7 +39,24 @@ void ComponentMesh::Update()
 	//Intersects function edited
 	if (App->renderer3D->camera->frustum.Intersects(GetMyGameObject()->abb))
 	{
-		Draw(component_texture);
+		for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
+		{
+			if (App->scene->GetGameObjects()[i]->GetCamera() != nullptr)
+			{
+				if (App->scene->GetGameObjects()[i]->GetCamera()->frustum_culling == true)
+				{
+					if (App->scene->GetGameObjects()[i]->GetCamera()->frustum.Intersects(GetMyGameObject()->abb))
+					{
+						Draw(component_texture);
+						break;
+					}
+				}
+				else
+				{
+					Draw(component_texture);
+				}
+			}
+		}
 	}
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();

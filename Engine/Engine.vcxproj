@@ -160,6 +160,7 @@
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleImport.h" />
     <ClInclude Include="ModuleResource.h" />
+    <ClInclude Include="ModuleTimeManager.h" />
     <ClInclude Include="Par\par_shapes.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Resource.h" />
@@ -270,6 +271,7 @@
     <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImport.cpp" />
     <ClCompile Include="ModuleResource.cpp" />
+    <ClCompile Include="ModuleTimeManager.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />

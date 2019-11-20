@@ -26,12 +26,13 @@ public:
 	void AddGameObject(GameObject* game_object);
 	void ModuleScene::DeleteGameObject(GameObject* _game_object);
 	GameObject* GetSelected();
+	GameObject * GetMainCamera();
 	void ChangeSelected(GameObject* selected);
 	void SetSelected(GameObject * go);
 	const std::vector<GameObject*> GetGameObjects() const;
 
 	GameObject* CreateGameObjectModel(ResourceModel* _resource_model);
-	GameObject* ChangeNameByCantities(GameObject* _game_object);
+	GameObject* ChangeNameByQuantities(GameObject* _game_object);
 
 	void MouseClicking(const LineSegment & segment);
 

@@ -49,7 +49,8 @@ bool ModuleScene::Start()
 	GameObject *camara = CreateGameObject("camara");
 	ComponentCamera* cam = new ComponentCamera(camara);
 	camara->AddComponent(cam);
-
+	cam->frustum_culling = true;
+	cam->main_camera = true;
 	return true;
 }
 
@@ -114,7 +115,7 @@ GameObject* ModuleScene::CreateGameObject(std::string _name)
 
 void ModuleScene::AddGameObject(GameObject* _game_object)
 {
-	game_objects.push_back(ChangeNameByCantities(_game_object));
+	game_objects.push_back(ChangeNameByQuantities(_game_object));
 }
 
 void ModuleScene::DeleteGameObject(GameObject* _game_object)
@@ -155,6 +156,18 @@ GameObject* ModuleScene::GetSelected()
 	for (uint i = 0; i < game_objects.size(); ++i)
 	{
 		if (game_objects[i]->IsFocused())
+		{
+			return game_objects[i];
+		}
+	}
+	return nullptr;
+}
+
+GameObject* ModuleScene::GetMainCamera()
+{
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i]->GetCamera())
 		{
 			return game_objects[i];
 		}
@@ -269,7 +282,7 @@ GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
 	return nullptr;
 }
 
-GameObject* ModuleScene::ChangeNameByCantities(GameObject* _game_object)
+GameObject* ModuleScene::ChangeNameByQuantities(GameObject* _game_object)
 {
 	uint cont = 1;
 	std::string name = _game_object->GetName();

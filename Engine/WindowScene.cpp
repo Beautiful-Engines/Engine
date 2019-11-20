@@ -62,11 +62,15 @@ bool WindowScene::Draw()
 		DrawGuizmo();
 	}
 	ImGui::End();
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !ImGuizmo::IsOver())
 	{
 		float2 mousePos = { ((float)App->input->GetMouseX()-(screen_pos.x+w/2)), ((float)App->input->GetMouseY()-(screen_pos.y+h/2)) };
-		mousePos = { mousePos.x / w * 2, mousePos.y / h * 2 };
-		App->camera->OnClick(mousePos);
+		mousePos = { mousePos.x / w * 2, -mousePos.y / h * 2 };
+
+		Ray = App->renderer3D->camera->frustum.UnProjectLineSegment(mousePos.x, mousePos.y);
+		/*lines.push_back(Ray.GetPoint(0));
+		lines.push_back(Ray.ExtremePoint(Ray.Dir()));*/
+		App->scene->MouseClicking(Ray);
 	}
 	return true;
 }

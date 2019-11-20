@@ -22,6 +22,7 @@ class ModuleScene;
 class ModuleImport;
 class ModuleFileSystem;
 class ModuleResource;
+class ModuleTimeManager;
 
 
 
@@ -37,6 +38,7 @@ public:
 	ModuleImport* importer;
 	ModuleFileSystem* file_system;
 	ModuleResource*  resource;
+	ModuleTimeManager* timemanager;
 
 private:
 
@@ -73,6 +75,9 @@ public:
 	int GetFPSCap();
 	std::vector<float> GetFPSVector();
 	std::vector<float> GetLastFrameMSVector();
+	float GetDt();
+
+	void SetDt(float _dt);
 
 	// Load and Save Configurations
 	void LoadDefaultConfig();

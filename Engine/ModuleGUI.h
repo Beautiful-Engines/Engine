@@ -54,6 +54,7 @@ private:
 	bool texture_2D = true;
 	bool normals = false;
 	bool vertex_normals = false;
+	bool play = false;
 
 
 };

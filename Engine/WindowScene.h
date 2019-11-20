@@ -2,6 +2,9 @@
 #define __WindowScene_H__
 
 #include "WindowEngine.h"
+#include "glmath.h"
+#include "MathGeoLib\include\MathGeoLib.h"
+#include "MathGeoLib\include\Math\float3.h"
 #include "MathGeoLib/include/Math/float2.h"
 #include "ImGuizmo.h"
 
@@ -23,6 +26,7 @@ public:
 	float w, h;
 
 private:
+	LineSegment Ray;
 	ImVec2 screen_pos;
 };
 #endif

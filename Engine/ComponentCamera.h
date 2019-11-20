@@ -39,6 +39,8 @@ public:
 
 	bool active = false;
 	bool update_camera_projection = false;
+	bool frustum_culling = false;
+	bool main_camera = false;
 
 };
 #endif

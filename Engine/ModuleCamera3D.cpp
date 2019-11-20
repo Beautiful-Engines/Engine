@@ -3,6 +3,7 @@
 #include "ModuleScene.h"
 #include "GameObject.h"
 #include "ComponentTransform.h"
+#include "ModuleTimeManager.h"
 #include "ModuleWindow.h"
 #include "ComponentCamera.h"
 #include "ComponentMesh.h"
@@ -57,7 +58,7 @@ bool ModuleCamera3D::CleanUp()
 update_status ModuleCamera3D::Update(float dt)
 {
 	newPos = { 0, 0, 0 };
-	float speed = 40.0f * dt;
+	float speed = 40.0f * App->timemanager->GetRealDt();
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = speed * 2;
 
@@ -221,17 +222,6 @@ void ModuleCamera3D::Move(const float3 &Movement)
 	Reference += Movement;
 
 	//CalculateViewMatrix();
-}
-
-void ModuleCamera3D::OnClick(const float2& mousePos)
-{
-	float mouseX = mousePos.x;
-	float mouseY = -mousePos.y;
-
-	Ray = App->renderer3D->camera->frustum.UnProjectLineSegment(mouseX, mouseY);
-	lines.push_back(Ray.GetPoint(0));
-	lines.push_back(Ray.ExtremePoint(Ray.Dir()));
-	App->scene->MouseClicking(Ray);
 }
 
 // -----------------------------------------------------------------
