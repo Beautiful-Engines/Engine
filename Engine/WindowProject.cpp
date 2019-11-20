@@ -13,11 +13,10 @@ WindowProject::WindowProject() : WindowEngine()
 {
 	enabled = true;
 	columns = 8;
-	image_size = 120;
-	spacing = 20;
+	image_size = 100;
+	spacing = 30;
 	offset = 10;
 }
-
 
 WindowProject::~WindowProject()
 {
@@ -43,7 +42,6 @@ bool WindowProject::Draw()
 			files.push_back(files_temp[i]);
 	}
 	
-	
 	int line = 0;
 	for (int i = 0; i < directories.size(); ++i)
 	{
@@ -52,12 +50,8 @@ bool WindowProject::Draw()
 		ImGui::SetCursorPosX(pos.x + (i - (line * columns)) * (image_size + spacing) + offset);
 		ImGui::SetCursorPosY(pos.y + line * (image_size + spacing) + offset);
 
-		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
-		{
-			uint id = (uint)App->resource->GetId(ASSETS_FOLDER + directories[i]);
-			ImGui::SetDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F, &id, sizeof(uint));
-			ImGui::EndDragDropSource();
-		}
+		ImGui::Image((void*)(intptr_t)((ResourceTexture*)App->resource->Get(App->resource->GetId("DefaultTexture")))->id_texture,
+			ImVec2(image_size, image_size), ImVec2(0, 1), ImVec2(1, 0));
 
 		ImGui::SetCursorPosX(pos.x + (i - (line * columns)) * (image_size + spacing) + offset);
 		ImGui::SetCursorPosY(pos.y + line * (image_size + spacing) + image_size + offset + offset);
@@ -91,7 +85,6 @@ bool WindowProject::Draw()
 			}
 		}
 
-
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 		{
 			uint id = App->resource->GetId(ASSETS_FOLDER + files[i]);
@@ -109,14 +102,12 @@ bool WindowProject::Draw()
 			line++;
 
 		ImGui::PopID();
-		
 	}
 	
 	ImGui::End();
 
 	return true;
 }
-
 
 std::string WindowProject::FitTextToImage(std::string text)
 {

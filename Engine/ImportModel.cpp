@@ -233,7 +233,7 @@ bool ImportModel::LoadModel(ResourceModel* _resource)
 bool ImportModel::LoadNode(nlohmann::json::iterator _iterator, ResourceModel* _resource)
 {
 	ResourceModel::ModelNode node;
-
+	
 	node.id = (*_iterator)["id"];
 	node.name = (*_iterator)["name"].get<std::string>();
 
@@ -264,19 +264,19 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 	if (_resource_model != nullptr)
 	{
 		GameObject* go_model = App->scene->CreateGameObject(_resource_model->GetName());
-		go_model->SetIdNode(_resource_model->GetId());
+		go_model->SetIdNode(_resource_model->GetId() + _resource_model->GetCantities());
 
 		for each (ResourceModel::ModelNode node in _resource_model->nodes)
 		{
 			GameObject* go_node = new GameObject();
 			go_node->SetName(node.name);
-			go_node->SetIdNode(node.id);
-			go_node->SetIdNodeParent(node.parent);
+			go_node->SetIdNode(node.id + _resource_model->GetCantities());
+			go_node->SetIdNodeParent(node.parent + _resource_model->GetCantities());
 
 			// Parent
 			for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
 			{
-				if (App->scene->GetGameObjects()[i]->GetIdNode() == node.parent)
+				if (App->scene->GetGameObjects()[i]->GetIdNode()  == node.parent + _resource_model->GetCantities())
 				{
 					go_node->SetParent(App->scene->GetGameObjects()[i]);
 					break;
@@ -285,7 +285,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 
 			for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
 			{
-				if (App->scene->GetGameObjects()[i]->GetIdNodeParent() == node.id)
+				if (App->scene->GetGameObjects()[i]->GetIdNodeParent() == node.id + _resource_model->GetCantities())
 				{
 					for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
 					{
