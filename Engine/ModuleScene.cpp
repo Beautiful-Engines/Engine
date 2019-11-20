@@ -212,8 +212,6 @@ GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
 					break;
 				}
 			}
-			if(go_node->GetParent() == nullptr)
-				go_node->SetParent(go_model);
 				
 			for (uint i = 0; i < game_objects.size(); ++i)
 			{
@@ -224,12 +222,14 @@ GameObject* ModuleScene::CreateGameObjectModel(ResourceModel* _resource_model)
 						if (game_objects[j]->IsChild(game_objects[i]))
 						{
 							game_objects[j]->DeleteChild(game_objects[i]);
-							break;
 						}
 					}
 					game_objects[i]->SetParent(go_node);
 				}
 			}
+
+			if (go_node->GetParent() == nullptr)
+				go_node->SetParent(go_model);
 			
 			// Transform
 			ComponentTransform* transform = go_node->GetTransform();
