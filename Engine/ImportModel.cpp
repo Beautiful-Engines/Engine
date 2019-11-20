@@ -303,9 +303,10 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 
 			// Transform
 			ComponentTransform* transform = go_node->GetTransform();
-			transform->position = node.position;
-			transform->rotation = node.rotation;
-			transform->scale = node.scale;
+			transform->local_position = node.position;
+			transform->local_rotation = node.rotation;
+			transform->local_scale = node.scale;
+			transform->GetTransformMatrix();
 
 			// Mesh
 			if (node.mesh > 0)
