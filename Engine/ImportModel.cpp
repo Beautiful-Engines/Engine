@@ -263,7 +263,6 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 {
 	if (_resource_model != nullptr)
 	{
-		_resource_model->SetCantities(1);
 		GameObject* go_model = App->scene->CreateGameObject(_resource_model->GetName());
 		go_model->SetIdNode(_resource_model->GetId());
 

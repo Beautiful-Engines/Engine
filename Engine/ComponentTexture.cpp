@@ -13,10 +13,13 @@ ComponentTexture::ComponentTexture(GameObject* _game_object) : Component(_game_o
 
 ComponentTexture::~ComponentTexture()
 {
-	glDeleteBuffers(1, &texture->id_texture);
-	glDeleteBuffers(1, &default_texture->id_texture);
-	texture->id_texture = 0;
-	default_texture->id_texture = 0;
+	if (texture != nullptr)
+	{
+		glDeleteBuffers(1, &texture->id_texture);
+		glDeleteBuffers(1, &default_texture->id_texture);
+		texture->id_texture = 0;
+		default_texture->id_texture = 0;
+	}
 }
 
 // Save
