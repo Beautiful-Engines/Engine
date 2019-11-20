@@ -7,10 +7,13 @@
 #include "ModuleInput.h"
 #include "ModuleScene.h"
 #include "ModuleWindow.h"
+#include "ModuleImport.h"
 #include "ModuleResource.h"
 #include "ComponentTransform.h"
 #include "ImGui/imgui.h"
 #include "ResourceModel.h"
+#include "ImportModel.h"
+
 #include "MathGeoLib/include/Math/float4x4.h"
 
 #include "ImGui/imgui_stdlib.h"
@@ -52,7 +55,7 @@ bool WindowScene::Draw()
 		{
 			uint* id = (uint*)payload->Data;
 			if(App->resource->Get(*id)->GetType() == Resource::RESOURCE_TYPE::RESOURCE_MODEL)
-				App->scene->CreateGameObjectModel((ResourceModel*)App->resource->Get(*id));
+				App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(*id));
 		}
 		ImGui::EndDragDropTarget();
 	}

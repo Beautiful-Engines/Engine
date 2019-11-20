@@ -2,6 +2,8 @@
 #define _ModuleResource_H_
 
 #include "Globals.h"
+#include "Module.h"
+
 class Resource;
 
 class ModuleResource : public Module
@@ -14,12 +16,11 @@ public:
 
 	void LoadFile(const char* _path);
 	Resource* Get(uint uid);
+	Resource* GetAndUse(uint uid);
 	uint GetId(std::string _file);
+	std::map<uint, Resource*> GetResources();
 	Resource* CreateResource(const char* extension, uint UID = 0);
 	void LoadAllAssets();
-	
-private:
-	
 
 protected:
 	std::map<uint, Resource*> resources;

@@ -26,12 +26,16 @@ public:
 	void SetName(std::string _name);
 	const char* GetFile() const;
 	void SetFile(std::string _file);
+	const uint GetCantities() const;
+	void SetCantities(uint _cantity);
 
 protected:
 	uint id = 0;
 	std::string name = "";
 	std::string file = "";
 	RESOURCE_TYPE type = RESOURCE_TYPE::NONE;
+	uint cantity = 0;
+
 };
 
 #endif // !_Resource_H_

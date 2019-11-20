@@ -33,6 +33,7 @@ public:
 
 	GameObject* CreateGameObjectModel(ResourceModel* _resource_model);
 	void FrustrumCulling();
+
 	GameObject* ChangeNameByQuantities(GameObject* _game_object);
 
 	void MouseClicking(const LineSegment & segment);

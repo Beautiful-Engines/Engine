@@ -65,6 +65,18 @@ Resource* ModuleResource::Get(uint _UID)
 	return nullptr;
 }
 
+Resource* ModuleResource::GetAndUse(uint _UID)
+{
+	std::map<uint, Resource*>::iterator it = resources.find(_UID);
+	if (it != resources.end())
+	{
+		it->second->SetCantities(1);
+		return it->second;
+	}
+
+	return nullptr;
+}
+
 uint ModuleResource::GetId(std::string _file)
 {
 	for (std::map<uint, Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
@@ -74,6 +86,11 @@ uint ModuleResource::GetId(std::string _file)
 	}
 		
 	return 0;
+}
+
+std::map<uint, Resource*> ModuleResource::GetResources()
+{
+	return resources;
 }
 
 void ModuleResource::LoadAllAssets()
@@ -101,35 +118,38 @@ void ModuleResource::LoadAllAssets()
 
 void ModuleResource::LoadFile(const char * _path)
 {
-	std::string spath = _path;
-	std::ifstream ifstream(spath);
-	nlohmann::json json = nlohmann::json::parse(ifstream);
+	if (!App->resource->GetId(_path))
+	{
+		std::string spath = _path;
+		std::ifstream ifstream(spath);
+		nlohmann::json json = nlohmann::json::parse(ifstream);
 
-	uint UID = json["id"];
-	std::string exported_file = json["exported_file"];
-	std::string name = json["name"];
-	std::string extension;
-	App->file_system->SplitFilePath(exported_file.c_str(), nullptr, nullptr, &extension);
-	Resource *resource = nullptr;
-	if ("." + extension == OUR_MESH_EXTENSION)
-	{
-		resource = CreateResource(OUR_MESH_EXTENSION, UID);
-		resource->SetFile(exported_file);
-		resource->SetName(name);
-		App->importer->import_mesh->LoadMeshFromResource((ResourceMesh*)resource);
-		
-	}
-	else if ("." + extension == OUR_TEXTURE_EXTENSION)
-	{
-		resource = CreateResource(OUR_TEXTURE_EXTENSION, UID);
-		resource->SetName(name);
-		App->importer->import_texture->LoadTexture(exported_file.c_str(), nullptr, (ResourceTexture*)resource);
-	}
-	else if ("." + extension == OUR_MODEL_EXTENSION)
-	{
-		resource = CreateResource(OUR_MODEL_EXTENSION, UID);
-		resource->SetFile(exported_file);
-		resource->SetName(name);
-		App->importer->import_model->LoadModel((ResourceModel*)resource);
+		uint UID = json["id"];
+		std::string exported_file = json["exported_file"];
+		std::string name = json["name"];
+		std::string extension;
+		App->file_system->SplitFilePath(exported_file.c_str(), nullptr, nullptr, &extension);
+		Resource *resource = nullptr;
+		if ("." + extension == OUR_MESH_EXTENSION)
+		{
+			resource = CreateResource(OUR_MESH_EXTENSION, UID);
+			resource->SetFile(exported_file);
+			resource->SetName(name);
+			App->importer->import_mesh->LoadMeshFromResource((ResourceMesh*)resource);
+
+		}
+		else if ("." + extension == OUR_TEXTURE_EXTENSION)
+		{
+			resource = CreateResource(OUR_TEXTURE_EXTENSION, UID);
+			resource->SetName(name);
+			App->importer->import_texture->LoadTexture(exported_file.c_str(), nullptr, (ResourceTexture*)resource);
+		}
+		else if ("." + extension == OUR_MODEL_EXTENSION)
+		{
+			resource = CreateResource(OUR_MODEL_EXTENSION, UID);
+			resource->SetFile(exported_file);
+			resource->SetName(name);
+			App->importer->import_model->LoadModel((ResourceModel*)resource);
+		}
 	}
 }

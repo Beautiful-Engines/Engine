@@ -245,6 +245,7 @@
     <ClInclude Include="WindowPrimitives.h" />
     <ClInclude Include="WindowProject.h" />
     <ClInclude Include="WindowProperties.h" />
+    <ClInclude Include="WindowResources.h" />
     <ClInclude Include="WindowScene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -326,6 +327,7 @@
     <ClCompile Include="WindowPrimitives.cpp" />
     <ClCompile Include="WindowProject.cpp" />
     <ClCompile Include="WindowProperties.cpp" />
+    <ClCompile Include="WindowResources.cpp" />
     <ClCompile Include="WindowScene.cpp" />
   </ItemGroup>
   <ItemGroup>

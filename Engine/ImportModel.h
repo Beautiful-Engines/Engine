@@ -17,11 +17,13 @@ public:
 
 	uint ImportFBX(const char* _path);
 	bool LoadModel(ResourceModel* resource);
+	GameObject* CreateModel(ResourceModel* _resource_model);
 
 private:
 	ResourceModel::ModelNode ImportNode(const aiNode* _node, const aiScene* _scene, ResourceMesh* _object, ResourceModel* _resource_model, ResourceModel::ModelNode* _resource_node = nullptr);
 	bool LoadNode(nlohmann::json::iterator it, ResourceModel* _resource);
 	void CreateOurModelFile(ResourceModel* _resource);
+	
 };
 
 #endif // !__ImportModel_H_

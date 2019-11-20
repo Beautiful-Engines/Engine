@@ -29,4 +29,5 @@ private:
 	LineSegment Ray;
 	ImVec2 screen_pos;
 };
-#endif
+#endif // !__WindowScene_H__
+

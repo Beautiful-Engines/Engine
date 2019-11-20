@@ -397,6 +397,9 @@
     <ClInclude Include="ModuleTimeManager.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="WindowResources.h">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -635,6 +638,9 @@
     </ClCompile>
     <ClCompile Include="ModuleTimeManager.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowResources.cpp">
+      <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

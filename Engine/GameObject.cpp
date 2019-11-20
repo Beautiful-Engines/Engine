@@ -13,13 +13,16 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-	for (auto iterator_components = components.begin(); iterator_components < components.end(); iterator_components++) {
-		if (*iterator_components != nullptr)
-		{
-			RELEASE(*iterator_components);
-			iterator_components = components.erase(iterator_components);
-			if (components.size() == 0)
-				break;
+	if (components.size() == 0)
+	{
+		for (auto iterator_components = components.begin(); iterator_components < components.end(); iterator_components++) {
+			if (*iterator_components != nullptr)
+			{
+				RELEASE(*iterator_components);
+				iterator_components = components.erase(iterator_components);
+				if (components.size() == 0)
+					break;
+			}
 		}
 	}
 	components.clear();
