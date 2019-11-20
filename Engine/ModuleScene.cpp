@@ -96,6 +96,20 @@ void ModuleScene::SaveScene()
 	ofstream << std::setw(4) << json << std::endl;
 }
 
+// Save
+void ModuleScene::SaveSceneTmp()
+{
+	LOG("Saving scene into %s", ASSETS_FOLDER"Scene.tmp");
+	nlohmann::json json = {
+		{"GameObjects", nlohmann::json::array()},
+	};
+
+	game_objects[0]->Save(json.find("GameObjects"));
+
+	std::ofstream ofstream(ASSETS_FOLDER"Scene.tmp");
+	ofstream << std::setw(4) << json << std::endl;
+}
+
 GameObject* ModuleScene::CreateGameObject(std::string _name)
 {
 	GameObject *game_object = new GameObject();

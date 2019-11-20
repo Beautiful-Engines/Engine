@@ -21,6 +21,7 @@ public:
 	bool CleanUp();
 
 	void SaveScene();
+	void SaveSceneTmp();
 
 	GameObject* CreateGameObject(std::string name);
 	void AddGameObject(GameObject* game_object);
@@ -31,7 +32,6 @@ public:
 	void SetSelected(GameObject * go);
 	const std::vector<GameObject*> GetGameObjects() const;
 
-	GameObject* CreateGameObjectModel(ResourceModel* _resource_model);
 	void FrustrumCulling();
 
 	GameObject* ChangeNameByQuantities(GameObject* _game_object);
