@@ -400,6 +400,9 @@
     <ClInclude Include="WindowResources.h">
       <Filter>Sources\EngineWindows</Filter>
     </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>Sources\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -641,6 +644,9 @@
     </ClCompile>
     <ClCompile Include="WindowResources.cpp">
       <Filter>Sources\EngineWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree.cpp">
+      <Filter>Sources\Containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
