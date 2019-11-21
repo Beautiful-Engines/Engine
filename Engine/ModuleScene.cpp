@@ -168,8 +168,7 @@ bool ModuleScene::LoadScene(bool _tmp)
 				component->Load(json_component);
 			}
 			AddGameObject(game_object, false);
-
-			
+			game_object->GetTransform()->GetTransformMatrix();	
 		}
 		else
 		{
