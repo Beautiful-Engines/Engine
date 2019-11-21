@@ -158,8 +158,12 @@ bool ModuleScene::LoadScene(bool _tmp)
 				Component* component;
 				if(json_component["type"] == ComponentType::TRANSFORM)
 					component = game_object->GetTransform();
-				else
-					component = new Component(game_object, json_component["type"]);
+				else if (json_component["type"] == ComponentType::MESH)
+					component = new ComponentMesh(game_object);
+				else if (json_component["type"] == ComponentType::TEXTURE)
+					component = new ComponentTexture(game_object);
+				else if (json_component["type"] == ComponentType::CAMERA)
+					component = new ComponentCamera(game_object);
 
 				component->Load(json_component);
 			}
@@ -345,7 +349,6 @@ void  ModuleScene::CreateCamera()
 {
 	GameObject *camara = CreateGameObject("camara");
 	ComponentCamera* cam = new ComponentCamera(camara);
-	camara->AddComponent(cam);
 	cam->frustum_culling = true;
 	cam->main_camera = true;
 }

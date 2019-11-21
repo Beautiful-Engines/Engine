@@ -51,7 +51,7 @@
             "Enable": true,
             "Name": "root",
             "ParentUID": 0,
-            "UID": 4221975590
+            "UID": 1994599107
         },
         {
             "Components": [
@@ -67,9 +67,9 @@
                         0.0
                     ],
                     "local_position": [
-                        -0.1138911098241806,
-                        0.04555415362119675,
-                        -11.203302383422852
+                        0.0,
+                        0.0,
+                        -5.4311418533325195
                     ],
                     "local_rotation": [
                         0.0,
@@ -83,9 +83,9 @@
                         1.0
                     ],
                     "position": [
-                        -0.1138911098241806,
-                        0.04555415362119675,
-                        -11.203302383422852
+                        0.0,
+                        0.0,
+                        -5.4311418533325195
                     ],
                     "rotation": [
                         0.0,
@@ -99,12 +99,19 @@
                         1.0
                     ],
                     "type": 2
+                },
+                {
+                    "enabled": false,
+                    "frustum_culling": true,
+                    "main_camera": true,
+                    "type": 3,
+                    "update_camera_projection": true
                 }
             ],
             "Enable": true,
             "Name": "camara_1",
-            "ParentUID": 4221975590,
-            "UID": 1244784131
+            "ParentUID": 1994599107,
+            "UID": 3886314853
         },
         {
             "Components": [
@@ -121,7 +128,7 @@
                     ],
                     "local_position": [
                         0.0,
-                        0.0,
+                        0.10830956697463989,
                         0.0
                     ],
                     "local_rotation": [
@@ -137,7 +144,7 @@
                     ],
                     "position": [
                         0.0,
-                        0.0,
+                        0.10830956697463989,
                         0.0
                     ],
                     "rotation": [
@@ -156,8 +163,8 @@
             ],
             "Enable": true,
             "Name": "Assets/bakerhouse (1).fbx_1",
-            "ParentUID": 4221975590,
-            "UID": 1684137706
+            "ParentUID": 1994599107,
+            "UID": 4098869293
         },
         {
             "Components": [
@@ -178,10 +185,10 @@
                         0.0
                     ],
                     "local_rotation": [
+                        -0.7071068286895752,
                         0.0,
                         0.0,
-                        0.0,
-                        1.0
+                        0.7071067094802856
                     ],
                     "local_scale": [
                         1.0,
@@ -190,33 +197,33 @@
                     ],
                     "position": [
                         0.0,
-                        0.0,
+                        0.10830956697463989,
                         0.0
                     ],
                     "rotation": [
+                        -0.7071068286895752,
                         0.0,
                         0.0,
-                        0.0,
-                        1.0
+                        0.7071067094802856
                     ],
                     "scale": [
                         1.0,
-                        1.0,
-                        1.0
+                        0.9999999403953552,
+                        0.9999999403953552
                     ],
                     "type": 2
                 },
                 {
                     "debug_bb": true,
                     "face_normals": false,
-                    "resource_mesh": 945856398,
+                    "resource_mesh": 101920629,
                     "textures": true,
                     "type": 0,
                     "vertex_normals": false
                 },
                 {
                     "checkered": false,
-                    "default_texture": 4022205320,
+                    "default_texture": 135267258,
                     "enabled": true,
                     "texture": 0,
                     "type": 1
@@ -224,8 +231,8 @@
             ],
             "Enable": true,
             "Name": "Chimney_mesh_1",
-            "ParentUID": 1684137706,
-            "UID": 2341189609
+            "ParentUID": 4098869293,
+            "UID": 3114567681
         },
         {
             "Components": [
@@ -241,15 +248,15 @@
                         0.0
                     ],
                     "local_position": [
-                        0.22778034210205078,
-                        -0.0911111831665039,
-                        0.2044411599636078
+                        0.0,
+                        0.0,
+                        0.0
                     ],
                     "local_rotation": [
+                        -0.7071068286895752,
                         0.0,
                         0.0,
-                        0.0,
-                        1.0
+                        0.7071067094802856
                     ],
                     "local_scale": [
                         1.0,
@@ -257,34 +264,34 @@
                         1.0
                     ],
                     "position": [
-                        0.22778034210205078,
-                        -0.0911111831665039,
-                        0.2044411599636078
+                        0.0,
+                        0.10830956697463989,
+                        0.0
                     ],
                     "rotation": [
+                        -0.7071068286895752,
                         0.0,
                         0.0,
-                        0.0,
-                        1.0
+                        0.7071067094802856
                     ],
                     "scale": [
                         1.0,
-                        1.0,
-                        1.0
+                        0.9999999403953552,
+                        0.9999999403953552
                     ],
                     "type": 2
                 },
                 {
                     "debug_bb": true,
                     "face_normals": false,
-                    "resource_mesh": 1735617554,
+                    "resource_mesh": 90559710,
                     "textures": true,
                     "type": 0,
                     "vertex_normals": false
                 },
                 {
                     "checkered": false,
-                    "default_texture": 4022205320,
+                    "default_texture": 135267258,
                     "enabled": true,
                     "texture": 0,
                     "type": 1
@@ -292,8 +299,8 @@
             ],
             "Enable": true,
             "Name": "Baker_house_mesh_1",
-            "ParentUID": 1684137706,
-            "UID": 396479468
+            "ParentUID": 4098869293,
+            "UID": 2506713586
         }
     ]
 }
