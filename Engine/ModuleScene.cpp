@@ -358,19 +358,15 @@ void ModuleScene::FrustrumCulling()
 						{
 							if (App->scene->GetGameObjects()[j]->GetMesh())
 							{
-								if (App->scene->GetGameObjects()[i]->GetCamera()->frustum.Intersects(App->scene->GetGameObjects()[j]->abb)) {
+								if (App->renderer3D->camera->frustum.Intersects(App->scene->GetGameObjects()[j]->abb)) {
 									objects_hit.push_back(App->scene->GetGameObjects()[j]);
 								}
 							}
 						}
 					}
-					for (uint j = 0; j < objects_hit.size(); ++j)
+					for (int i = 0; i < objects_hit.size(); ++i)
 					{
-						if (App->scene->GetGameObjects()[j]->GetMesh())
-							if (App->renderer3D->camera->frustum.Intersects(objects_hit[j]->abb))
-							{
-								objects_hit[j]->GetMesh()->draw = true;
-							}
+						objects_hit[i]->GetMesh()->draw = true;
 					}
 				}
 			}
