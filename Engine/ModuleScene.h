@@ -54,7 +54,7 @@ private:
 	uint id_grid = 0;
 	uint grid_vertices = 0;
 	
-	Quadtree* quadtree;
+	Quadtree quadtree;
 
 private:
 	void CreateGrid();

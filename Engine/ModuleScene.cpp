@@ -70,7 +70,7 @@ update_status ModuleScene::Update(float dt)
 		DrawGrid();
 
 	game_objects[0]->Update();
-	quadtree->Draw();
+	quadtree.Draw();
 
 	FrustrumCulling();
 
@@ -312,7 +312,7 @@ void ModuleScene::FrustrumCulling()
 			{
 				if (App->scene->GetGameObjects()[i]->GetCamera()->frustum_culling == true)
 				{
-					quadtree->Intersect(objects_hit, App->scene->GetGameObjects()[i]->GetCamera()->frustum);
+					quadtree.Intersect(objects_hit, App->scene->GetGameObjects()[i]->GetCamera()->frustum);
 					for (uint j = 0; j < objects_hit.size(); ++j)
 					{
 						if (objects_hit[j]->GetMesh())
@@ -393,7 +393,7 @@ GameObject* ModuleScene::ChangeNameByQuantities(GameObject* _game_object)
 void ModuleScene::MouseClicking(const LineSegment& line)
 {
 	std::map<float, GameObject*> selected;
-	quadtree->Intersect(selected, line);
+	quadtree.Intersect(selected, line);
 
 	for (uint i = 0; i < game_objects.size(); i++)
 	{
@@ -507,7 +507,7 @@ void ModuleScene::CreateQuadtree()
 	math::AABB boundary;
 	boundary.SetFromCenterAndSize(center, size);
 
-	quadtree->Create(boundary);
+	quadtree.Create(boundary);
 
 	RecalculateQuadtree();
 }
@@ -515,5 +515,5 @@ void ModuleScene::CreateQuadtree()
 void ModuleScene::RecalculateQuadtree()
 {
 	for (uint i = 0; i < GetStaticGameObjects().size(); ++i)
-		App->scene->quadtree->Insert(GetStaticGameObjects()[i]);
+		App->scene->quadtree.Insert(GetStaticGameObjects()[i]);
 }
