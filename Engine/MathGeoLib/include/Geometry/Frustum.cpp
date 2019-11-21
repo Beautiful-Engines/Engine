@@ -628,7 +628,6 @@ bool Frustum::Intersects(const AABB &aabb) const
 	for (int i = 0; i < nplanes; ++i)
 	{
 		int points_inside = 8;
-
 		for (int j = 0; j < 8; ++j)
 		{
 			if (GetPlane(i).IsOnPositiveSide(corners[j])) {

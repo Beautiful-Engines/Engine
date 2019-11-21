@@ -70,7 +70,7 @@ update_status ModuleScene::Update(float dt)
 		DrawGrid();
 
 	game_objects[0]->Update();
-	quadtree.Draw();
+	quadtree->Draw();
 
 	FrustrumCulling();
 
@@ -303,6 +303,7 @@ const std::vector<GameObject*> ModuleScene::GetGameObjects() const
 
 void ModuleScene::FrustrumCulling()
 {
+	std::vector<GameObject*> objects_hit;
 	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
 	{
 		if (AnyCamera())
@@ -311,32 +312,33 @@ void ModuleScene::FrustrumCulling()
 			{
 				if (App->scene->GetGameObjects()[i]->GetCamera()->frustum_culling == true)
 				{
-					for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
+					quadtree->Intersect(objects_hit, App->scene->GetGameObjects()[i]->GetCamera()->frustum);
+					for (uint j = 0; j < objects_hit.size(); ++j)
 					{
-						if (App->scene->GetGameObjects()[j]->GetMesh())
+						if (objects_hit[j]->GetMesh())
 						{
-							if (App->scene->GetGameObjects()[i]->GetCamera()->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
+							if (objects_hit[i]->GetCamera()->frustum.Intersects(objects_hit[j]->abb))
 							{
-								if (App->renderer3D->camera->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
+								if (App->renderer3D->camera->frustum.Intersects(objects_hit[j]->abb))
 								{
-									App->scene->GetGameObjects()[j]->GetMesh()->draw = true;
+									objects_hit[j]->GetMesh()->draw = true;
 								}
 							}
 							else
 							{
-								App->scene->GetGameObjects()[j]->GetMesh()->draw = false;
+								objects_hit[j]->GetMesh()->draw = false;
 							}
 						}
 					}
 				}
 				else
 				{
-					for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
+					for (uint j = 0; j < objects_hit.size(); ++j)
 					{
 						if (App->scene->GetGameObjects()[j]->GetMesh())
-							if (App->renderer3D->camera->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
+							if (App->renderer3D->camera->frustum.Intersects(objects_hit[j]->abb))
 							{
-								App->scene->GetGameObjects()[j]->GetMesh()->draw = true;
+								objects_hit[j]->GetMesh()->draw = true;
 							}
 					}
 				}
@@ -391,13 +393,18 @@ GameObject* ModuleScene::ChangeNameByQuantities(GameObject* _game_object)
 void ModuleScene::MouseClicking(const LineSegment& line)
 {
 	std::map<float, GameObject*> selected;
+	quadtree->Intersect(selected, line);
+
 	for (uint i = 0; i < game_objects.size(); i++)
 	{
 		if (line.Intersects(game_objects[i]->abb))
 		{
-			float hit_near, hit_far;
-			if (line.Intersects(game_objects[i]->obb, hit_near, hit_far))
-				selected[hit_near] = game_objects[i];
+			if (game_objects[i]->is_static)
+			{
+				float hit_near, hit_far;
+				if (line.Intersects(game_objects[i]->obb, hit_near, hit_far))
+					selected[hit_near] = game_objects[i];
+			}
 		}
 	}
 
@@ -500,7 +507,7 @@ void ModuleScene::CreateQuadtree()
 	math::AABB boundary;
 	boundary.SetFromCenterAndSize(center, size);
 
-	quadtree.Create(boundary);
+	quadtree->Create(boundary);
 
 	RecalculateQuadtree();
 }
@@ -508,5 +515,5 @@ void ModuleScene::CreateQuadtree()
 void ModuleScene::RecalculateQuadtree()
 {
 	for (uint i = 0; i < GetStaticGameObjects().size(); ++i)
-		App->scene->quadtree.Insert(GetStaticGameObjects()[i]);
+		App->scene->quadtree->Insert(GetStaticGameObjects()[i]);
 }

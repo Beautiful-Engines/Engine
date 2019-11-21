@@ -83,7 +83,7 @@ void QuadtreeNode::Subdivide()
 
 void QuadtreeNode::RedistributeChildren()
 {
-	std::list<GameObject*>::const_iterator it = game_objects.begin();
+	std::vector<GameObject*>::const_iterator it = game_objects.begin();
 
 	while (it != game_objects.end())
 	{
