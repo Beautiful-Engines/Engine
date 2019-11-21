@@ -44,8 +44,6 @@ public:
 	void DeleteChild(GameObject* _game_object);
 	const bool GameObject::IsChild(GameObject * _game_object) const;
 
-	const bool IsLastChild(GameObject * _game_object) const;
-
 	ComponentTransform* GetTransform() const;
 
 	ComponentMesh* GetMesh();
@@ -53,6 +51,7 @@ public:
 	ComponentCamera* GetCamera() const;
 
 	const bool IsFocused() const;
+	float GetDistance();
 	void SetFocus(bool focus);
 
 	void UpdateBB();

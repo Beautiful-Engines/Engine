@@ -104,7 +104,17 @@ update_status ModuleCamera3D::Update(float dt)
 	{
 		if (App->scene->GetSelected() != nullptr)
 		{
-			LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
+			mdistance;
+			LookAt(App->scene->GetSelected()->GetTransform()->position);
+			focus = true;
+			/*camera_inputs_active = false;*/
+
+			if (App->scene->GetSelected()->GetMesh())
+				mdistance = App->scene->GetSelected()->GetDistance() * 5;
+			else mdistance = 5;
+
+		}
+			/*LookAt({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
 			if (App->scene->GetSelected()->GetMesh() && App->scene->GetSelected()->GetMesh()->GetResourceMesh()->is_primitive == false)
 			{
 				focus = true;
@@ -112,8 +122,8 @@ update_status ModuleCamera3D::Update(float dt)
 			else
 			{
 				focus = false;
-			}
-		}
+			}*/
+		//}
 		
 	}
 	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
@@ -129,7 +139,7 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 	if (focus)
 	{
-		Focus(speed);
+		Focus(speed/2);
 	}
 
 	/*camera->frustum.pos += newPos;
@@ -170,19 +180,40 @@ update_status ModuleCamera3D::Update(float dt)
 }
 void ModuleCamera3D::Focus(float speed)
 {
-	int go_height_ratio = 4;
-	int distance_ratio = 10;
-	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
-	{
-		if (App->scene->GetGameObjects()[i]->IsFocused() && App->scene->GetGameObjects()[i]->GetMesh())
-		{
-			float go_height = App->scene->GetGameObjects()[i]->GetMesh()->GetMaxPoint().y - App->scene->GetGameObjects()[i]->GetMesh()->GetMinPoint().y;
+	int ratio = 6;
+	int distance_ratio = 2;
 
+		if (App->scene->GetSelected() && App->scene->GetSelected()->GetMesh())
+		{
+			//float go_height = App->scene->GetGameObjects()[i]->GetMesh()->GetMaxPoint().y - App->scene->GetGameObjects()[i]->GetMesh()->GetMinPoint().y;
 			float3 end_position = { Reference.x, Reference.y, Reference.z };
-			float3 position = { Position.x, Position.y, Position.z };
-			float distance = position.Distance({ App->scene->GetGameObjects()[i]->GetTransform()->local_position.x, App->scene->GetGameObjects()[i]->GetTransform()->local_position.y, App->scene->GetGameObjects()[i]->GetTransform()->local_position.z });
+			float3 position = { camera->frustum.pos.x, camera->frustum.pos.y, camera->frustum.pos.z };
+			float distance = position.Distance({ App->scene->GetSelected()->GetTransform()->local_position.x, App->scene->GetSelected()->GetTransform()->local_position.y, App->scene->GetSelected()->GetTransform()->local_position.z });
 			speed = speed * distance;
-			if (go_height * go_height_ratio < distance - distance / distance_ratio) {
+			if (distance*ratio < mdistance-mdistance/distance_ratio || distance*ratio > mdistance+mdistance/distance_ratio) {
+				if (distance < mdistance+5) 
+				{
+					newPos -= camera->frustum.front * speed/10;
+					if (distance + camera->frustum.pos.z >= mdistance)
+					{
+						focus = false;
+					}
+				}
+				else if (distance > mdistance-5) 
+				{
+					newPos += camera->frustum.front * speed/10;
+					if (distance - camera->frustum.pos.z <= mdistance)
+					{
+						focus = false;
+					}
+				}
+			}
+			else
+			{
+				focus = false;
+			}
+
+			/*if (go_height * go_height_ratio < distance - distance / distance_ratio) {
 				newPos -= Z * speed;
 			}
 			else if (go_height * go_height_ratio > distance + distance / distance_ratio)
@@ -192,10 +223,12 @@ void ModuleCamera3D::Focus(float speed)
 			else if (go_height * go_height_ratio < distance + distance / distance_ratio && go_height * go_height_ratio > distance - distance / distance_ratio)
 			{
 				focus = false;
-			}
+			}*/
 		}
-	}
-	
+		else
+		{
+			focus = false;
+		}
 }
 // -----------------------------------------------------------------
 void ModuleCamera3D::Look(const float3 &Position, const float3 &Reference, bool RotateAroundReference)

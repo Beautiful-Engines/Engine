@@ -205,19 +205,6 @@ const bool GameObject::IsChild(GameObject * _game_object) const
 	return ret;
 }
 
-const bool GameObject::IsLastChild(GameObject * _game_object) const
-{
-	bool ret = false;
-
-	for (int i = 0; i < children.size() && !ret; i++)
-	{
-		if (children[i] == _game_object)
-			return true;
-	}
-
-	return ret;
-}
-
 void GameObject::DeleteChild(GameObject* _game_object)
 {
 	std::vector<GameObject*>::iterator iterator_go = children.begin();
@@ -275,6 +262,17 @@ ComponentMesh * GameObject::GetMesh()
 const bool GameObject::IsFocused() const
 {
 	return focus;
+}
+
+float GameObject::GetDistance()
+{
+	float distance = 0;
+
+	if (GetMesh()) {
+		distance = abb.Size().Length();
+	}
+
+	return distance;
 }
 
 void GameObject::SetFocus(bool _focus)

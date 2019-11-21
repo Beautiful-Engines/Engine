@@ -26,6 +26,7 @@ public:
 	bool focus = false;
 	float3 newPos = { 0, 0, 0 };
 	std::vector<float3> lines;
+	float mdistance;
 
 private:
 
