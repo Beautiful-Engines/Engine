@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "GameObject.h"
 #include "ModuleImport.h"
+#include "ModuleResource.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 #include "ComponentTexture.h"
@@ -25,9 +26,27 @@ ComponentTexture::~ComponentTexture()
 // Save
 void ComponentTexture::Save(const nlohmann::json::iterator& _iterator)
 {
-	nlohmann::json json = {
+	nlohmann::json json;
+	if (texture != nullptr)
+	{
+		json = {
 		{"type", type},
-	};
+		{"enabled", enabled},
+		{"texture", texture->GetId()},
+		{"default_texture", default_texture->GetId()},
+		{"checkered", checkered},
+		};
+	}
+	else
+	{
+		json = {
+		{"type", type},
+		{"enabled", enabled},
+		{"texture", 0},
+		{"default_texture", default_texture->GetId()},
+		{"checkered", checkered},
+		};
+	}
 
 	_iterator.value().push_back(json);
 }
@@ -35,6 +54,11 @@ void ComponentTexture::Save(const nlohmann::json::iterator& _iterator)
 void ComponentTexture::Load(const nlohmann::json _json)
 {
 	type = _json["type"];
+	enabled = _json["enabled"];
+	if(_json["texture"] != 0)
+		texture = (ResourceTexture*)App->resource->Get(_json["texture"]);
+	default_texture = (ResourceTexture*)App->resource->Get(_json["default_texture"]);
+	checkered = _json["checkered"];
 }
 
 void ComponentTexture::DrawTexture(ResourceMesh* _resource_mesh)

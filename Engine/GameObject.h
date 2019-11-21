@@ -36,6 +36,7 @@ public:
 	const std::vector<Component*> GetComponents() const;
 	GameObject* GetParent();
 	
+	void SetId(uint _id);
 	void SetIdNode(uint _id_node);
 	void SetIdNodeParent(uint _id_node_parent);
 	void SetParent(GameObject* _game_object);

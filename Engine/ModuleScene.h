@@ -20,11 +20,11 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	void SaveScene();
-	void SaveSceneTmp();
+	void SaveScene(bool _tmp = false);
+	bool LoadScene(bool _tmp = false);
 
 	GameObject* CreateGameObject(std::string name);
-	void AddGameObject(GameObject* game_object);
+	void AddGameObject(GameObject* game_object, bool _change_name = true);
 	void ModuleScene::DeleteGameObject(GameObject* _game_object);
 	GameObject* GetSelected();
 	GameObject * GetMainCamera();

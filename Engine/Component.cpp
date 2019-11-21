@@ -40,6 +40,11 @@ void Component::Save(const nlohmann::json::iterator& _iterator)
 
 }
 
+void Component::Load(const nlohmann::json _json)
+{
+
+}
+
 const ComponentType Component::GetType() const
 {
 	return type;

@@ -41,6 +41,19 @@ void ComponentTransform::Save(const nlohmann::json::iterator& _iterator)
 	_iterator.value().push_back(json);
 }
 
+void ComponentTransform::Load(const nlohmann::json _json)
+{
+	type = _json["type"];
+	position = float3(_json["position"][0], _json["position"][1], _json["position"][2]);
+	rotation = Quat(_json["rotation"][0], _json["rotation"][1], _json["rotation"][2], _json["rotation"][3]);
+	euler = float3(_json["euler"][0], _json["euler"][1], _json["euler"][2]);
+	scale = float3(_json["scale"][0], _json["scale"][1], _json["scale"][2]);
+	local_position = float3(_json["local_position"][0], _json["local_position"][1], _json["local_position"][2]);
+	local_rotation = Quat(_json["local_rotation"][0], _json["local_rotation"][1], _json["local_rotation"][2], _json["local_rotation"][3]);
+	local_euler = float3(_json["local_euler"][0], _json["local_euler"][1], _json["local_euler"][2]);
+	local_scale = float3(_json["local_scale"][0], _json["local_scale"][1], _json["local_scale"][2]);
+}
+
 void ComponentTransform::SetLocalPosition(float3 position)
 {
 	local_position = position;

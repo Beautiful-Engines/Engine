@@ -28,6 +28,7 @@ public:
 	const bool IsEnabled() const;
 
 	virtual void Save(const nlohmann::json::iterator& _iterator);
+	virtual void Load(const nlohmann::json _json);
 
 	const ComponentType GetType() const;
 	GameObject* GetMyGameObject();

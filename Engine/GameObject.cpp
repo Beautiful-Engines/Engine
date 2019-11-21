@@ -164,6 +164,11 @@ GameObject* GameObject::GetParent()
 	return parent;
 }
 
+void GameObject::SetId(uint _id)
+{
+	id = _id;
+}
+
 void GameObject::SetIdNode(uint _id_node)
 {
 	id_node = _id_node;

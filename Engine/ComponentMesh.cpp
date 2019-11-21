@@ -6,6 +6,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h"
+#include "ModuleResource.h"
 #include "ResourceMesh.h"
 #include "ComponentMesh.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
@@ -50,7 +51,8 @@ void ComponentMesh::Save(const nlohmann::json::iterator& _iterator)
 		{"vertex_normals",vertex_normals},
 		{"face_normals", face_normals},
 		{"textures", textures },
-		{"debug_bb", debug_bb }
+		{"debug_bb", debug_bb },
+		{"resource_mesh", resource_mesh->GetId() }
 	};
 
 	_iterator.value().push_back(json);
@@ -63,6 +65,7 @@ void ComponentMesh::Load(const nlohmann::json _json)
 	face_normals = _json["face_normals"];
 	textures = _json["textures"];
 	debug_bb = _json["debug_bb"];
+	resource_mesh = (ResourceMesh*) App->resource->Get(_json["resource_mesh"]);
 }
 
 void ComponentMesh::Draw(ComponentTexture *component_texture)

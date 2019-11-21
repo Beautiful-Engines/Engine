@@ -66,6 +66,8 @@ update_status ModuleScene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
 		SaveScene();
+	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		LoadScene();
 	
 	return UPDATE_CONTINUE;
 }
@@ -83,32 +85,89 @@ bool ModuleScene::CleanUp()
 }
 
 // Save
-void ModuleScene::SaveScene()
+void ModuleScene::SaveScene(bool _tmp)
 {
-	LOG("Saving scene into %s", ASSETS_FOLDER"Scene.xfa");
-	nlohmann::json json= {
-		{"GameObjects", nlohmann::json::array()},
-	};
-	
-	game_objects[0]->Save(json.find("GameObjects"));
-	
-	std::ofstream ofstream(ASSETS_FOLDER"Scene.xfa");
-	ofstream << std::setw(4) << json << std::endl;
-}
+	std::string file;
+	if (_tmp)
+		file = ASSETS_FOLDER "scene.tmp";
+	else
+	{
+		LOG("Saving scene into %s", ASSETS_FOLDER"Scene.mgr");
+		file = ASSETS_FOLDER + std::string("scene") + OUR_SCENE_EXTENSION;
+	}
+		
 
-// Save
-void ModuleScene::SaveSceneTmp()
-{
-	LOG("Saving scene into %s", ASSETS_FOLDER"Scene.tmp");
 	nlohmann::json json = {
-		{"GameObjects", nlohmann::json::array()},
+	{"GameObjects", nlohmann::json::array()},
 	};
 
 	game_objects[0]->Save(json.find("GameObjects"));
-
-	std::ofstream ofstream(ASSETS_FOLDER"Scene.tmp");
+	
+	std::ofstream ofstream(file);
 	ofstream << std::setw(4) << json << std::endl;
+	
 }
+
+bool ModuleScene::LoadScene(bool _tmp)
+{
+	game_objects.clear();
+	
+	std::string file;
+	if (_tmp)
+		file = ASSETS_FOLDER "scene.tmp";
+	else
+	{
+		LOG("Loading scene from %s", ASSETS_FOLDER"Scene.mgr");
+		file = ASSETS_FOLDER + std::string("scene") + OUR_SCENE_EXTENSION;
+	}
+		
+	std::ifstream ifstream(file);
+	nlohmann::json json = nlohmann::json::parse(ifstream);
+	nlohmann::json json_game_objects = json.find("GameObjects").value();
+	for (nlohmann::json::iterator iterator = json_game_objects.begin(); iterator != json_game_objects.end(); ++iterator)
+	{
+		nlohmann::json object = iterator.value();
+		uint parent_id = object["ParentUID"];
+
+		if (parent_id != 0)
+		{
+			GameObject* game_object = new GameObject();
+			game_object->SetName(object["Name"]);
+			game_object->SetId(object["UID"]);
+			if (object["Enable"])
+				game_object->Enable();
+			else
+				game_object->Disable();
+
+			for (uint i = 0; i < game_objects.size(); ++i)
+			{
+				if (game_objects[i]->GetId() == parent_id)
+					game_object->SetParent(game_objects[i]);
+			}
+
+			for (nlohmann::json::iterator components_it = object["Components"].begin(); components_it != object["Components"].end(); ++components_it)
+			{
+				nlohmann::json json_component = components_it.value();
+				Component* component;
+				if(json_component["type"] == ComponentType::TRANSFORM)
+					component = game_object->GetTransform();
+				else
+					component = new Component(game_object, json_component["type"]);
+
+				component->Load(json_component);
+			}
+			AddGameObject(game_object, false);
+		}
+		else
+		{
+			GameObject* root = CreateGameObject("root");
+			root->SetId(object["UID"]);
+		}
+	}
+
+	return true;
+}
+
 
 GameObject* ModuleScene::CreateGameObject(std::string _name)
 {
@@ -116,7 +175,7 @@ GameObject* ModuleScene::CreateGameObject(std::string _name)
 	for (uint i = 0; i < game_objects.size(); ++i)
 	{
 		if (game_objects[i]->GetParent() == nullptr)
-			game_object->SetParent(game_objects[i]);
+			game_object->SetParent(game_objects[0]);
 	}
 	game_object->SetName(_name);
 	AddGameObject(game_object);
@@ -124,9 +183,12 @@ GameObject* ModuleScene::CreateGameObject(std::string _name)
 	return game_object;
 }
 
-void ModuleScene::AddGameObject(GameObject* _game_object)
+void ModuleScene::AddGameObject(GameObject* _game_object, bool _change_name)
 {
-	game_objects.push_back(ChangeNameByQuantities(_game_object));
+	if(_change_name)
+		game_objects.push_back(ChangeNameByQuantities(_game_object));
+	else
+		game_objects.push_back(_game_object);
 }
 
 void ModuleScene::DeleteGameObject(GameObject* _game_object)

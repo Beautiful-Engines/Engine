@@ -1,0 +1,299 @@
+{
+    "GameObjects": [
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "root",
+            "ParentUID": 0,
+            "UID": 4221975590
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -0.1138911098241806,
+                        0.04555415362119675,
+                        -11.203302383422852
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -0.1138911098241806,
+                        0.04555415362119675,
+                        -11.203302383422852
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "camara_1",
+            "ParentUID": 4221975590,
+            "UID": 1244784131
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Assets/bakerhouse (1).fbx_1",
+            "ParentUID": 4221975590,
+            "UID": 1684137706
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 945856398,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 4022205320,
+                    "enabled": true,
+                    "texture": 0,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "Chimney_mesh_1",
+            "ParentUID": 1684137706,
+            "UID": 2341189609
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.22778034210205078,
+                        -0.0911111831665039,
+                        0.2044411599636078
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.22778034210205078,
+                        -0.0911111831665039,
+                        0.2044411599636078
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 1735617554,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 4022205320,
+                    "enabled": true,
+                    "texture": 0,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "Baker_house_mesh_1",
+            "ParentUID": 1684137706,
+            "UID": 396479468
+        }
+    ]
+}

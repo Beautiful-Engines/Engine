@@ -11,6 +11,7 @@ public:
 	~ComponentTransform();
 
 	void Save(const nlohmann::json::iterator& _iterator);
+	void Load(const nlohmann::json _json);
 
 	void SetLocalPosition(float3 position);
 
