@@ -195,6 +195,15 @@ GameObject* ModuleScene::CreateGameObject(std::string _name)
 	return game_object;
 }
 
+void ModuleScene::ActiveBBDebug(bool active)
+{
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if(game_objects[i]->GetMesh())
+		game_objects[i]->GetMesh()->debug_bb = active;
+	}
+}
+
 void ModuleScene::AddGameObject(GameObject* _game_object, bool _change_name)
 {
 	if(_change_name)
@@ -373,52 +382,46 @@ GameObject* ModuleScene::ChangeNameByQuantities(GameObject* _game_object)
 	return _game_object;
 }
 
-void ModuleScene::MouseClicking(const LineSegment& segment)
+void ModuleScene::MouseClicking(const LineSegment& line)
 {
 	std::map<float, GameObject*> selected;
 	for (uint i = 0; i < game_objects.size(); i++)
 	{
-		if (segment.Intersects(game_objects[i]->abb))
+		if (line.Intersects(game_objects[i]->abb))
 		{
 			float hit_near, hit_far;
-			if (segment.Intersects(game_objects[i]->obb, hit_near, hit_far))
+			if (line.Intersects(game_objects[i]->obb, hit_near, hit_far))
 				selected[hit_near] = game_objects[i];
 		}
 	}
 
-	GameObject* Selected = nullptr;
-	for (std::map<float, GameObject*>::iterator it = selected.begin(); it != selected.end() && Selected == nullptr; it++)
+	GameObject* clicked = nullptr;
+	for (std::map<float, GameObject*>::iterator it = selected.begin(); it != selected.end() && clicked == nullptr; it++)
 	{
 		const ResourceMesh* mesh = it->second->GetMesh()->GetResourceMesh();
 		if (mesh)
 		{
-				LineSegment local = segment;
+				LineSegment local = line;
 				local.Transform(it->second->GetTransform()->transform_matrix.Inverted());
 				for (uint v = 0; v < mesh->n_indexes; v += 3)
 				{
-					uint indexA = mesh->indexes[v];
-					float3 v1(mesh->vertices[indexA]);
-
-					uint indexB = mesh->indexes[v + 1];
-					float3 v2(mesh->vertices[indexB]);
-
-					uint indexC = mesh->indexes[v + 2];
-					float3 v3(mesh->vertices[indexC]);
+					float3 v1(mesh->vertices[mesh->indexes[v]]);
+					float3 v2(mesh->vertices[mesh->indexes[v + 1]]);
+					float3 v3(mesh->vertices[mesh->indexes[v + 2]]);
 			
-						Triangle triangle(v1, v2, v3);
-						LOG("%f,%f,%f", v1, v2, v3);
+					Triangle triangle(v1, v2, v3);
 
-						if (local.Intersects(triangle, nullptr, nullptr))
-						{
-							Selected = it->second;
-							break;
-						}
+					if (local.Intersects(triangle, nullptr, nullptr))
+					{
+						clicked = it->second;
+						break;
+					}
 				}
 		}
 	}
 	for (uint i = 0; i < game_objects.size(); i++)
 	{
-		if (game_objects[i] == Selected)
+		if (game_objects[i] == clicked)
 		{
 			//App->gui->window_hierarchy->select_iterator = i;
 			//App->gui->window_hierarchy->node_clicked = i;

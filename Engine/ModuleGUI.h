@@ -57,6 +57,7 @@ private:
 	bool normals = false;
 	bool vertex_normals = false;
 	bool play = false;
+	bool debug_bb = true;
 
 
 };

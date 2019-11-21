@@ -190,6 +190,9 @@ update_status ModuleGUI::CreateMainMenuBar()
 					else
 						glDisable(GL_TEXTURE_2D);
 
+				if (ImGui::Checkbox("Bounding Box", &debug_bb))
+					App->scene->ActiveBBDebug(debug_bb);
+
 				if (ImGui::Checkbox("Normals", &normals))
 					App->renderer3D->normals = normals;
 

@@ -12,7 +12,7 @@ ComponentCamera::ComponentCamera(GameObject* _game_object) : Component(_game_obj
 	frustum.pos = { 0.f, 0.f, 0.f };
 	frustum.type = FrustumType::PerspectiveFrustum;
 
-	frustum.nearPlaneDistance = 1.0f;
+	frustum.nearPlaneDistance = 2.0f;
 	frustum.farPlaneDistance = 200.0f;
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
@@ -110,7 +110,6 @@ float ComponentCamera::GetAspectRatio()
 
 void ComponentCamera::LookAt(float3 position)
 {
-	//tbch
 	float3 vector = position - frustum.pos;
 
 	float3x3 matrix = float3x3::LookAt(frustum.front, vector.Normalized(), frustum.up, float3::unitY);

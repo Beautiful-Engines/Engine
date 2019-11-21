@@ -36,7 +36,7 @@ bool ModuleCamera3D::Start()
 
 	camera = new ComponentCamera(nullptr);
 	camera->Enable();
-	camera->frustum.pos = { 2.f, 5.f, 0.f };
+	camera->frustum.pos = { 10.f, 35.f, 0.f };
 	LookAt({ 0.f, 0.f, 0.f });
 
 	App->renderer3D->camera = camera;

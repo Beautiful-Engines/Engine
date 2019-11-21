@@ -622,19 +622,20 @@ bool Frustum::Intersects(const LineSegment &lineSegment) const
 bool Frustum::Intersects(const AABB &aabb) const
 {
 	math::float3 corners[8];
+	int nplanes = 6;
 	aabb.GetCornerPoints(corners);
 
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < nplanes; ++i)
 	{
-		int points_inside_this_plane = 8;
+		int points_inside = 8;
 
 		for (int j = 0; j < 8; ++j)
 		{
 			if (GetPlane(i).IsOnPositiveSide(corners[j])) {
-				--points_inside_this_plane;
+				--points_inside;
 			}
 		}
-		if (points_inside_this_plane == 0)
+		if (points_inside == 0)
 			return false;
 	}
 	return true;
