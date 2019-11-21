@@ -9,6 +9,7 @@
 #include "ResourceTexture.h"
 #include "ImportModel.h"
 #include "ResourceModel.h"
+#include "Primitive.h"
 
 #include <fstream>
 

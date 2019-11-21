@@ -231,68 +231,41 @@ update_status ModuleGUI::CreateMainMenuBar()
 		{
 			if (ImGui::MenuItem("Create Empty"))
 			{
-				uint count = 1;
-				std::string name = "GameObject";
-				std::string namecount = name + std::to_string(count);
-				for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
-				{
-					if (App->scene->GetGameObjects()[i] != nullptr && App->scene->GetGameObjects()[i]->GetName() == namecount)
-					{
-						count++;
-						namecount = name + std::to_string(count);
-						i = 0;
-					}
-				}
-				App->scene->CreateGameObject(namecount);
+				App->scene->CreateGameObject("GameObject");
 			}
 
 			if (ImGui::MenuItem("Create Empty Child"))
 			{
 				if (App->scene->GetSelected() != nullptr)
 				{
-					uint count = 1;
-					std::string name = "GameObject";
-					std::string namecount = name + std::to_string(count);
-					for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
-					{
-						if (App->scene->GetGameObjects()[i] != nullptr && App->scene->GetGameObjects()[i]->GetName() == namecount)
-						{
-							count++;
-							namecount = name + std::to_string(count);
-							i = 0;
-						}
-					}
-					GameObject *gameobject_child = new GameObject();
-					gameobject_child->SetName(namecount);
+					GameObject *gameobject_child = App->scene->CreateGameObject("GameObject");
 					gameobject_child->SetParent(App->scene->GetSelected());
-					App->scene->AddGameObject(gameobject_child);
 				}
-				
 			}
 				
-			ImGui::Separator();
-			if (ImGui::BeginMenu("3D Objects"))
-			{
-				if (ImGui::MenuItem("Sphere"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::SPHERE));
-				if (ImGui::MenuItem("Cube"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::CUBE));
-				/*if (ImGui::MenuItem("Torus"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::TORUS));
-				if (ImGui::MenuItem("Octahedron"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::OCTAHEDRON));
-				if (ImGui::MenuItem("Dodecahedron"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::DODECAHEDRON));
-				if (ImGui::MenuItem("Icosahedron"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::ICOSAHEDRON));
-				if (ImGui::MenuItem("Rock"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::ROCK));
-				if (ImGui::MenuItem("Klein Bottle"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::KLEIN_BOTTLE));*/
-					
-				ImGui::EndMenu();
-			}
-			ImGui::Checkbox("Object Properties", &window_properties->enabled);
+			/*ImGui::Separator();*/
+			//if (ImGui::BeginMenu("3D Objects"))
+			//{
+			//	if (ImGui::MenuItem("Sphere"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::SPHERE));
+			//	if (ImGui::MenuItem("Cube"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::CUBE));
+			//	/*if (ImGui::MenuItem("Torus"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::TORUS));
+			//	if (ImGui::MenuItem("Octahedron"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::OCTAHEDRON));
+			//	if (ImGui::MenuItem("Dodecahedron"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::DODECAHEDRON));
+			//	if (ImGui::MenuItem("Icosahedron"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::ICOSAHEDRON));
+			//	if (ImGui::MenuItem("Rock"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::ROCK));
+			//	if (ImGui::MenuItem("Klein Bottle"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::KLEIN_BOTTLE));*/
+			//		
+			//	ImGui::EndMenu();
+			//}
+			
 			ImGui::EndMenu();
 		}
 
@@ -302,6 +275,7 @@ update_status ModuleGUI::CreateMainMenuBar()
 			ImGui::Checkbox("Console", &window_console->enabled);
 			ImGui::Checkbox("Project", &window_project->enabled);
 			ImGui::Checkbox("Hierarchy", &window_hierarchy->enabled);
+			ImGui::Checkbox("Object Properties", &window_properties->enabled);
 			ImGui::Checkbox("Demo Window", &demo);
 			ImGui::EndMenu();
 		}
