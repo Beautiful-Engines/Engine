@@ -33,6 +33,8 @@ public:
 	int GetFrameCount() const;
 	float GetRealDt() const;
 
+	Timer GetGameTimer();
+
 	float GetTimeSincePlay();
 
 	float GetRealTimeSinceStartup();
@@ -43,7 +45,9 @@ public:
 
 	void StartGameClock();
 
-	bool play = false, pause = false, saved = false;
+	void ChechState();
+
+	bool play = false, pause = false, saved = false, load = false;
 	
 	STATE state;
 

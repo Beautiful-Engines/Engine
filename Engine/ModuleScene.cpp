@@ -11,6 +11,7 @@
 #include "ComponentTexture.h"
 #include "ComponentMesh.h"
 #include "ComponentCamera.h"
+#include "ModuleTimeManager.h"
 #include "WindowHierarchy.h"
 #include "ModuleScene.h"
 
@@ -43,11 +44,7 @@ bool ModuleScene::Start()
 	CreateGrid();
 
 	GameObject *root = CreateGameObject("root");
-	GameObject *camara = CreateGameObject("camara");
-	ComponentCamera* cam = new ComponentCamera(camara);
-	camara->AddComponent(cam);
-	cam->frustum_culling = true;
-	cam->main_camera = true;
+	CreateCamera();
 	return true;
 }
 
@@ -58,6 +55,16 @@ update_status ModuleScene::PreUpdate(float dt)
 
 update_status ModuleScene::Update(float dt)
 {
+	if (App->timemanager->saved)
+	{
+		App->scene->SaveScene(true);
+		App->timemanager->saved = false;
+	}
+	if (App->timemanager->load)
+	{
+		App->scene->LoadScene(true);
+		App->timemanager->load = false;
+	}
 	if (App->renderer3D->grid)
 		DrawGrid();
 
@@ -278,43 +285,70 @@ void ModuleScene::FrustrumCulling()
 {
 	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
 	{
-		if (App->scene->GetGameObjects()[i]->GetCamera() != nullptr)
+		if (AnyCamera())
 		{
-			if (App->scene->GetGameObjects()[i]->GetCamera()->frustum_culling == true)
+			if (App->scene->GetGameObjects()[i]->GetCamera() != nullptr)
 			{
-				for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
+				if (App->scene->GetGameObjects()[i]->GetCamera()->frustum_culling == true)
 				{
-					if (App->scene->GetGameObjects()[j]->GetMesh())
+					for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
 					{
-						if (App->scene->GetGameObjects()[i]->GetCamera()->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
+						if (App->scene->GetGameObjects()[j]->GetMesh())
 						{
+							if (App->scene->GetGameObjects()[i]->GetCamera()->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
+							{
+								if (App->renderer3D->camera->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
+								{
+									App->scene->GetGameObjects()[j]->GetMesh()->draw = true;
+								}
+							}
+							else
+							{
+								App->scene->GetGameObjects()[j]->GetMesh()->draw = false;
+							}
+						}
+					}
+				}
+				else
+				{
+					for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
+					{
+						if (App->scene->GetGameObjects()[j]->GetMesh())
 							if (App->renderer3D->camera->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
 							{
 								App->scene->GetGameObjects()[j]->GetMesh()->draw = true;
 							}
-						}
-						else
-						{
-							App->scene->GetGameObjects()[j]->GetMesh()->draw = false;
-						}
 					}
 				}
 			}
-			else
-			{
-				for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
-				{
-					if (App->scene->GetGameObjects()[j]->GetMesh())
-						if (App->renderer3D->camera->frustum.Intersects(App->scene->GetGameObjects()[j]->abb))
-						{
-							App->scene->GetGameObjects()[j]->GetMesh()->draw = true;
-						}
-				}
-			}
+		}
+		else
+		{
+			CreateCamera();
+			LOG("You always need to have at least one camera in the scene!")
 		}
 	}
 }
 
+bool ModuleScene::AnyCamera()
+{
+	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
+	{
+		if (App->scene->GetGameObjects()[i]->GetCamera() != nullptr)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+void  ModuleScene::CreateCamera()
+{
+	GameObject *camara = CreateGameObject("camara");
+	ComponentCamera* cam = new ComponentCamera(camara);
+	camara->AddComponent(cam);
+	cam->frustum_culling = true;
+	cam->main_camera = true;
+}
 GameObject* ModuleScene::ChangeNameByQuantities(GameObject* _game_object)
 {
 	uint cont = 1;

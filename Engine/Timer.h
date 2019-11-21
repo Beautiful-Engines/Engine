@@ -16,6 +16,8 @@ public:
 
 	void Pause();
 
+	void SetRunning(bool runn);
+
 	Uint32 Read();
 	Uint32 ReadSec();
 

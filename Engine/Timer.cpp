@@ -19,9 +19,7 @@ void Timer::Start()
 	if (!paused)
 		started_at = SDL_GetTicks();
 	else
-	{
 		started_at += SDL_GetTicks() - stopped_at;
-	}
 
 	paused = false;
 }
@@ -44,23 +42,15 @@ void Timer::Pause()
 Uint32 Timer::Read()
 {
 	if (running == true)
-	{
 		return SDL_GetTicks() - started_at;
-	}
 	else
-	{
 		return stopped_at - started_at;
-	}
 }
 
 Uint32 Timer::ReadSec()
 {
 	if (running == true)
-	{
 		return (SDL_GetTicks() - started_at) / 1000;
-	}
 	else
-	{
 		return (stopped_at - started_at) / 1000;
-	}
 }

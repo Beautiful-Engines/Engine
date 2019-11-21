@@ -32,6 +32,17 @@ WindowScene::~WindowScene()
 {
 }
 
+void WindowScene::GetSizeWithAspectRatio(int current_width, int current_height)
+{
+	float scale_height = (float)h / (float)current_height;
+	float scale_width = (float)w / (float)current_width;
+
+	float scale = (std::min)(scale_height, scale_width);
+
+	w = current_width * scale;
+	h = current_height * scale;
+}
+
 bool WindowScene::Draw()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -65,7 +76,7 @@ bool WindowScene::Draw()
 		DrawGuizmo();
 	}
 	ImGui::End();
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !ImGuizmo::IsOver())
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !ImGuizmo::IsOver() && IsInside({ (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() }))
 	{
 		float2 mousePos = { ((float)App->input->GetMouseX()-(screen_pos.x+w/2)), ((float)App->input->GetMouseY()-(screen_pos.y+h/2)) };
 		mousePos = { mousePos.x / w * 2, -mousePos.y / h * 2 };
@@ -78,24 +89,10 @@ bool WindowScene::Draw()
 	return true;
 }
 
-void WindowScene::Start()
-{
-}
-
 bool WindowScene::IsInside(const float2 & pos) const
 {
-	return false;
-}
-
-void WindowScene::GetSizeWithAspectRatio(int current_width, int current_height)
-{
-	float scale_height = (float)h / (float)current_height;
-	float scale_width = (float)w / (float)current_width;
-
-	float scale = (std::min)(scale_height, scale_width);
-
-	w = current_width * scale;
-	h = current_height * scale;
+	AABB2D box(float2(screen_pos.x, screen_pos.y), float2(screen_pos.x + w, screen_pos.y + h));
+	return math::Contains(box, float3(pos.x, pos.y, 0));
 }
 
 void WindowScene::TransformInputs()

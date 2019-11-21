@@ -34,6 +34,10 @@ public:
 
 	void FrustrumCulling();
 
+	bool AnyCamera();
+
+	void CreateCamera();
+
 	GameObject* ChangeNameByQuantities(GameObject* _game_object);
 
 	void MouseClicking(const LineSegment & segment);

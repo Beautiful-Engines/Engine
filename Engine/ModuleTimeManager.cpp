@@ -37,6 +37,7 @@ void ModuleTimeManager::PrepareUpdate()
 		break;
 	case WANTS_EDITOR:
 		LOG("EDITOR");
+		StartGameClock();
 		StopGameClock();
 		game_dt = 0.0f;
 		state = EDITOR;
@@ -97,4 +98,22 @@ void ModuleTimeManager::StopGameClock()
 void ModuleTimeManager::StartGameClock()
 {
 	game_time.Start();
+}
+void  ModuleTimeManager::ChechState()
+{
+	if (App->timemanager->play)
+		App->timemanager->state = WANTS_PLAY;
+	else
+	{
+		App->timemanager->state = WANTS_EDITOR;
+		load = true;
+	}
+
+	if (pause)
+		state = WANTS_PAUSE;
+	else if (!play)
+		state = WANTS_EDITOR;
+
+	if (pause && !play)
+		state = WANTS_EDITOR;
 }

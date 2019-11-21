@@ -18,7 +18,6 @@ public:
 	ImGuizmo::MODE guizmo_mode;
 
 	bool Draw();
-	void Start();
 	bool IsInside(const float2& pos) const;
 	void GetSizeWithAspectRatio(int current_width, int current_height);
 	void TransformInputs();

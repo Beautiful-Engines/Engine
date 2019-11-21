@@ -312,14 +312,18 @@ update_status ModuleGUI::CreateMainMenuBar()
 			ImGui::EndMenu();
 		}
 		if (ImGui::Checkbox("Play", &App->timemanager->play))
-			if(App->timemanager->play)
-			App->timemanager->state = WANTS_PLAY;
+			App->timemanager->ChechState();
+			/*if (App->timemanager->play)
+				App->timemanager->state = WANTS_PLAY;
 			else
-			App->timemanager->state = WANTS_EDITOR;
+			App->timemanager->state = WANTS_EDITOR;*/
 
 		if (ImGui::Checkbox("Pause", &App->timemanager->pause))
-			if(App->timemanager->pause)
-			App->timemanager->state = WANTS_PAUSE;
+			App->timemanager->ChechState();
+			//if (App->timemanager->pause)
+			//	App->timemanager->state = WANTS_PAUSE;
+			//else if (!App->timemanager->play)
+			//	App->timemanager->state = WANTS_EDITOR;
 
 		ImGui::Text("Game Timer:"); ImGui::SameLine();
 		ImGui::TextColored({ 255, 255, 0, 255 }, "%f", App->timemanager->GetTimeSincePlay()); ImGui::SameLine();
