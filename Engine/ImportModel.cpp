@@ -139,12 +139,24 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 	resource_node.position = float3(translation.x, translation.y, translation.z);
 	resource_node.scale = float3(scaling.x, scaling.y, scaling.z);
 	resource_node.rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
-	if (resource_node.scale.x > 1000)
+	if (resource_node.scale.x >= 1000)
 		resource_node.scale.x /= 1000;
-	if (resource_node.scale.x > 100)
+	if (resource_node.scale.x >= 100)
 		resource_node.scale.x /= 100;
-	if (resource_node.scale.x > 10)
+	if (resource_node.scale.x >= 10)
 		resource_node.scale.x /= 10;
+	if (resource_node.scale.y >= 1000)
+		resource_node.scale.y /= 1000;
+	if (resource_node.scale.y >= 100)
+		resource_node.scale.y /= 100;
+	if (resource_node.scale.y >= 10)
+		resource_node.scale.y /= 10;
+	if (resource_node.scale.z >= 1000)
+		resource_node.scale.z /= 1000;
+	if (resource_node.scale.z >= 100)
+		resource_node.scale.z /= 100;
+	if (resource_node.scale.z >= 10)
+		resource_node.scale.z /= 10;
 
 	// Mesh
 	if (_node->mNumMeshes > 0)
