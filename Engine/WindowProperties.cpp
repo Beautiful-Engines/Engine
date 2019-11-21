@@ -75,22 +75,17 @@ bool WindowProperties::Draw()
 			if (ImGui::Button("Delete", { 100,20 }))
 				App->scene->DeleteGameObject(go);
 			ImGui::Checkbox("Hide", &go->hide);
-			ImGui::Checkbox("Static", &go->is_static);
-			if (go->is_static)
-			{
-				go->SetStatic(true);
-				App->scene->CreateQuadtree();
-			}
-			else
-			{
-				go->SetStatic(false);
-				App->scene->CreateQuadtree();
-			}
-
 			if (go->hide)
 				go->Disable();
 			else
 				go->Enable();
+
+			if (ImGui::Checkbox("Static", &go->is_static))
+			{
+				go->SetStatic(go->is_static);
+				App->scene->CreateQuadtree();
+			}
+				
 
 			if (ImGui::CollapsingHeader("Transform"))
 			{
