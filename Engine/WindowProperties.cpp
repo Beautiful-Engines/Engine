@@ -90,19 +90,25 @@ bool WindowProperties::Draw()
 			if (ImGui::CollapsingHeader("Transform"))
 			{
 				float* p = (float*)&trans->local_position;
-				if (ImGui::InputFloat3("Position", p, 2))
+				if (!go->is_static)
 				{
-					go->GetTransform()->SetLocalPosition((float3)p);
+					if (ImGui::InputFloat3("Position", p, 2))
+					{
+						go->GetTransform()->SetLocalPosition((float3)p);
+					}
 				}
+				else
+					ImGui::InputFloat3("Position", p, 1);
 				
 
 				float* r = (float*)&go->GetTransform()->GetLocalRotationToEuler();
-				if(ImGui::InputFloat3("Rotation", r, 2)) {
+				if(ImGui::InputFloat3("Rotation", r, 2) && !go->is_static) 
+				{
 					go->GetTransform()->SetLocalRotationFromEuler((float3)r);
-				};
+				}
 
 				float* s = (float*)&trans->local_scale;
-				if (ImGui::InputFloat3("Scale", s, 2))
+				if (ImGui::InputFloat3("Scale", s, 2) && !go->is_static)
 				{
 					go->GetTransform()->SetLocalScale((float3)s);
 				}

@@ -256,7 +256,7 @@ ComponentMesh * GameObject::GetMesh()
 {
 	for (uint i = 0; i < this->GetComponents().size(); ++i)
 	{
-		if (this->GetComponents()[i]->GetType() == ComponentType::MESH)
+		if (this->GetComponents()[i] != nullptr && this->GetComponents()[i]->GetType() == ComponentType::MESH)
 		{
 			return (ComponentMesh*)this->GetComponents()[i];
 		}

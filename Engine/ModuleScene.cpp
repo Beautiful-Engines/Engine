@@ -366,7 +366,8 @@ void ModuleScene::FrustrumCulling()
 					}
 					for (int i = 0; i < objects_hit.size(); ++i)
 					{
-						objects_hit[i]->GetMesh()->draw = true;
+						if (objects_hit[i]->GetMesh() != nullptr)
+							objects_hit[i]->GetMesh()->draw = true;
 					}
 				}
 			}

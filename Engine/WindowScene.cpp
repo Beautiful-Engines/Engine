@@ -122,7 +122,7 @@ void WindowScene::DrawGuizmo()
 	ImGuizmo::SetDrawlist();
 	ImGuizmo::Manipulate((const float*)&view,(const float*)&projection,guizmo_operation,guizmo_mode,(float*)&transform,(float*)&delta);
 
-	if (ImGuizmo::IsUsing())
+	if (ImGuizmo::IsUsing() && !App->scene->GetSelected()->is_static)
 	{
 		App->scene->GetSelected()->GetTransform()->SetTransformMatrix(transform.Transposed());
 	}
