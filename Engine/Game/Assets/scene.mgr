@@ -51,7 +51,7 @@
             "Enable": true,
             "Name": "root",
             "ParentUID": 0,
-            "UID": 1994599107
+            "UID": 2156124610
         },
         {
             "Components": [
@@ -69,7 +69,7 @@
                     "local_position": [
                         0.0,
                         0.0,
-                        -5.4311418533325195
+                        -19.452720642089844
                     ],
                     "local_rotation": [
                         0.0,
@@ -85,7 +85,7 @@
                     "position": [
                         0.0,
                         0.0,
-                        -5.4311418533325195
+                        -19.452720642089844
                     ],
                     "rotation": [
                         0.0,
@@ -110,8 +110,8 @@
             ],
             "Enable": true,
             "Name": "camara_1",
-            "ParentUID": 1994599107,
-            "UID": 3886314853
+            "ParentUID": 2156124610,
+            "UID": 1435363567
         },
         {
             "Components": [
@@ -128,7 +128,7 @@
                     ],
                     "local_position": [
                         0.0,
-                        0.10830956697463989,
+                        0.0,
                         0.0
                     ],
                     "local_rotation": [
@@ -144,7 +144,7 @@
                     ],
                     "position": [
                         0.0,
-                        0.10830956697463989,
+                        0.0,
                         0.0
                     ],
                     "rotation": [
@@ -162,9 +162,9 @@
                 }
             ],
             "Enable": true,
-            "Name": "Assets/bakerhouse (1).fbx_1",
-            "ParentUID": 1994599107,
-            "UID": 4098869293
+            "Name": "GameObject_1",
+            "ParentUID": 2156124610,
+            "UID": 2373208198
         },
         {
             "Components": [
@@ -185,10 +185,10 @@
                         0.0
                     ],
                     "local_rotation": [
-                        -0.7071068286895752,
                         0.0,
                         0.0,
-                        0.7071067094802856
+                        0.0,
+                        1.0
                     ],
                     "local_scale": [
                         1.0,
@@ -197,14 +197,650 @@
                     ],
                     "position": [
                         0.0,
-                        0.10830956697463989,
+                        0.0,
                         0.0
                     ],
                     "rotation": [
-                        -0.7071068286895752,
                         0.0,
                         0.0,
-                        0.7071067094802856
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "GameObject_2",
+            "ParentUID": 2373208198,
+            "UID": 2149976073
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "GameObject_3",
+            "ParentUID": 2149976073,
+            "UID": 314959560
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "GameObject_5",
+            "ParentUID": 2149976073,
+            "UID": 3801487852
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "GameObject_4",
+            "ParentUID": 2156124610,
+            "UID": 2240777934
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Assets/street environment_v01.fbx_1",
+            "ParentUID": 2156124610,
+            "UID": 2295530552
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        18.153732299804688,
+                        0.0,
+                        58.96091079711914
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        18.153732299804688,
+                        0.0,
+                        58.96091079711914
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Sky001_$AssimpFbx$_Translation_1",
+            "ParentUID": 2295530552,
+            "UID": 3042811058
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        -0.7071067690849304,
+                        0.0,
+                        0.0,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        18.153732299804688,
+                        0.0,
+                        58.96091079711914
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Sky001_$AssimpFbx$_PreRotation_1",
+            "ParentUID": 3042811058,
+            "UID": 1103195816
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        -0.7071067690849304,
+                        0.0,
+                        0.0,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        18.153732299804688,
+                        0.0,
+                        58.96091079711914
+                    ],
+                    "rotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        -5.960464477539063e-08
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999998807907104,
+                        0.9999998807907104
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Sky001_$AssimpFbx$_PostRotation_1",
+            "ParentUID": 1103195816,
+            "UID": 2950469821
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        18.153732299804688,
+                        0.0,
+                        58.96091079711914
+                    ],
+                    "rotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        -5.960464477539063e-08
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999998807907104,
+                        0.9999998807907104
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Sky001_1",
+            "ParentUID": 2950469821,
+            "UID": 2392233299
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        -0.7071067690849304,
+                        0.0,
+                        0.0,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Dummy001_$AssimpFbx$_PreRotation_1",
+            "ParentUID": 2295530552,
+            "UID": 2771368957
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Dummy001_$AssimpFbx$_Rotation_1",
+            "ParentUID": 2771368957,
+            "UID": 35015819
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Dummy001_1",
+            "ParentUID": 35015819,
+            "UID": 388342675
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -41.47589111328125,
+                        21.01409912109375,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -41.47589111328125,
+                        1.2525379133876413e-06,
+                        -21.014097213745117
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
                     ],
                     "scale": [
                         1.0,
@@ -216,23 +852,2048 @@
                 {
                     "debug_bb": true,
                     "face_normals": false,
-                    "resource_mesh": 101920629,
+                    "resource_mesh": 3941708247,
                     "textures": true,
                     "type": 0,
                     "vertex_normals": false
                 },
                 {
                     "checkered": false,
-                    "default_texture": 135267258,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 2017781041,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_004_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1513182839
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        17.707164764404297,
+                        20.05327606201172,
+                        2.121072952832037e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        17.707164764404297,
+                        1.4073756346988375e-06,
+                        -20.053274154663086
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 1184030320,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 254139814,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_001_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1746569753
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        16.0104923248291,
+                        37.4932861328125,
+                        -1.5106878663573298e-06
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        16.0104923248291,
+                        7.240862487378763e-07,
+                        -37.493282318115234
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 147572660,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 564516447,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_007_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1690799643
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        40.97999572753906,
+                        18.270824432373047,
+                        -2.0522466002148576e-06
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        40.97999572753906,
+                        -9.632203727960587e-07,
+                        -18.270822525024414
+                    ],
+                    "rotation": [
+                        -0.5,
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 4021998369,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 2454373955,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_008_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 4006971169
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -2.1597719192504883,
+                        1.8538382053375244,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        -0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -2.1597719192504883,
+                        1.1049736770019081e-07,
+                        -1.8538380861282349
+                    ],
+                    "rotation": [
+                        -0.5,
+                        -0.5,
+                        -0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 588083942,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
                     "enabled": true,
                     "texture": 0,
                     "type": 1
                 }
             ],
             "Enable": true,
-            "Name": "Chimney_mesh_1",
-            "ParentUID": 4098869293,
-            "UID": 3114567681
+            "Name": "Line002_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 3502656285
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -0.02860260009765625,
+                        0.026032090187072754,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        0.9966352581977844,
+                        0.9706164598464966,
+                        0.9966352581977844
+                    ],
+                    "position": [
+                        -0.02860260009765625,
+                        1.5516334883614036e-09,
+                        -0.026032088324427605
+                    ],
+                    "rotation": [
+                        -0.7071067690849304,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        0.9966352581977844,
+                        0.9706164002418518,
+                        0.9966351985931396
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 4128092098,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 0,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "Plane001_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1653730685
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        25.154010772705078,
+                        -39.15372085571289,
+                        8.553864176974457e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        25.154010772705078,
+                        -1.4783572623855434e-06,
+                        39.153717041015625
+                    ],
+                    "rotation": [
+                        -0.5,
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 1851673183,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 2595641392,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_010_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 3038809272
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        30.134540557861328,
+                        37.4932861328125,
+                        -1.5106878663573298e-06
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        30.134540557861328,
+                        7.240862487378763e-07,
+                        -37.493282318115234
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 2288982307,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 564516447,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_011_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1597072673
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -42.288055419921875,
+                        33.201576232910156,
+                        5.014607040720875e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -42.288055419921875,
+                        2.4804287477309117e-06,
+                        -33.20157241821289
+                    ],
+                    "rotation": [
+                        -0.5,
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 3937697556,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 3716385139,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_013_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 761386507
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -19.439706802368164,
+                        32.061729431152344,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        -4.371138828673793e-08
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -19.439706802368164,
+                        1.9110279936285224e-06,
+                        -32.06172561645508
+                    ],
+                    "rotation": [
+                        3.0908619663705394e-08,
+                        0.7071068286895752,
+                        0.7071068286895752,
+                        -3.090862676913275e-08
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 492628256,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 2017781041,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_014_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 2462779608
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        34.270423889160156,
+                        -41.972747802734375,
+                        8.553864176974457e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        -4.371138828673793e-08
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        34.270423889160156,
+                        -1.646384362175013e-06,
+                        41.97274398803711
+                    ],
+                    "rotation": [
+                        3.0908619663705394e-08,
+                        0.7071068286895752,
+                        0.7071068286895752,
+                        -3.090862676913275e-08
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 1886186838,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 2595641392,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_016_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 2456274460
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        44.26008224487305,
+                        -39.15372085571289,
+                        8.553864176974457e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        44.26008224487305,
+                        -1.4783572623855434e-06,
+                        39.153717041015625
+                    ],
+                    "rotation": [
+                        -0.5,
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 50196738,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 2595641392,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_017_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 3414566849
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -20.831323623657227,
+                        -27.426488876342773,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.9470718370939721e-07
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -20.831323623657227,
+                        -1.6347461269106134e-06,
+                        27.42648696899414
+                    ],
+                    "rotation": [
+                        -1.376787679419067e-07,
+                        0.7071068286895752,
+                        0.7071068286895752,
+                        1.3767881057447084e-07
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 1447749385,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 1987283583,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_022_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1293427934
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        42.13064193725586,
+                        37.4932861328125,
+                        -1.5106878663573298e-06
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        42.13064193725586,
+                        7.240862487378763e-07,
+                        -37.493282318115234
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 1612516722,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 564516447,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_023_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 2683880940
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -20.572771072387695,
+                        43.060829162597656,
+                        -0.06919445842504501
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        4.371138828673793e-08
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -20.572771072387695,
+                        -0.06919188797473907,
+                        -43.06082534790039
+                    ],
+                    "rotation": [
+                        -3.0908619663705394e-08,
+                        0.7071068286895752,
+                        0.7071068286895752,
+                        3.090862676913275e-08
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 3232240504,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 2454373955,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_024_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 4229555903
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        31.51188850402832,
+                        -16.446016311645508,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        4.371138828673793e-08
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        31.51188850402832,
+                        -9.802589602259104e-07,
+                        16.446014404296875
+                    ],
+                    "rotation": [
+                        -3.0908619663705394e-08,
+                        0.7071068286895752,
+                        0.7071068286895752,
+                        3.090862676913275e-08
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 1145830927,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 1987283583,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_026_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 651046974
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        13.38798999786377,
+                        -33.75503921508789,
+                        -9.383451811117993e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        13.38798999786377,
+                        -2.950302132376237e-06,
+                        33.755035400390625
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 1683472718,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 3160808638,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_028_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1587059503
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -2.5033531188964844,
+                        15.800846099853516,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -2.5033531188964844,
+                        9.418038189323852e-07,
+                        -15.8008451461792
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 249264893,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 0,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "Object010_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 3435870352
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -42.8072395324707,
+                        -41.83556365966797,
+                        -9.383451811117993e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        -0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -42.8072395324707,
+                        -3.4319391488679685e-06,
+                        41.8355598449707
+                    ],
+                    "rotation": [
+                        -0.5,
+                        -0.5,
+                        -0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 2268907522,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 3160808638,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_030_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1661379374
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -34.679481506347656,
+                        -41.83556365966797,
+                        -9.383451811117993e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        -0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -34.679481506347656,
+                        -3.4319391488679685e-06,
+                        41.8355598449707
+                    ],
+                    "rotation": [
+                        -0.5,
+                        -0.5,
+                        -0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 2137251008,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 3160808638,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_031_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 344205791
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -29.478403091430664,
+                        21.01409912109375,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -29.478403091430664,
+                        1.2525379133876413e-06,
+                        -21.014097213745117
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 2914705112,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 2017781041,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_032_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 959409878
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -32.36149597167969,
+                        42.37042236328125,
+                        5.014607040720875e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -32.36149597167969,
+                        3.0269345643318957e-06,
+                        -42.370418548583984
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 3501872307,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 3716385139,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_033_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 2390173323
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        16.049516677856445,
+                        -16.696884155273438,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        -0.7071068286895752,
+                        0.7071067094802856
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        16.049516677856445,
+                        -9.952118489309214e-07,
+                        16.696882247924805
+                    ],
+                    "rotation": [
+                        0.5,
+                        0.5000000596046448,
+                        0.5000001192092896,
+                        -0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 948388538,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 1987283583,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_034_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 4126108556
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        13.38798999786377,
+                        -40.80251693725586,
+                        -9.383451811117993e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        13.38798999786377,
+                        -3.3703645385685377e-06,
+                        40.802513122558594
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 4184082183,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 3160808638,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_035_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 3714404353
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -31.216331481933594,
+                        33.201576232910156,
+                        5.014607040720875e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        -0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -31.216331481933594,
+                        2.4804287477309117e-06,
+                        -33.20157241821289
+                    ],
+                    "rotation": [
+                        -0.5,
+                        -0.5,
+                        -0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 3336380503,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 3716385139,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_036_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1905846392
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -20.31769371032715,
+                        -16.16360855102539,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.9470718370939721e-07
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -20.31769371032715,
+                        -9.634261459723348e-07,
+                        16.163606643676758
+                    ],
+                    "rotation": [
+                        -1.376787679419067e-07,
+                        0.7071068286895752,
+                        0.7071068286895752,
+                        1.3767881057447084e-07
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 742523875,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 1987283583,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_037_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1616308180
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -41.64900207519531,
+                        -16.495393753051758,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        -0.7071068286895752,
+                        0.7071067094802856
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -41.64900207519531,
+                        -9.832020850808476e-07,
+                        16.495391845703125
+                    ],
+                    "rotation": [
+                        0.5,
+                        0.5000000596046448,
+                        0.5000001192092896,
+                        -0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 4056244186,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 1987283583,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_038_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 4140178769
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -42.8072395324707,
+                        -30.643888473510742,
+                        -9.383451811117993e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        -0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -42.8072395324707,
+                        -2.7648632112686755e-06,
+                        30.64388656616211
+                    ],
+                    "rotation": [
+                        -0.5,
+                        -0.5,
+                        -0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 3915460798,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 3160808638,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_039_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1633366941
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -34.679481506347656,
+                        -30.643888473510742,
+                        -9.383451811117993e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        -0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -34.679481506347656,
+                        -2.7648632112686755e-06,
+                        30.64388656616211
+                    ],
+                    "rotation": [
+                        -0.5,
+                        -0.5,
+                        -0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 197260821,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 3160808638,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_040_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 2365969705
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        30.69527816772461,
+                        21.612646102905273,
+                        2.121072952832037e-07
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.7071067690849304,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        30.69527816772461,
+                        1.5003213320596842e-06,
+                        -21.61264419555664
+                    ],
+                    "rotation": [
+                        -0.5,
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                },
+                {
+                    "debug_bb": true,
+                    "face_normals": false,
+                    "resource_mesh": 3318163605,
+                    "textures": true,
+                    "type": 0,
+                    "vertex_normals": false
+                },
+                {
+                    "checkered": false,
+                    "default_texture": 1188892313,
+                    "enabled": true,
+                    "texture": 254139814,
+                    "type": 1
+                }
+            ],
+            "Enable": true,
+            "Name": "City_building_041_mesh_1",
+            "ParentUID": 388342675,
+            "UID": 1444570187
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -78.31243133544922,
+                        45.251216888427734,
+                        -97.03111267089844
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -78.31243133544922,
+                        45.251216888427734,
+                        -97.03111267089844
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Camera001_$AssimpFbx$_Translation_1",
+            "ParentUID": 2295530552,
+            "UID": 2681359554
         },
         {
             "Components": [
@@ -253,7 +2914,749 @@
                         0.0
                     ],
                     "local_rotation": [
-                        -0.7071068286895752,
+                        -0.7071067690849304,
+                        0.0,
+                        0.0,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -78.31243133544922,
+                        45.251216888427734,
+                        -97.03111267089844
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Camera001_$AssimpFbx$_PreRotation_1",
+            "ParentUID": 2681359554,
+            "UID": 2023091776
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        -0.19855600595474243,
+                        0.5607047080993652,
+                        0.7577487230300903,
+                        -0.26833298802375793
+                    ],
+                    "local_scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "position": [
+                        -78.31243133544922,
+                        45.251216888427734,
+                        -97.03111267089844
+                    ],
+                    "rotation": [
+                        0.04933977127075195,
+                        0.9322873950004578,
+                        0.1393311768770218,
+                        -0.3301403522491455
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999998211860657,
+                        0.9999998211860657
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Camera001_$AssimpFbx$_Rotation_1",
+            "ParentUID": 2023091776,
+            "UID": 3288590011
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -78.31243133544922,
+                        45.251216888427734,
+                        -97.03111267089844
+                    ],
+                    "rotation": [
+                        0.04933977127075195,
+                        0.9322873950004578,
+                        0.1393311768770218,
+                        -0.3301403522491455
+                    ],
+                    "scale": [
+                        0.9999998807907104,
+                        0.9999998211860657,
+                        0.9999998211860657
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Camera001_1",
+            "ParentUID": 3288590011,
+            "UID": 4168138536
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -28.13262176513672,
+                        20.873329162597656,
+                        -35.064212799072266
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -28.13262176513672,
+                        20.873329162597656,
+                        -35.064212799072266
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Camera001.Target_$AssimpFbx$_Translation_1",
+            "ParentUID": 2295530552,
+            "UID": 3959311396
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        -0.7071067690849304,
+                        0.0,
+                        0.0,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -28.13262176513672,
+                        20.873329162597656,
+                        -35.064212799072266
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Camera001.Target_$AssimpFbx$_PreRotation_1",
+            "ParentUID": 3959311396,
+            "UID": 1221771598
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        -0.1985560655593872,
+                        0.5607047080993652,
+                        0.7577487230300903,
+                        -0.2683330476284027
+                    ],
+                    "local_scale": [
+                        1.0,
+                        0.9999999403953552,
+                        1.0
+                    ],
+                    "position": [
+                        -28.13262176513672,
+                        20.873329162597656,
+                        -35.064212799072266
+                    ],
+                    "rotation": [
+                        0.049339767545461655,
+                        0.932287335395813,
+                        0.1393311768770218,
+                        -0.33014050126075745
+                    ],
+                    "scale": [
+                        0.9999999403953552,
+                        0.9999998807907104,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Camera001.Target_$AssimpFbx$_Rotation_1",
+            "ParentUID": 1221771598,
+            "UID": 3621379403
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -28.13262176513672,
+                        20.873329162597656,
+                        -35.064212799072266
+                    ],
+                    "rotation": [
+                        0.049339767545461655,
+                        0.932287335395813,
+                        0.1393311768770218,
+                        -0.33014050126075745
+                    ],
+                    "scale": [
+                        0.9999999403953552,
+                        0.9999998807907104,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Camera001.Target_1",
+            "ParentUID": 3621379403,
+            "UID": 4142784019
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        -66.72126770019531,
+                        141.9341278076172,
+                        6.204137662280118e-06
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -66.72126770019531,
+                        141.9341278076172,
+                        6.204137662280118e-06
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Spot001_$AssimpFbx$_Translation_1",
+            "ParentUID": 2295530552,
+            "UID": 2985916270
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        -0.7071067690849304,
+                        0.0,
+                        0.0,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -66.72126770019531,
+                        141.9341278076172,
+                        6.204137662280118e-06
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Spot001_$AssimpFbx$_PreRotation_1",
+            "ParentUID": 2985916270,
+            "UID": 3376196452
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.15443940460681915,
+                        -0.15443937480449677,
+                        -0.6900351047515869,
+                        0.6900351643562317
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -66.72126770019531,
+                        141.9341278076172,
+                        6.204137662280118e-06
+                    ],
+                    "rotation": [
+                        -0.3787233829498291,
+                        -0.5971336960792542,
+                        -0.3787234425544739,
+                        0.5971336960792542
+                    ],
+                    "scale": [
+                        0.9999999403953552,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Spot001_$AssimpFbx$_Rotation_1",
+            "ParentUID": 3376196452,
+            "UID": 3810359380
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        -0.7071067690849304,
+                        0.0,
+                        0.0,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -66.72126770019531,
+                        141.9341278076172,
+                        6.204137662280118e-06
+                    ],
+                    "rotation": [
+                        0.6900351047515869,
+                        0.15443938970565796,
+                        0.6900351643562317,
+                        -0.15443943440914154
+                    ],
+                    "scale": [
+                        0.9999999403953552,
+                        0.9999998807907104,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Spot001_$AssimpFbx$_PostRotation_1",
+            "ParentUID": 3810359380,
+            "UID": 4074766545
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        -66.72126770019531,
+                        141.9341278076172,
+                        6.204137662280118e-06
+                    ],
+                    "rotation": [
+                        0.6900351047515869,
+                        0.15443938970565796,
+                        0.6900351643562317,
+                        -0.15443943440914154
+                    ],
+                    "scale": [
+                        0.9999999403953552,
+                        0.9999998807907104,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Spot001_1",
+            "ParentUID": 4074766545,
+            "UID": 2624011408
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        28.890945434570313,
+                        -60.96388244628906,
+                        -2.6648158382158726e-06
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        28.890945434570313,
+                        -60.96388244628906,
+                        -2.6648158382158726e-06
+                    ],
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Spot001.Target_$AssimpFbx$_Translation_1",
+            "ParentUID": 2295530552,
+            "UID": 42828439
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        -0.7071067690849304,
+                        0.0,
+                        0.0,
+                        0.7071067690849304
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        28.890945434570313,
+                        -60.96388244628906,
+                        -2.6648158382158726e-06
+                    ],
+                    "rotation": [
+                        -0.7071067094802856,
+                        0.0,
+                        0.0,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999999403953552,
+                        0.9999999403953552
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Spot001.Target_$AssimpFbx$_PreRotation_1",
+            "ParentUID": 42828439,
+            "UID": 557484454
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.7071068286895752,
                         0.0,
                         0.0,
                         0.7071067094802856
@@ -264,43 +3667,81 @@
                         1.0
                     ],
                     "position": [
-                        0.0,
-                        0.10830956697463989,
-                        0.0
+                        28.890945434570313,
+                        -60.96388244628906,
+                        -2.6648158382158726e-06
                     ],
                     "rotation": [
-                        -0.7071068286895752,
+                        8.940696716308594e-08,
                         0.0,
                         0.0,
-                        0.7071067094802856
+                        1.0
                     ],
                     "scale": [
                         1.0,
-                        0.9999999403953552,
-                        0.9999999403953552
+                        0.9999998807907104,
+                        0.9999998807907104
                     ],
                     "type": 2
-                },
-                {
-                    "debug_bb": true,
-                    "face_normals": false,
-                    "resource_mesh": 90559710,
-                    "textures": true,
-                    "type": 0,
-                    "vertex_normals": false
-                },
-                {
-                    "checkered": false,
-                    "default_texture": 135267258,
-                    "enabled": true,
-                    "texture": 0,
-                    "type": 1
                 }
             ],
             "Enable": true,
-            "Name": "Baker_house_mesh_1",
-            "ParentUID": 4098869293,
-            "UID": 2506713586
+            "Name": "Spot001.Target_$AssimpFbx$_Rotation_1",
+            "ParentUID": 557484454,
+            "UID": 753962235
+        },
+        {
+            "Components": [
+                {
+                    "euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_euler": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "local_rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "local_scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "position": [
+                        28.890945434570313,
+                        -60.96388244628906,
+                        -2.6648158382158726e-06
+                    ],
+                    "rotation": [
+                        8.940696716308594e-08,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999998807907104,
+                        0.9999998807907104
+                    ],
+                    "type": 2
+                }
+            ],
+            "Enable": true,
+            "Name": "Spot001.Target_1",
+            "ParentUID": 753962235,
+            "UID": 608134886
         }
     ]
 }

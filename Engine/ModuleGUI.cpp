@@ -231,43 +231,16 @@ update_status ModuleGUI::CreateMainMenuBar()
 		{
 			if (ImGui::MenuItem("Create Empty"))
 			{
-				uint count = 1;
-				std::string name = "GameObject";
-				std::string namecount = name + std::to_string(count);
-				for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
-				{
-					if (App->scene->GetGameObjects()[i] != nullptr && App->scene->GetGameObjects()[i]->GetName() == namecount)
-					{
-						count++;
-						namecount = name + std::to_string(count);
-						i = 0;
-					}
-				}
-				App->scene->CreateGameObject(namecount);
+				App->scene->CreateGameObject("GameObject");
 			}
 
 			if (ImGui::MenuItem("Create Empty Child"))
 			{
 				if (App->scene->GetSelected() != nullptr)
 				{
-					uint count = 1;
-					std::string name = "GameObject";
-					std::string namecount = name + std::to_string(count);
-					for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
-					{
-						if (App->scene->GetGameObjects()[i] != nullptr && App->scene->GetGameObjects()[i]->GetName() == namecount)
-						{
-							count++;
-							namecount = name + std::to_string(count);
-							i = 0;
-						}
-					}
-					GameObject *gameobject_child = new GameObject();
-					gameobject_child->SetName(namecount);
+					GameObject *gameobject_child = App->scene->CreateGameObject("GameObject");
 					gameobject_child->SetParent(App->scene->GetSelected());
-					App->scene->AddGameObject(gameobject_child);
 				}
-				
 			}
 				
 			/*ImGui::Separator();*/

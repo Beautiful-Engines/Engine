@@ -181,6 +181,10 @@ void GameObject::SetIdNodeParent(uint _id_node_parent)
 
 void GameObject::SetParent(GameObject* _game_object)
 {
+	if (parent != nullptr)
+	{
+		parent->DeleteChild(this);
+	}
 	parent = _game_object;
 	_game_object->children.push_back(this);
 }
