@@ -37,15 +37,25 @@ bool WindowHierarchy::Draw()
 
 void WindowHierarchy::DrawNode(GameObject * go)
 {
-	static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+	static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 	static int selection_mask = (1 << 2);
 	node_clicked = -1;
 	select_iterator++;
 
 	ImGuiTreeNodeFlags node_flags = base_flags;
-	const bool is_selected = (selection_mask & (1 << select_iterator)) != 0;
-	if (is_selected)
-		node_flags |= ImGuiTreeNodeFlags_Selected;
+	//const bool is_selected = (selection_mask & (1 << select_iterator)) != 0;
+	if (App->scene->GetSelected()/*is_selected*/)
+	{
+		if (App->scene->GetSelected() == go)
+		{
+			node_flags |= ImGuiTreeNodeFlags_Selected;
+		}
+		if (go->GetChildren().size() > 0)
+		{
+			if (go->IsChild(App->scene->GetSelected()))
+				ImGui::SetNextTreeNodeOpen(true);
+		}
+	}
 	if (go->GetChildren().size() > 0)
 	{
 		bool node_open = ImGui::TreeNodeEx(go->GetName().c_str(), node_flags);
@@ -53,9 +63,10 @@ void WindowHierarchy::DrawNode(GameObject * go)
 		DragAndDrop(go);
 
 		if (ImGui::IsItemClicked()) {
-			node_clicked = select_iterator;
 			App->scene->SetSelected(go);
 			App->scene->ChangeSelected(go);
+			node_flags |= ImGuiTreeNodeFlags_Selected;
+			node_clicked = select_iterator;
 		}
 		if (node_open) {
 			for (int i = 0; i < go->GetChildren().size(); i++)
@@ -67,12 +78,15 @@ void WindowHierarchy::DrawNode(GameObject * go)
 
 	}
 	else {
-		node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
+		node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 		ImGui::TreeNodeEx(go->GetName().c_str(), node_flags);
 
 		DragAndDrop(go);
 
 		if (ImGui::IsItemClicked()) {
+			App->scene->SetSelected(go);
+			App->scene->ChangeSelected(go);
+			node_flags |= ImGuiTreeNodeFlags_Selected;
 			SelectHierarchyItem(select_iterator, go);
 		}
 	}
