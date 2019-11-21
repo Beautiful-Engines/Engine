@@ -52,6 +52,8 @@ void ComponentTransform::Load(const nlohmann::json _json)
 	local_rotation = Quat(_json["local_rotation"][0], _json["local_rotation"][1], _json["local_rotation"][2], _json["local_rotation"][3]);
 	local_euler = float3(_json["local_euler"][0], _json["local_euler"][1], _json["local_euler"][2]);
 	local_scale = float3(_json["local_scale"][0], _json["local_scale"][1], _json["local_scale"][2]);
+
+	GetTransformMatrix();
 }
 
 void ComponentTransform::SetLocalPosition(float3 position)

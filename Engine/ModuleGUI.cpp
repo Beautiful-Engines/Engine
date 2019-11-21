@@ -270,29 +270,29 @@ update_status ModuleGUI::CreateMainMenuBar()
 				
 			}
 				
-			ImGui::Separator();
-			if (ImGui::BeginMenu("3D Objects"))
-			{
-				if (ImGui::MenuItem("Sphere"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::SPHERE));
-				if (ImGui::MenuItem("Cube"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::CUBE));
-				/*if (ImGui::MenuItem("Torus"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::TORUS));
-				if (ImGui::MenuItem("Octahedron"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::OCTAHEDRON));
-				if (ImGui::MenuItem("Dodecahedron"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::DODECAHEDRON));
-				if (ImGui::MenuItem("Icosahedron"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::ICOSAHEDRON));
-				if (ImGui::MenuItem("Rock"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::ROCK));
-				if (ImGui::MenuItem("Klein Bottle"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::KLEIN_BOTTLE));*/
-					
-				ImGui::EndMenu();
-			}
-			ImGui::Checkbox("Object Properties", &window_properties->enabled);
+			/*ImGui::Separator();*/
+			//if (ImGui::BeginMenu("3D Objects"))
+			//{
+			//	if (ImGui::MenuItem("Sphere"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::SPHERE));
+			//	if (ImGui::MenuItem("Cube"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::CUBE));
+			//	/*if (ImGui::MenuItem("Torus"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::TORUS));
+			//	if (ImGui::MenuItem("Octahedron"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::OCTAHEDRON));
+			//	if (ImGui::MenuItem("Dodecahedron"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::DODECAHEDRON));
+			//	if (ImGui::MenuItem("Icosahedron"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::ICOSAHEDRON));
+			//	if (ImGui::MenuItem("Rock"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::ROCK));
+			//	if (ImGui::MenuItem("Klein Bottle"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::KLEIN_BOTTLE));*/
+			//		
+			//	ImGui::EndMenu();
+			//}
+			
 			ImGui::EndMenu();
 		}
 
@@ -302,6 +302,7 @@ update_status ModuleGUI::CreateMainMenuBar()
 			ImGui::Checkbox("Console", &window_console->enabled);
 			ImGui::Checkbox("Project", &window_project->enabled);
 			ImGui::Checkbox("Hierarchy", &window_hierarchy->enabled);
+			ImGui::Checkbox("Object Properties", &window_properties->enabled);
 			ImGui::Checkbox("Demo Window", &demo);
 			ImGui::EndMenu();
 		}
