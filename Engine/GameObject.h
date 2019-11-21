@@ -50,6 +50,7 @@ public:
 
 	ComponentCamera* GetCamera() const;
 
+	void SetStatic(bool _static);
 	const bool IsFocused() const;
 	float GetDistance();
 	void SetFocus(bool focus);
@@ -57,6 +58,8 @@ public:
 	void UpdateBB();
 
 	bool hide = false;
+	bool is_static = false;
+
 	AABB abb;
 	OBB obb;
 
@@ -72,7 +75,10 @@ private:
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> children;
 
+	
 	bool focus = false;
+	
+	
 
 };
 

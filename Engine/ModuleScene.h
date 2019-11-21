@@ -2,6 +2,7 @@
 #define __ModuleScene_H__
 
 #include "Module.h"
+#include "Quadtree.h"
 #include "MathGeoLib\include\MathGeoLib.h"
 
 class GameObject;
@@ -43,16 +44,22 @@ public:
 
 	void MouseClicking(const LineSegment & segment);
 
+	std::vector<GameObject*> GetStaticGameObjects();
+
+	void CreateQuadtree();
+
 private:
 	std::vector<GameObject*> game_objects;
 	int grid_size = 100;
 	uint id_grid = 0;
 	uint grid_vertices = 0;
 	
+	Quadtree quadtree;
 
 private:
 	void CreateGrid();
 	void DrawGrid();
+	void RecalculateQuadtree();
 
 };
 

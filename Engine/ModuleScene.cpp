@@ -45,6 +45,7 @@ bool ModuleScene::Start()
 
 	GameObject *root = CreateGameObject("root");
 	CreateCamera();
+	CreateQuadtree();
 	return true;
 }
 
@@ -69,6 +70,8 @@ update_status ModuleScene::Update(float dt)
 		DrawGrid();
 
 	game_objects[0]->Update();
+	quadtree.Draw();
+
 	FrustrumCulling();
 
 	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
@@ -141,6 +144,7 @@ bool ModuleScene::LoadScene(bool _tmp)
 			GameObject* game_object = new GameObject();
 			game_object->SetName(object["Name"]);
 			game_object->SetId(object["UID"]);
+			game_object->is_static = object["IsStatic"];
 			if (object["Enable"])
 				game_object->Enable();
 			else
@@ -167,8 +171,8 @@ bool ModuleScene::LoadScene(bool _tmp)
 
 				component->Load(json_component);
 			}
+			game_object->GetTransform()->GetTransformMatrix();
 			AddGameObject(game_object, false);
-			game_object->GetTransform()->GetTransformMatrix();	
 		}
 		else
 		{
@@ -210,6 +214,8 @@ void ModuleScene::AddGameObject(GameObject* _game_object, bool _change_name)
 		game_objects.push_back(ChangeNameByQuantities(_game_object));
 	else
 		game_objects.push_back(_game_object);
+
+	CreateQuadtree();
 }
 
 void ModuleScene::DeleteGameObject(GameObject* _game_object)
@@ -471,4 +477,36 @@ void ModuleScene::CreateGrid()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(int) * grid_vertices, grides, GL_STATIC_DRAW);
 
 	delete[] grides;
+}
+
+
+std::vector<GameObject*> ModuleScene::GetStaticGameObjects()
+{
+	std::vector<GameObject*> static_game_objects;
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i]->is_static)
+			static_game_objects.push_back(game_objects[i]);
+	}
+
+	return static_game_objects;
+}
+
+
+void ModuleScene::CreateQuadtree()
+{
+	const math::float3 center(0.0f, 0.0f, 0.0f);
+	const math::float3 size(100, 40, 100);
+	math::AABB boundary;
+	boundary.SetFromCenterAndSize(center, size);
+
+	quadtree.Create(boundary);
+
+	RecalculateQuadtree();
+}
+
+void ModuleScene::RecalculateQuadtree()
+{
+	for (uint i = 0; i < GetStaticGameObjects().size(); ++i)
+		App->scene->quadtree.Insert(GetStaticGameObjects()[i]);
 }

@@ -93,6 +93,7 @@ void GameObject::Save(const nlohmann::json::iterator& _iterator)
 		{"Name", name},
 		{"ParentUID", GetParent() ? GetParent()->GetId() : 0},
 		{"Enable", enabled},
+		{"IsStatic", is_static},
 		{"Components",nlohmann::json::array()}
 	};
 
@@ -261,6 +262,15 @@ ComponentMesh * GameObject::GetMesh()
 		}
 	}
 	return false;
+}
+
+void GameObject::SetStatic(bool _static) 
+{
+	for (int i = 0; i < children.size(); i++)
+	{
+		children[i]->SetStatic(_static);
+	}
+	is_static = _static;
 }
 
 const bool GameObject::IsFocused() const

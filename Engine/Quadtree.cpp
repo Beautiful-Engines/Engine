@@ -1,3 +1,5 @@
+#include "Application.h"
+#include "ModuleRenderer3D.h"
 #include "GameObject.h"
 #include "Quadtree.h"
 
@@ -117,6 +119,19 @@ void QuadtreeNode::RedistributeChildren()
 	}
 }
 
+void QuadtreeNode::Draw()
+{
+	float3 corners[8];
+	bounding_box.GetCornerPoints(corners);
+	App->renderer3D->DebugDrawCube(corners, { 1.0f, 0.0f, 0.0f });
+
+	if (children[0]) {
+		for (int i = 0; i < CHILDRENS; i++) {
+			children[i]->Draw();
+		}
+	}
+}
+
 // Quadtree
 Quadtree::Quadtree() 
 {
@@ -143,4 +158,9 @@ void Quadtree::Insert(GameObject* _game_object)
 {
 	if (_game_object->abb.Intersects(root->bounding_box))
 		root->Insert(_game_object);
+}
+
+void Quadtree::Draw()
+{
+	root->Draw();
 }

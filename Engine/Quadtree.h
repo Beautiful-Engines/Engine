@@ -2,7 +2,7 @@
 #define _Quadtree_H_
 
 #define MAX_ITEMS 2
-#define MAX_DIVISIONS 10
+#define MAX_DIVISIONS 5
 #define CHILDRENS 4
 
 class GameObject;
@@ -23,6 +23,8 @@ public:
 
 	template<typename Type>
 	void Intersect(std::vector<GameObject*> &_game_objects, Type& _primitive);
+
+	void Draw();
 
 public:
 
@@ -47,6 +49,8 @@ public:
 
 	template<typename Type>
 	void Intersect(std::vector<GameObject*> &_game_objects, Type & _primitive);
+
+	void Draw();
 
 private:
 	QuadtreeNode * root = nullptr;
