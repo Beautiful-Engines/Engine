@@ -304,6 +304,7 @@ const std::vector<GameObject*> ModuleScene::GetGameObjects() const
 void ModuleScene::FrustrumCulling()
 {
 	std::vector<GameObject*> objects_hit;
+
 	for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
 	{
 		if (AnyCamera())
@@ -313,11 +314,27 @@ void ModuleScene::FrustrumCulling()
 				if (App->scene->GetGameObjects()[i]->GetCamera()->frustum_culling == true)
 				{
 					quadtree.Intersect(objects_hit, App->scene->GetGameObjects()[i]->GetCamera()->frustum);
-					for (uint j = 0; j < objects_hit.size(); ++j)
+					for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
+					{
+						if (!App->scene->GetGameObjects()[j]->is_static) 
+						{
+							if (App->scene->GetGameObjects()[j]->GetMesh()) 
+							{
+								if (App->scene->GetGameObjects()[i]->GetCamera()->frustum.Intersects(App->scene->GetGameObjects()[j]->abb)) {
+									objects_hit.push_back(App->scene->GetGameObjects()[j]);
+								}
+							}
+						}
+					}
+					for (int i = 0; i < objects_hit.size(); ++i) 
+					{
+						objects_hit[i]->GetMesh()->draw = true;
+					}
+					/*for (uint j = 0; j < objects_hit.size(); ++j)
 					{
 						if (objects_hit[j]->GetMesh())
 						{
-							if (objects_hit[i]->GetCamera()->frustum.Intersects(objects_hit[j]->abb))
+							if (App->scene->GetGameObjects()[i]->GetCamera()->frustum.Intersects(objects_hit[j]->abb))
 							{
 								if (App->renderer3D->camera->frustum.Intersects(objects_hit[j]->abb))
 								{
@@ -327,12 +344,26 @@ void ModuleScene::FrustrumCulling()
 							else
 							{
 								objects_hit[j]->GetMesh()->draw = false;
+
 							}
 						}
-					}
+					}*/
 				}
 				else
 				{
+					quadtree.Intersect(objects_hit, App->renderer3D->camera->frustum);
+					for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
+					{
+						if (!App->scene->GetGameObjects()[j]->is_static)
+						{
+							if (App->scene->GetGameObjects()[j]->GetMesh())
+							{
+								if (App->scene->GetGameObjects()[i]->GetCamera()->frustum.Intersects(App->scene->GetGameObjects()[j]->abb)) {
+									objects_hit.push_back(App->scene->GetGameObjects()[j]);
+								}
+							}
+						}
+					}
 					for (uint j = 0; j < objects_hit.size(); ++j)
 					{
 						if (App->scene->GetGameObjects()[j]->GetMesh())
@@ -365,8 +396,8 @@ bool ModuleScene::AnyCamera()
 }
 void  ModuleScene::CreateCamera()
 {
-	GameObject *camara = CreateGameObject("camara");
-	ComponentCamera* cam = new ComponentCamera(camara);
+	GameObject *camera = CreateGameObject("camara");
+	ComponentCamera* cam = new ComponentCamera(camera);
 	cam->frustum_culling = true;
 	cam->main_camera = true;
 }

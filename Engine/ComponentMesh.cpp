@@ -39,6 +39,7 @@ void ComponentMesh::Update()
 	if (draw)
 	{
 		Draw(component_texture);
+		draw = false;
 	}
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
