@@ -49,7 +49,7 @@ void GameObject::Update()
 		}
 	}
 	if (GetCamera()) {
-		if (GetCamera()->active == false)
+		if (!GetCamera()->IsEnabled())
 		{
 			GetCamera()->UpdateFrustumTransform();
 			GetCamera()->DrawFrustum();

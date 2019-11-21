@@ -8,6 +8,7 @@
 
 ComponentCamera::ComponentCamera(GameObject* _game_object) : Component(_game_object, ComponentType::CAMERA)
 {
+	enabled = false;
 	frustum.pos = { 0.f, 0.f, 0.f };
 	frustum.type = FrustumType::PerspectiveFrustum;
 
@@ -22,6 +23,28 @@ ComponentCamera::ComponentCamera(GameObject* _game_object) : Component(_game_obj
 
 ComponentCamera::~ComponentCamera()
 {
+}
+
+void ComponentCamera::Save(const nlohmann::json::iterator& _iterator)
+{
+	nlohmann::json json = {
+		{"type", type},
+		{"enabled",enabled},
+		{"update_camera_projection", update_camera_projection},
+		{"frustum_culling", frustum_culling },
+		{"main_camera", main_camera }
+	};
+
+	_iterator.value().push_back(json);
+}
+
+void ComponentCamera::Load(const nlohmann::json _json)
+{
+	type = _json["type"];
+	enabled = _json["enabled"];
+	update_camera_projection = _json["update_camera_projection"];
+	frustum_culling = _json["frustum_culling"];
+	main_camera = _json["main_camera"];
 }
 
 Plane ComponentCamera::GetNearPlane()

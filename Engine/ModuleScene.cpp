@@ -349,7 +349,6 @@ void  ModuleScene::CreateCamera()
 {
 	GameObject *camara = CreateGameObject("camara");
 	ComponentCamera* cam = new ComponentCamera(camara);
-	camara->AddComponent(cam);
 	cam->frustum_culling = true;
 	cam->main_camera = true;
 }

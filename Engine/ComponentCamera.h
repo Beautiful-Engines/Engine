@@ -13,6 +13,9 @@ public:
 	ComponentCamera(GameObject* _game_object);
 	~ComponentCamera();
 
+	void Save(const nlohmann::json::iterator& _iterator);
+	void Load(const nlohmann::json _json);
+
 	Frustum frustum;
 
 	Plane GetNearPlane();
@@ -37,7 +40,6 @@ public:
 	void UpdateFrustumTransform();
 	void DrawFrustum();
 
-	bool active = false;
 	bool update_camera_projection = false;
 	bool frustum_culling = false;
 	bool main_camera = false;

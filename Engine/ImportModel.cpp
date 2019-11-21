@@ -136,6 +136,7 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 		resource_node.parent = _resource_model->GetId();
 	else
 		resource_node.parent = _resource_node->id;
+
 	resource_node.position = float3(translation.x, translation.y, translation.z);
 	resource_node.scale = float3(scaling.x, scaling.y, scaling.z);
 	resource_node.rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
