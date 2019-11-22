@@ -98,20 +98,31 @@ bool WindowProperties::Draw()
 					}
 				}
 				else
-					ImGui::InputFloat3("Position", p, 1);
+					ImGui::InputFloat3("Position", p, 2, ImGuiInputTextFlags_ReadOnly);
 				
 
 				float* r = (float*)&go->GetTransform()->GetLocalRotationToEuler();
-				if(ImGui::InputFloat3("Rotation", r, 2) && !go->is_static) 
+				if (!go->is_static)
 				{
-					go->GetTransform()->SetLocalRotationFromEuler((float3)r);
+					if(ImGui::InputFloat3("Rotation", r, 2) && !go->is_static) 
+					{
+						go->GetTransform()->SetLocalRotationFromEuler((float3)r);
+					}
 				}
+				else
+					ImGui::InputFloat3("Rotation", r, 2, ImGuiInputTextFlags_ReadOnly);
 
 				float* s = (float*)&trans->local_scale;
-				if (ImGui::InputFloat3("Scale", s, 2) && !go->is_static)
+				if (!go->is_static)
 				{
-					go->GetTransform()->SetLocalScale((float3)s);
+					if (ImGui::InputFloat3("Scale", s, 2) && !go->is_static)
+					{
+						go->GetTransform()->SetLocalScale((float3)s);
+					}
 				}
+				else
+					ImGui::InputFloat3("Scale", s, 2, ImGuiInputTextFlags_ReadOnly);
+
 			
 				//go->GetTransform()->GetTransformMatrix();
 				/*ImGui::Text("Position"); ImGui::SameLine();
