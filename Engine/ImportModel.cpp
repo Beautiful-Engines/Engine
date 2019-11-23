@@ -328,7 +328,11 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				ComponentMesh* mesh = new ComponentMesh(go_node);
 				ComponentTexture* texture = new ComponentTexture(go_node);
 				ResourceMesh* resource_mesh = nullptr;
-				resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION, node.mesh);
+				if (App->resource->Get(node.mesh) != nullptr)
+					resource_mesh = (ResourceMesh*)App->resource->GetAndUse(node.mesh);
+				else
+					resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION, node.mesh);
+				
 				resource_mesh->SetFile(LIBRARY_MESH_FOLDER + std::to_string(node.mesh) + OUR_MESH_EXTENSION);
 				App->importer->import_mesh->LoadMeshFromResource(resource_mesh);
 				go_node->GetMesh()->AddResourceMesh(resource_mesh);

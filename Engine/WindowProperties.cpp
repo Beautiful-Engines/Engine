@@ -72,14 +72,15 @@ bool WindowProperties::Draw()
 
 		if (trans != nullptr)
 		{
-			if (ImGui::Button("Delete", { 100,20 }))
-				App->scene->DeleteGameObject(go);
-			ImGui::Checkbox("Hide", &go->hide);
-			if (go->hide)
-				go->Disable();
-			else
-				go->Enable();
-
+			/*if (ImGui::Button("Delete", { 100,20 }))
+				App->scene->DeleteGameObject(go);*/
+			if (ImGui::Checkbox("Hide", &go->hide))
+			{
+				if (go->hide)
+					go->Disable();
+				else
+					go->Enable();
+			}
 			if (ImGui::Checkbox("Static", &go->is_static))
 			{
 				go->SetStatic(go->is_static);

@@ -60,7 +60,7 @@ bool WindowConfig::Draw()
 			sprintf_s(title, 25, "Milliseconds %0.1f", App->GetLastFrameMSVector()[App->GetLastFrameMSVector().size() - 1]);
 			ImGui::PlotHistogram("##milliseconds", &App->GetLastFrameMSVector()[0], App->GetLastFrameMSVector().size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 
-			bool vsync = App->renderer3D->GetVSync();
+			vsync = App->renderer3D->GetVSync();
 			if (ImGui::Checkbox("Use VSync", &vsync))
 			{
 				App->renderer3D->SetVSync(vsync);
