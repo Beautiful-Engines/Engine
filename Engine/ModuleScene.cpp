@@ -4,6 +4,7 @@
 #include "ModuleGUI.h"
 #include "ModuleInput.h"
 #include "ModuleImport.h"
+#include "ModuleFileSystem.h"
 #include "ModuleResource.h"
 #include "GameObject.h"
 #include "Primitive.h"
@@ -120,8 +121,6 @@ void ModuleScene::SaveScene(bool _tmp)
 
 bool ModuleScene::LoadScene(bool _tmp)
 {
-	game_objects.clear();
-	
 	std::string file;
 	if (_tmp)
 		file = ASSETS_FOLDER "scene.tmp";
@@ -130,55 +129,64 @@ bool ModuleScene::LoadScene(bool _tmp)
 		LOG("Loading scene from %s", ASSETS_FOLDER"Scene.mgr");
 		file = ASSETS_FOLDER + std::string("scene") + OUR_SCENE_EXTENSION;
 	}
-		
-	std::ifstream ifstream(file);
-	nlohmann::json json = nlohmann::json::parse(ifstream);
-	nlohmann::json json_game_objects = json.find("GameObjects").value();
-	for (nlohmann::json::iterator iterator = json_game_objects.begin(); iterator != json_game_objects.end(); ++iterator)
+	
+	if (App->file_system->Exists(file.c_str()))
 	{
-		nlohmann::json object = iterator.value();
-		uint parent_id = object["ParentUID"];
+		game_objects.clear();
 
-		if (parent_id != 0)
+		std::ifstream ifstream(file);
+		nlohmann::json json = nlohmann::json::parse(ifstream);
+		nlohmann::json json_game_objects = json.find("GameObjects").value();
+		for (nlohmann::json::iterator iterator = json_game_objects.begin(); iterator != json_game_objects.end(); ++iterator)
 		{
-			GameObject* game_object = new GameObject();
-			game_object->SetName(object["Name"]);
-			game_object->SetId(object["UID"]);
-			game_object->is_static = object["IsStatic"];
-			if (object["Enable"])
-				game_object->Enable();
+			nlohmann::json object = iterator.value();
+			uint parent_id = object["ParentUID"];
+
+			if (parent_id != 0)
+			{
+				GameObject* game_object = new GameObject();
+				game_object->SetName(object["Name"]);
+				game_object->SetId(object["UID"]);
+				game_object->is_static = object["IsStatic"];
+				if (object["Enable"])
+					game_object->Enable();
+				else
+					game_object->Disable();
+
+				for (uint i = 0; i < game_objects.size(); ++i)
+				{
+					if (game_objects[i]->GetId() == parent_id)
+						game_object->SetParent(game_objects[i]);
+				}
+
+				for (nlohmann::json::iterator components_it = object["Components"].begin(); components_it != object["Components"].end(); ++components_it)
+				{
+					nlohmann::json json_component = components_it.value();
+					Component* component;
+					if (json_component["type"] == ComponentType::TRANSFORM)
+						component = game_object->GetTransform();
+					else if (json_component["type"] == ComponentType::MESH)
+						component = new ComponentMesh(game_object);
+					else if (json_component["type"] == ComponentType::TEXTURE)
+						component = new ComponentTexture(game_object);
+					else if (json_component["type"] == ComponentType::CAMERA)
+						component = new ComponentCamera(game_object);
+
+					component->Load(json_component);
+				}
+				game_object->GetTransform()->GetTransformMatrix();
+				AddGameObject(game_object, false);
+			}
 			else
-				game_object->Disable();
-
-			for (uint i = 0; i < game_objects.size(); ++i)
 			{
-				if (game_objects[i]->GetId() == parent_id)
-					game_object->SetParent(game_objects[i]);
+				GameObject* root = CreateGameObject("root");
+				root->SetId(object["UID"]);
 			}
-
-			for (nlohmann::json::iterator components_it = object["Components"].begin(); components_it != object["Components"].end(); ++components_it)
-			{
-				nlohmann::json json_component = components_it.value();
-				Component* component;
-				if(json_component["type"] == ComponentType::TRANSFORM)
-					component = game_object->GetTransform();
-				else if (json_component["type"] == ComponentType::MESH)
-					component = new ComponentMesh(game_object);
-				else if (json_component["type"] == ComponentType::TEXTURE)
-					component = new ComponentTexture(game_object);
-				else if (json_component["type"] == ComponentType::CAMERA)
-					component = new ComponentCamera(game_object);
-
-				component->Load(json_component);
-			}
-			game_object->GetTransform()->GetTransformMatrix();
-			AddGameObject(game_object, false);
 		}
-		else
-		{
-			GameObject* root = CreateGameObject("root");
-			root->SetId(object["UID"]);
-		}
+	}
+	else
+	{
+		LOG("File %s doesn't exist", ASSETS_FOLDER"Scene.mgr");
 	}
 
 	return true;
