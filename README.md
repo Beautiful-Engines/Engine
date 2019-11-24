@@ -50,6 +50,7 @@ The code is written in C++.
 - Component Texture on Inspector can activate and deactivate Checkers texture for the Mesh
 - Console window logs
 - Objects with Bounding Box, can activate and deactivate at Edit->Bounding Box
+- Quadtree, can activate and deactivate at Edit->Quadtree
 
 #### Resources
 - Assets appear at Project Panel, drag models to scene to create
@@ -64,6 +65,7 @@ In this menu you can enable and disable:
 	- Color
 	- Textures
 	- Bounding Box
+	- Quadtree
 	- Normals
 	- Wireframe	
 	
