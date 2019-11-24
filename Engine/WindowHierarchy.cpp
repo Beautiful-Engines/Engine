@@ -106,17 +106,16 @@ void WindowHierarchy::DragAndDrop(GameObject* _go)
 	// Source
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 	{
-		ImGui::SetDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F, &_go, sizeof(GameObject));
+		ImGui::SetDragDropPayload("GameObject", &_go, sizeof(GameObject));
 		ImGui::EndDragDropSource();
 	}
 
 	// Target
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
 		{
 			GameObject* game_object = *(GameObject**)payload->Data;
-
 			if (!game_object->IsChild(_go) && game_object != _go)
 			{
 				game_object->GetParent()->DeleteChild(game_object);
@@ -129,7 +128,7 @@ void WindowHierarchy::DragAndDrop(GameObject* _go)
 	// To Root
 	if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), (ImGuiID)"Hierarchy"))
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
 		{
 			GameObject* game_object = *(GameObject**)payload->Data;
 
