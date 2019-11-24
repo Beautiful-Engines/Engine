@@ -437,12 +437,9 @@ void ModuleScene::MouseClicking(const LineSegment& line)
 	{
 		if (line.Intersects(game_objects[i]->abb))
 		{
-			if (game_objects[i]->is_static)
-			{
 				float hit_near, hit_far;
 				if (line.Intersects(game_objects[i]->obb, hit_near, hit_far))
 					selected[hit_near] = game_objects[i];
-			}
 		}
 	}
 
