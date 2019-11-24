@@ -25,6 +25,7 @@ The code is written in C++.
 - Component Texture on Inspector can activate and deactivate Checkers texture for the Mesh
 - Console window logs
 - Objects with Bounding Box, can activate and deactivate at Edit->Bounding Box
+- Quadtree, can activate and deactivate at Edit->Quadtree
 
 #### Camera
 - Modify the different camera values (FOV,near and far plane, frustrum culling)​​in the inspector menu.
@@ -35,8 +36,8 @@ The code is written in C++.
 - For stop playmode take out the checkbox and recover the original state before play.
 
 #### Resource Manager
-- The Assets panel show everything on the assets folder.
-- The Resources panel show everything loaded in the engine.
+- The Project panel show everything on the assets folder.
+- The Resources panel show everything loaded in the engine ordered by type.
 - Dragging a new model or texture to the menu project will create its corresponding files the meta, the .axf for meshes, .xfa for models and .dds for textures.
 - At the Resource panel we can see how many objects in the scene are using that resource
 
@@ -44,17 +45,6 @@ The code is written in C++.
 
 #### Scene Serialization
 - Save the current scene or load a scene from Menu->File->Save/Load.
-
-#### Debug
-- Component Mesh on Inspector can activate and deactivate vertex normals and face normals
-- Component Texture on Inspector can activate and deactivate Checkers texture for the Mesh
-- Console window logs
-- Objects with Bounding Box, can activate and deactivate at Edit->Bounding Box
-- Quadtree, can activate and deactivate at Edit->Quadtree
-
-#### Resources
-- Assets appear at Project Panel, drag models to scene to create
-- Loaded Resources appear at Resources Panel structured by type
 
 #### Render Mode
 
