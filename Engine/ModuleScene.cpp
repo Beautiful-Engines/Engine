@@ -71,7 +71,9 @@ update_status ModuleScene::Update(float dt)
 		DrawGrid();
 
 	game_objects[0]->Update();
-	quadtree.Draw();
+
+	if(debug_quadtree)
+		quadtree.Draw();
 
 	FrustrumCulling();
 

@@ -48,6 +48,8 @@ public:
 
 	void CreateQuadtree();
 
+	bool debug_quadtree = true;
+
 private:
 	std::vector<GameObject*> game_objects;
 	int grid_size = 100;
