@@ -61,16 +61,20 @@ enum update_status
 // Configuration -----------
 #define VERSION "0.4-alpha"
 #define ASSETS_FOLDER "Assets/"
-#define SETTINGS_FOLDER "/Settings/"
-#define LIBRARY_FOLDER "/Library/"
-#define LIBRARY_AUDIO_FOLDER "/Library/Audio/"
-#define LIBRARY_TEXTURES_FOLDER "/Library/Textures/"
-#define LIBRARY_MESH_FOLDER "/Library/Meshes/"
-#define LIBRARY_ANIMATION_FOLDER "/Library/Animations/"
-#define LIBRARY_SCENE_FOLDER "/Library/Scenes/"
-#define LIBRARY_MODEL_FOLDER "/Library/Models/"
-#define LIBRARY_MATERIAL_FOLDER "/Library/Materials/"
-#define LIBRARY_STATE_MACHINE_FOLDER "/Library/StateMachines/"
+#define SETTINGS_FOLDER "Settings/"
+#define LIBRARY_FOLDER "Library/"
+#define LIBRARY_AUDIO_FOLDER "Library/Audio/"
+#define LIBRARY_TEXTURES_FOLDER "Library/Textures/"
+#define LIBRARY_MESH_FOLDER "Library/Meshes/"
+#define LIBRARY_ANIMATION_FOLDER "Library/Animations/"
+#define LIBRARY_SCENE_FOLDER "Library/Scenes/"
+#define LIBRARY_MODEL_FOLDER "Library/Models/"
+#define LIBRARY_MATERIAL_FOLDER "Library/Materials/"
+#define LIBRARY_STATE_MACHINE_FOLDER "Library/StateMachines/"
+#define OUR_MESH_EXTENSION ".axf" // Apruebanos x favor
+#define OUR_TEXTURE_EXTENSION ".dds"
+#define OUR_SCENE_EXTENSION ".mgr" // Marc Garrigó Rules
+#define OUR_MODEL_EXTENSION ".xfa" // X favor apruebanos
 
 
 #endif // !__Globals_H_

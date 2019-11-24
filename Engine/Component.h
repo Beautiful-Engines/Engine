@@ -5,11 +5,13 @@ class GameObject;
 
 #include "Assimp/include/vector3.h"
 #include "Globals.h"
+#include "nlohmann/json.hpp"
 
 enum class ComponentType {
 	MESH,
-	MATERIAL,
+	TEXTURE,
 	TRANSFORM,
+	CAMERA,
 	OTHER
 };
 
@@ -25,8 +27,11 @@ public:
 	virtual void Disable();
 	const bool IsEnabled() const;
 
+	virtual void Save(const nlohmann::json::iterator& _iterator);
+	virtual void Load(const nlohmann::json _json);
+
 	const ComponentType GetType() const;
-	const GameObject* GetMyGameObject() const;
+	GameObject* GetMyGameObject();
 
 
 protected:

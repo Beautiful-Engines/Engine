@@ -3,6 +3,9 @@
 
 #define MAX_FPS 120
 
+#include "PCG/pcg_random.hpp"
+#include <random>
+
 #include <list>
 #include <vector>
 
@@ -18,6 +21,8 @@ class ModuleGUI;
 class ModuleScene;
 class ModuleImport;
 class ModuleFileSystem;
+class ModuleResource;
+class ModuleTimeManager;
 
 
 
@@ -32,6 +37,8 @@ public:
 	ModuleScene* scene;
 	ModuleImport* importer;
 	ModuleFileSystem* file_system;
+	ModuleResource*  resource;
+	ModuleTimeManager* timemanager;
 
 private:
 
@@ -47,6 +54,8 @@ private:
 	std::vector<float> ms_log;
 	float	dt;
 	std::list<Module*> list_modules;
+
+	pcg32 uuid;
 
 public:
 
@@ -66,12 +75,16 @@ public:
 	int GetFPSCap();
 	std::vector<float> GetFPSVector();
 	std::vector<float> GetLastFrameMSVector();
+	float GetDt();
+
+	void SetDt(float _dt);
 
 	// Load and Save Configurations
 	void LoadDefaultConfig();
 	bool LoadConfig();
 	void SaveConfig();
 	
+	uint GenerateNewId();
 
 private:
 

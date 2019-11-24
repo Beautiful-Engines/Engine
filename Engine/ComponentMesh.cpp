@@ -2,39 +2,25 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleImport.h"
 #include "GameObject.h"
-#include "ComponentMaterial.h"
+#include "ComponentTexture.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "ModuleScene.h"
+#include "ModuleResource.h"
+#include "ResourceMesh.h"
 #include "ComponentMesh.h"
+#include "MathGeoLib\include\Geometry\AABB.h"
 
 #include "glew/glew.h"
 
 ComponentMesh::ComponentMesh(GameObject* _game_object) : Component(_game_object, ComponentType::MESH)
 {
+
 }
 
 ComponentMesh::~ComponentMesh()
 {
-	glDeleteBuffers(1, &id_index);
-	glDeleteBuffers(1, &id_normal);
-	glDeleteBuffers(1, &id_vertex);
-	glDeleteBuffers(1, &id_uv);
 
-	delete[] vertices;
-	vertices = nullptr;
-
-	delete[] indexes;
-	indexes = nullptr;
-
-	delete[] normals;
-	normals = nullptr;
-
-	delete[] uv_coords;
-	uv_coords = nullptr;
-
-	delete[] face_center_point;
-	face_center_point = nullptr;
-
-	delete[] face_normal;
-	face_normal = nullptr;
 }
 
 void ComponentMesh::Update()
@@ -42,54 +28,88 @@ void ComponentMesh::Update()
 	std::vector<Component*> components = my_game_object->GetComponents();
 	std::vector<Component*>::iterator iterator_component = components.begin();
 
-	ComponentMaterial *component_material = nullptr;
-	for (; iterator_component != components.end(); ++iterator_component) 
+	ComponentTexture *component_texture = nullptr;
+	for (; iterator_component != components.end(); ++iterator_component)
 	{
-		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MATERIAL)
+		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::TEXTURE)
 		{
-			component_material = (ComponentMaterial*)*iterator_component;
-			if (!checkered && component_material->id_texture == this->id_texture)
-				break;
-			else if (checkered && component_material->id_texture == this->id_default_texture)
-				break;
-			else
-				component_material = nullptr;
+			component_texture = (ComponentTexture*)*iterator_component;
 		}
 	}
-
-	Draw(component_material);
+	if (draw)
+	{
+		Draw(component_texture);
+		draw = false;
+	}
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
 }
 
-void ComponentMesh::Draw(ComponentMaterial *component_material)
+void ComponentMesh::Save(const nlohmann::json::iterator& _iterator)
 {
+	nlohmann::json json = {
+		{"type", type},
+		{"vertex_normals",vertex_normals},
+		{"face_normals", face_normals},
+		{"textures", textures },
+		{"debug_bb", debug_bb },
+		{"resource_mesh", resource_mesh->GetId() }
+	};
+
+	_iterator.value().push_back(json);
+}
+
+void ComponentMesh::Load(const nlohmann::json _json)
+{
+	type = _json["type"];
+	vertex_normals = _json["vertex_normals"];
+	face_normals = _json["face_normals"];
+	textures = _json["textures"];
+	debug_bb = _json["debug_bb"];
+	resource_mesh = (ResourceMesh*) App->resource->Get(_json["resource_mesh"]);
+}
+
+void ComponentMesh::Draw(ComponentTexture *component_texture)
+{
+	glPushMatrix();
+	glMultMatrixf((float*)&GetMyGameObject()->GetTransform()->transform_matrix.Transposed());
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glColor3f(1.f, 1.f, 1.f);
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glBindBuffer(GL_ARRAY_BUFFER, resource_mesh->id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	if (component_material != nullptr && textures)
+	if (component_texture != nullptr && textures)
 	{
-		component_material->DrawTexture(this);
+		component_texture->DrawTexture(resource_mesh);
 	}
 
-	if(is_primitive)
-		glDrawElements(GL_TRIANGLES, n_indexes, GL_UNSIGNED_SHORT, NULL);
+	if (resource_mesh->is_primitive)
+		glDrawElements(GL_TRIANGLES, resource_mesh->n_indexes, GL_UNSIGNED_SHORT, NULL);
 	else
-		glDrawElements(GL_TRIANGLES, n_indexes, GL_UNSIGNED_INT, NULL);
+		glDrawElements(GL_TRIANGLES, resource_mesh->n_indexes, GL_UNSIGNED_INT, NULL);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glPopMatrix();
+
+	if (debug_bb) {
+		static float3 corners[8];
+		GetMyGameObject()->abb.GetCornerPoints(corners);
+		App->renderer3D->DebugDrawCube(corners, { 0, 255, 0, 255 });
+		GetMyGameObject()->obb.GetCornerPoints(corners);
+		App->renderer3D->DebugDrawCube(corners, { 0, 0, 255, 255 });
+	}
+
 }
 
 
 void ComponentMesh::DrawNormals()
 {
-	if (normals != nullptr)
+	if (resource_mesh->normals != nullptr)
 	{
 		glColor3f(0.f, 1.f, 0.f);
 		glBegin(GL_LINES);
@@ -98,45 +118,70 @@ void ComponentMesh::DrawNormals()
 		if ((App->renderer3D->vertex_normals && App->renderer3D->normals) || vertex_normals)
 		{
 			int j = 0;
-			for (int i = 0; i < n_vertices * 3; i += 3) {
-				glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
-				glVertex3f(vertices[i] + normals[j].x  * lenght, vertices[i + 1] + normals[j].y  * lenght, vertices[i + 2] + normals[j].z  * lenght);
+			for (int i = 0; i < resource_mesh->n_vertices; i++) {
+				glVertex3f(resource_mesh->vertices[i].x, resource_mesh->vertices[i].y, resource_mesh->vertices[i].z);
+				glVertex3f(resource_mesh->vertices[i].x + resource_mesh->normals[j].x  * lenght, resource_mesh->vertices[i].y + resource_mesh->normals[j].y  * lenght, resource_mesh->vertices[i].z + resource_mesh->normals[j].z  * lenght);
 				++j;
 			}
 		}
-		if((App->renderer3D->normals && !App->renderer3D->vertex_normals) || face_normals)
+		if ((App->renderer3D->normals && !App->renderer3D->vertex_normals) || face_normals)
 		{
-			for (int i = 0; i < n_indexes; i += 3) {
-				glVertex3f(face_center_point[i], face_center_point[i + 1], face_center_point[i + 2]);
-				glVertex3f(face_center_point[i] + face_normal[i] * lenght, face_center_point[i + 1] + face_normal[i + 1] * lenght, face_center_point[i + 2] + face_normal[i + 2] * lenght);
+			for (int i = 0; i < resource_mesh->n_indexes; i += 3) {
+				glVertex3f(resource_mesh->face_center_point[i].x, resource_mesh->face_center_point[i].y, resource_mesh->face_center_point[i].z);
+				glVertex3f(resource_mesh->face_center_point[i].x + resource_mesh->face_normal[i].x * lenght, resource_mesh->face_center_point[i].y + resource_mesh->face_normal[i].y * lenght, resource_mesh->face_center_point[i].z + resource_mesh->face_normal[i].z * lenght);
 			}
 		}
-
-
-
 		glEnd();
 	}
 }
-
 float3 ComponentMesh::GetMaxPoint()
 {
-	float3 maxP = { vertices[0],vertices[1],vertices[2] };
-	for (int i = 0; i < n_vertices; i += 3) {
-			if (maxP.y < vertices[i + 1])
-			{
-				maxP = { vertices[i],vertices[i + 1],vertices[i + 2] };
-			}
+	float3 maxP = resource_mesh->vertices[0];
+	for (int i = 0; i < resource_mesh->n_vertices; i++) {
+		if (maxP.y < resource_mesh->vertices[i].y)
+		{
+			maxP = resource_mesh->vertices[i];
+		}
 	}
 	return maxP;
 }
+AABB ComponentMesh::GetBB()
+{
+	/*if (debug_bb)
+	{
+		static float3 corners[8];
+		GetMyGameObject()->abb.GetCornerPoints(corners);
+		App->renderer3D->DebugDrawCube(corners, { 0, 255, 0, 255 });
+		GetMyGameObject()->obb.GetCornerPoints(corners);
+		App->renderer3D->DebugDrawCube(corners, { 0, 0, 255, 255 });
+		if (App->camera->lines.size() > 0)
+			App->renderer3D->DebugDrawLines(App->camera->lines);
+	}*/
+	AABB bounding_box;
+	bounding_box.SetNegativeInfinity();
+	bounding_box.Enclose(resource_mesh->vertices, resource_mesh->n_vertices);
+	return bounding_box;
+}
 float3 ComponentMesh::GetMinPoint()
 {
-	float3 minP = { vertices[0],vertices[1],vertices[2] };
-	for (int i = 0; i < n_vertices; i += 3) {
-		if (minP.y > vertices[i + 1])
+	float3 minP = resource_mesh->vertices[0];
+	for (int i = 0; i < resource_mesh->n_vertices; i++) {
+		if (minP.y > resource_mesh->vertices[i].y)
 		{
-			minP = { vertices[i],vertices[i + 1],vertices[i + 2] };
+			minP = resource_mesh->vertices[i];
 		}
 	}
 	return minP;
 }
+
+void ComponentMesh::AddResourceMesh(ResourceMesh* _resource_mesh)
+{
+	resource_mesh = _resource_mesh;
+	_resource_mesh->SetCantities(1);
+}
+
+ResourceMesh* ComponentMesh::GetResourceMesh()
+{
+	return resource_mesh;
+}
+

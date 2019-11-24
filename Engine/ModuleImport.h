@@ -3,8 +3,9 @@
 
 #include "Module.h"
 
-class ComponentMesh;
-class GameObject;
+class ImportModel;
+class ImportMesh;
+class ImportTexture;
 
 class ModuleImport : public Module
 {
@@ -17,13 +18,13 @@ public:
 	bool CleanUp() override;
 
 
-	bool LoadFile(const char* path);
-	bool LoadMesh(const char* path);
-	bool LoadTexture(const char* path, GameObject* go_fromfbx = nullptr);
-	void DefaultTexture(GameObject* go_texturedefault);
-	void GLBuffer(ComponentMesh *mesh);
+	void ImportFile(const char* _path, bool _change_meta = false);
 
-	std::string final_path = "";
+public:
+
+	ImportModel* import_model;
+	ImportMesh* import_mesh;
+	ImportTexture* import_texture;
 
 };
 

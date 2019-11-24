@@ -10,6 +10,9 @@ class WindowAbout;
 class WindowConsole;
 class WindowProperties;
 class WindowPrimitives;
+class WindowProject;
+class WindowResources;
+class WindowScene;
 
 class ModuleGUI : public Module
 {
@@ -36,6 +39,9 @@ public:
 	WindowConsole* window_console = nullptr;
 	WindowPrimitives* window_primitives = nullptr;
 	WindowProperties* window_properties = nullptr;
+	WindowProject* window_project = nullptr;
+	WindowResources* window_resources = nullptr;
+	WindowScene* window_scene = nullptr;
 
 private:
 
@@ -50,6 +56,8 @@ private:
 	bool texture_2D = true;
 	bool normals = false;
 	bool vertex_normals = false;
+	bool play = false;
+	bool debug_bb = true;
 
 
 };

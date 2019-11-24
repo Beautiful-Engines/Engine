@@ -51,17 +51,19 @@ public:
 
 	uint id_vertex = 0u;
 	uint n_vertices = 0u;
-	float *vertices = nullptr;
+	float3 *vertices = nullptr;
 
 	uint id_normal = 0u;
-	aiVector3D *normals = nullptr;
+	uint n_normals = 0u;
+	float3 *normals = nullptr;
 
 	uint id_uv = 0u;
+	uint uv_comp = 0u;
 	uint n_uv = 0u;
-	float *uv_coords = nullptr;
+	float2 *uv_coords = nullptr;
 
-	float *face_center_point = nullptr;
-	float *face_normal = nullptr;
+	float3 *face_center_point = nullptr;
+	float3 *face_normal = nullptr;
 
 	par_shapes_mesh* shape = nullptr;
 	int subdivisions = 5;

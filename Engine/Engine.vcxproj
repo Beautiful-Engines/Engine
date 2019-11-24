@@ -132,8 +132,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentCamera.h" />
     <ClInclude Include="ComponentMesh.h" />
-    <ClInclude Include="ComponentMaterial.h" />
+    <ClInclude Include="ComponentTexture.h" />
     <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="DeviL\include\devil_internal_exports.h" />
     <ClInclude Include="DeviL\include\il.h" />
@@ -143,6 +144,7 @@
     <ClInclude Include="DeviL\include\ilu_region.h" />
     <ClInclude Include="DeviL\include\il_wrap.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_opengl3.h" />
@@ -152,10 +154,20 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="ImportMesh.h" />
+    <ClInclude Include="ImportModel.h" />
+    <ClInclude Include="ImportTexture.h" />
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleImport.h" />
+    <ClInclude Include="ModuleResource.h" />
+    <ClInclude Include="ModuleTimeManager.h" />
+    <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Par\par_shapes.h" />
     <ClInclude Include="Primitive.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceMesh.h" />
+    <ClInclude Include="ResourceModel.h" />
+    <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="WindowAbout.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
@@ -232,17 +244,22 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="WindowEngine.h" />
     <ClInclude Include="WindowPrimitives.h" />
+    <ClInclude Include="WindowProject.h" />
     <ClInclude Include="WindowProperties.h" />
+    <ClInclude Include="WindowResources.h" />
+    <ClInclude Include="WindowScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
-    <ClCompile Include="ComponentMaterial.cpp" />
+    <ClCompile Include="ComponentCamera.cpp" />
+    <ClCompile Include="ComponentTexture.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
+    <ClCompile Include="ImGuizmo.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -250,9 +267,19 @@
     <ClCompile Include="ImGui\imgui_impl_sdl.cpp" />
     <ClCompile Include="ImGui\imgui_stdlib.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="ImportMesh.cpp" />
+    <ClCompile Include="ImportModel.cpp" />
+    <ClCompile Include="ImportTexture.cpp" />
     <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImport.cpp" />
+    <ClCompile Include="ModuleResource.cpp" />
+    <ClCompile Include="ModuleTimeManager.cpp" />
+    <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceMesh.cpp" />
+    <ClCompile Include="ResourceModel.cpp" />
+    <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="WindowAbout.cpp" />
     <ClCompile Include="WindowConfig.cpp" />
     <ClCompile Include="WindowConsole.cpp" />
@@ -300,7 +327,10 @@
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="WindowPrimitives.cpp" />
+    <ClCompile Include="WindowProject.cpp" />
     <ClCompile Include="WindowProperties.cpp" />
+    <ClCompile Include="WindowResources.cpp" />
+    <ClCompile Include="WindowScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl" />

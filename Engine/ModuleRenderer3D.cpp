@@ -3,6 +3,8 @@
 #include "ModuleWindow.h"
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
+#include "ComponentCamera.h"
+#include "MathGeoLib/include/Math/float2.h"
 
 #include "glew\glew.h"
 #include "SDL\include\SDL_opengl.h"
@@ -100,8 +102,7 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_TEXTURE_2D);
 
 	}
-	// Projection matrix for
-	OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
+
 
 	// Initialize glew
 	GLenum error = glewInit();
@@ -117,6 +118,8 @@ bool ModuleRenderer3D::Init()
 		LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		LOG("Vendor: %s", glGetString(GL_VENDOR));
 		LOG("Renderer: %s", glGetString(GL_RENDERER));
+		//OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
+		CreateSceneBuffer();
 	}
 
 	return ret;
@@ -126,17 +129,26 @@ bool ModuleRenderer3D::Init()
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 
+	if (camera->update_camera_projection) {
+		UpdateProjectionMatrix();
+		camera->update_camera_projection = false;
+	}
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBindFramebuffer(GL_FRAMEBUFFER, scene_buffer_id);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf((float*)&camera->GetOpenGLViewMatrix()/*App->camera->GetViewMatrix()*/);
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	lights[0].SetPos(camera->frustum.pos.x, camera->frustum.pos.y, camera->frustum.pos.z/*App->camera->Position.x, App->camera->Position.y, App->camera->Position.z*/);
 
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
+
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -144,6 +156,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
@@ -163,10 +176,33 @@ void ModuleRenderer3D::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
+	ResizeScene(width, height);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
 	glLoadMatrixf(&ProjectionMatrix);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+}
+
+void ModuleRenderer3D::ResizeScene(float w, float h)
+{
+	glBindTexture(GL_TEXTURE_2D, scene_texture_id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, scene_depth_id);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
+}
+
+void ModuleRenderer3D::UpdateProjectionMatrix()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glLoadMatrixf((GLfloat*)&camera->GetOpenGLProjectionMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -211,6 +247,99 @@ void ModuleRenderer3D::SetVSync(bool VSync)
 	{
 		SDL_GL_SetSwapInterval(0);
 	}
+}
+
+void ModuleRenderer3D::CreateSceneBuffer()
+{
+	glGenFramebuffers(1, &scene_buffer_id);
+	glBindFramebuffer(GL_FRAMEBUFFER, scene_buffer_id);
+
+	glGenTextures(1, &scene_texture_id);
+	glBindTexture(GL_TEXTURE_2D, scene_texture_id);
+
+	float2 size = float2(App->window->GetWindowWidth(), App->window->GetWindowHeight());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size.x, size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, scene_texture_id, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glGenRenderbuffers(1, &scene_depth_id);
+	glBindRenderbuffer(GL_RENDERBUFFER, scene_depth_id);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, scene_depth_id);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void ModuleRenderer3D::DebugDrawCube(const float3 * vertices, Color color) const
+{
+	glEnableClientState(GL_CULL_FACE);
+	glEnableClientState(GL_LIGHTING);
+	glEnableClientState(GL_TEXTURE_2D);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glColor3f(color.r, color.g, color.b);
+	glLineWidth(5.0f);
+
+	glBegin(GL_QUADS);
+
+	glVertex3fv((const GLfloat*)&vertices[1]);
+	glVertex3fv((const GLfloat*)&vertices[5]);
+	glVertex3fv((const GLfloat*)&vertices[7]);
+	glVertex3fv((const GLfloat*)&vertices[3]);
+
+	glVertex3fv((const GLfloat*)&vertices[4]);
+	glVertex3fv((const GLfloat*)&vertices[0]);
+	glVertex3fv((const GLfloat*)&vertices[2]);
+	glVertex3fv((const GLfloat*)&vertices[6]);
+
+	glVertex3fv((const GLfloat*)&vertices[5]);
+	glVertex3fv((const GLfloat*)&vertices[4]);
+	glVertex3fv((const GLfloat*)&vertices[6]);
+	glVertex3fv((const GLfloat*)&vertices[7]);
+
+	glVertex3fv((const GLfloat*)&vertices[0]);
+	glVertex3fv((const GLfloat*)&vertices[1]);
+	glVertex3fv((const GLfloat*)&vertices[3]);
+	glVertex3fv((const GLfloat*)&vertices[2]);
+
+	glVertex3fv((const GLfloat*)&vertices[3]);
+	glVertex3fv((const GLfloat*)&vertices[7]);
+	glVertex3fv((const GLfloat*)&vertices[6]);
+	glVertex3fv((const GLfloat*)&vertices[2]);
+
+	glVertex3fv((const GLfloat*)&vertices[0]);
+	glVertex3fv((const GLfloat*)&vertices[4]);
+	glVertex3fv((const GLfloat*)&vertices[5]);
+	glVertex3fv((const GLfloat*)&vertices[1]);
+
+	glEnd();
+
+	glColor3f(1.f, 1.f, 1.f);
+	glLineWidth(1.0f);
+
+	glDisableClientState(GL_CULL_FACE);
+	glDisableClientState(GL_LIGHTING);
+	glDisableClientState(GL_TEXTURE_2D);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void ModuleRenderer3D::DebugDrawLines(std::vector<float3> lines)
+{
+	glColor3f(0.f, 1.0f, 0.0f);
+	glBegin(GL_LINES);
+	glLineWidth(5.0f);
+	float lenght = 0.4f;
+	for (int i = 0; i < lines.size(); i++)
+	{
+		glVertex3f((GLfloat)lines[i].x, (GLfloat)lines[i].y, (GLfloat)lines[i].z);
+	}
+
+	glLineWidth(1.0f);
+	glColor3f(1.f, 1.f, 1.f);
+	glEnd();
 }
 
 

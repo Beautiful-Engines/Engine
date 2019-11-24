@@ -14,10 +14,11 @@ public:
 	bool Draw();
 
 	void DrawNode(GameObject * go);
-
+	void SelectHierarchyItem(int i, GameObject* go);
+	int node_clicked;
 	int select_iterator = -1;
 private:
-
+	void DragAndDrop(GameObject* go);
 };
 
 #endif // !__WindowHierarchy_H__

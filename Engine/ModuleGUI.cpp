@@ -8,6 +8,7 @@
 #include "ImGui\imgui_impl_sdl.h"
 #include "ImGui\imgui_impl_opengl3.h"
 #include "ModuleGUI.h"
+#include "ModuleTimeManager.h"
 
 #include "WindowEngine.h"
 #include "WindowHierarchy.h"
@@ -16,6 +17,9 @@
 #include "WindowConsole.h"
 #include "WindowPrimitives.h"
 #include "WindowProperties.h"
+#include "WindowProject.h"
+#include "WindowResources.h"
+#include "WindowScene.h"
 
 #include "Primitive.h"
 
@@ -37,24 +41,31 @@ bool ModuleGUI::Init()
 	window_console = new WindowConsole();
 	window_primitives = new WindowPrimitives();
 	window_properties = new WindowProperties();
+	window_project = new WindowProject();
+	window_resources = new WindowResources();
+	window_scene = new WindowScene();
 
 	// Push windows into vector
+	windows_engine.push_back(window_scene);
 	windows_engine.push_back(window_hierarchy);
 	windows_engine.push_back(window_config);
 	windows_engine.push_back(window_about);
 	windows_engine.push_back(window_console);
 	windows_engine.push_back(window_primitives);
 	windows_engine.push_back(window_properties);
+	windows_engine.push_back(window_resources);
+	windows_engine.push_back(window_project);
+	
 
 	// Initialize ImGUi
 	LOG("Creating ImGui context");
-
+	
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigWindowsMoveFromTitleBarOnly = true;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	ImGui::StyleColorsDark();
-
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init();
 
@@ -82,7 +93,6 @@ update_status ModuleGUI::Update(float dt)
 update_status ModuleGUI::PostUpdate(float dt)
 {
 	ImGui::Render();
-
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	ImGui::EndFrame();
@@ -139,6 +149,8 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Load", "CTRL+L")) { App->scene->LoadScene(); }
+			if (ImGui::MenuItem("Save", "CTRL+S")) { App->scene->SaveScene(); }
 			if (ImGui::MenuItem("Quit", "ALT+F4")) { return UPDATE_STOP; }
 			ImGui::EndMenu();
 		}
@@ -177,6 +189,9 @@ update_status ModuleGUI::CreateMainMenuBar()
 						glEnable(GL_TEXTURE_2D);
 					else
 						glDisable(GL_TEXTURE_2D);
+
+				if (ImGui::Checkbox("Bounding Box", &debug_bb))
+					App->scene->ActiveBBDebug(debug_bb);
 
 				if (ImGui::Checkbox("Normals", &normals))
 					App->renderer3D->normals = normals;
@@ -219,68 +234,41 @@ update_status ModuleGUI::CreateMainMenuBar()
 		{
 			if (ImGui::MenuItem("Create Empty"))
 			{
-				uint count = 1;
-				std::string name = "GameObject";
-				std::string namecount = name + std::to_string(count);
-				for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
-				{
-					if (App->scene->GetGameObjects()[i] != nullptr && App->scene->GetGameObjects()[i]->GetName() == namecount)
-					{
-						count++;
-						namecount = name + std::to_string(count);
-						i = 0;
-					}
-				}
-				App->scene->CreateGameObject(namecount);
+				App->scene->CreateGameObject("GameObject");
 			}
 
 			if (ImGui::MenuItem("Create Empty Child"))
 			{
 				if (App->scene->GetSelected() != nullptr)
 				{
-					uint count = 1;
-					std::string name = "GameObject";
-					std::string namecount = name + std::to_string(count);
-					for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
-					{
-						if (App->scene->GetGameObjects()[i] != nullptr && App->scene->GetGameObjects()[i]->GetName() == namecount)
-						{
-							count++;
-							namecount = name + std::to_string(count);
-							i = 0;
-						}
-					}
-					GameObject *gameobject_child = new GameObject();
-					gameobject_child->SetName(namecount);
+					GameObject *gameobject_child = App->scene->CreateGameObject("GameObject");
 					gameobject_child->SetParent(App->scene->GetSelected());
-					App->scene->AddGameObject(gameobject_child);
 				}
-				
 			}
 				
-			ImGui::Separator();
-			if (ImGui::BeginMenu("3D Objects"))
-			{
-				if (ImGui::MenuItem("Sphere"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::SPHERE));
-				if (ImGui::MenuItem("Cube"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::CUBE));
-				/*if (ImGui::MenuItem("Torus"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::TORUS));
-				if (ImGui::MenuItem("Octahedron"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::OCTAHEDRON));
-				if (ImGui::MenuItem("Dodecahedron"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::DODECAHEDRON));
-				if (ImGui::MenuItem("Icosahedron"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::ICOSAHEDRON));
-				if (ImGui::MenuItem("Rock"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::ROCK));
-				if (ImGui::MenuItem("Klein Bottle"))
-					App->scene->AddGameObject(new Primitive(PrimitiveType::KLEIN_BOTTLE));*/
-					
-				ImGui::EndMenu();
-			}
-			ImGui::Checkbox("Object Properties", &window_properties->enabled);
+			/*ImGui::Separator();*/
+			//if (ImGui::BeginMenu("3D Objects"))
+			//{
+			//	if (ImGui::MenuItem("Sphere"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::SPHERE));
+			//	if (ImGui::MenuItem("Cube"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::CUBE));
+			//	/*if (ImGui::MenuItem("Torus"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::TORUS));
+			//	if (ImGui::MenuItem("Octahedron"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::OCTAHEDRON));
+			//	if (ImGui::MenuItem("Dodecahedron"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::DODECAHEDRON));
+			//	if (ImGui::MenuItem("Icosahedron"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::ICOSAHEDRON));
+			//	if (ImGui::MenuItem("Rock"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::ROCK));
+			//	if (ImGui::MenuItem("Klein Bottle"))
+			//		App->scene->AddGameObject(new Primitive(PrimitiveType::KLEIN_BOTTLE));*/
+			//		
+			//	ImGui::EndMenu();
+			//}
+			
 			ImGui::EndMenu();
 		}
 
@@ -288,7 +276,9 @@ update_status ModuleGUI::CreateMainMenuBar()
 		{
 			ImGui::Checkbox("Configuration", &window_config->enabled);
 			ImGui::Checkbox("Console", &window_console->enabled);
+			ImGui::Checkbox("Project", &window_project->enabled);
 			ImGui::Checkbox("Hierarchy", &window_hierarchy->enabled);
+			ImGui::Checkbox("Object Properties", &window_properties->enabled);
 			ImGui::Checkbox("Demo Window", &demo);
 			ImGui::EndMenu();
 		}
@@ -298,7 +288,25 @@ update_status ModuleGUI::CreateMainMenuBar()
 			ImGui::Checkbox("About", &window_about->enabled);
 			ImGui::EndMenu();
 		}
+		if (ImGui::Checkbox("Play", &App->timemanager->play))
+			App->timemanager->ChechState();
+			/*if (App->timemanager->play)
+				App->timemanager->state = WANTS_PLAY;
+			else
+			App->timemanager->state = WANTS_EDITOR;*/
 
+		if (ImGui::Checkbox("Pause", &App->timemanager->pause))
+			App->timemanager->ChechState();
+			//if (App->timemanager->pause)
+			//	App->timemanager->state = WANTS_PAUSE;
+			//else if (!App->timemanager->play)
+			//	App->timemanager->state = WANTS_EDITOR;
+
+		ImGui::Text("Game Timer:"); ImGui::SameLine();
+		ImGui::TextColored({ 255, 255, 0, 255 }, "%f", App->timemanager->GetTimeSincePlay()); ImGui::SameLine();
+
+		ImGui::Text("Real Timer:"); ImGui::SameLine();
+		ImGui::TextColored({ 255, 255, 0, 255 }, "%f", App->timemanager->GetRealTimeSinceStartup()); ImGui::SameLine();
 	}
 	ImGui::EndMainMenuBar();
 
@@ -317,7 +325,6 @@ update_status ModuleGUI::CreateMainMenuBar()
 
 void ModuleGUI::LogInput(int key, const char* state, bool mouse)
 {
-	
 	window_config->LogInput(key, state, mouse);
 }
 

@@ -27,6 +27,7 @@ private:
 	int refresh_rate = 0;
 	bool fullscreen = false, fulldesktop = false, borderless = false;
 	bool resizable = true;
+	bool vsync = false;
 
 	int total_reported_mem = 0;
 	int total_actual_mem = 0;

@@ -2,8 +2,11 @@
 #define __ModuleScene_H__
 
 #include "Module.h"
+#include "Quadtree.h"
+#include "MathGeoLib\include\MathGeoLib.h"
 
 class GameObject;
+class ResourceModel;
 
 class ModuleScene : public Module
 {
@@ -18,12 +21,32 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void SaveScene(bool _tmp = false);
+	bool LoadScene(bool _tmp = false);
+
 	GameObject* CreateGameObject(std::string name);
-	void AddGameObject(GameObject* game_object);
+	void ActiveBBDebug(bool active);
+	void AddGameObject(GameObject* game_object, bool _change_name = true);
+	void ModuleScene::DeleteGameObject(GameObject* _game_object);
 	GameObject* GetSelected();
+	GameObject * GetMainCamera();
 	void ChangeSelected(GameObject* selected);
 	void SetSelected(GameObject * go);
 	const std::vector<GameObject*> GetGameObjects() const;
+
+	void FrustrumCulling();
+
+	bool AnyCamera();
+
+	void CreateCamera();
+
+	GameObject* ChangeNameByQuantities(GameObject* _game_object);
+
+	void MouseClicking(const LineSegment & segment);
+
+	std::vector<GameObject*> GetStaticGameObjects();
+
+	void CreateQuadtree();
 
 private:
 	std::vector<GameObject*> game_objects;
@@ -31,11 +54,12 @@ private:
 	uint id_grid = 0;
 	uint grid_vertices = 0;
 	
+	Quadtree quadtree;
 
 private:
 	void CreateGrid();
 	void DrawGrid();
-	
+	void RecalculateQuadtree();
 
 };
 

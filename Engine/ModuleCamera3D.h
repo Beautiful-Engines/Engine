@@ -3,6 +3,10 @@
 
 #include "Module.h"
 #include "glmath.h"
+#include "MathGeoLib\include\MathGeoLib.h"
+#include "MathGeoLib\include\Math\float3.h"
+
+class ComponentCamera;
 
 class ModuleCamera3D : public Module
 {
@@ -15,12 +19,14 @@ public:
 	void Focus(float speed);
 	bool CleanUp();
 
-	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
-	void LookAt(const vec3 &Spot);
-	void Move(const vec3 &Movement);
+	void Look(const float3 &Position, const float3 &Reference, bool RotateAroundReference = false);
+	void LookAt(const float3 &Spot);
+	void Move(const float3 &Movement);
 	float* GetViewMatrix();
 	bool focus = false;
-	vec3 newPos = { 0, 0, 0 };
+	float3 newPos = { 0, 0, 0 };
+	std::vector<float3> lines;
+	float mdistance;
 
 private:
 
@@ -28,10 +34,11 @@ private:
 
 public:
 
-	vec3 X, Y, Z, Position, Reference;
+	float3 X, Y, Z, Position, Reference;
 
 private:
 
+	ComponentCamera * camera;
 	mat4x4 ViewMatrix, ViewMatrixInverse;
 };
 

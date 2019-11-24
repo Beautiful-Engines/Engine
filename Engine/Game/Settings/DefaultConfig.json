@@ -5,7 +5,7 @@
         "Title": "Engine"
     },
     "Renderer3D": {
-        "VSync": true
+        "VSync": false
     },
     "Window": {
         "Borderless": false,

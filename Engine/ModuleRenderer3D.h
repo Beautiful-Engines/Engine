@@ -3,6 +3,9 @@
 
 #include "Module.h"
 #include "Light.h"
+#include "MathGeoLib\include\Math\float3.h"
+
+class ComponentCamera;
 
 #define MAX_LIGHTS 8
 #define MAX_MESHES 200
@@ -21,6 +24,10 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
+
+	void ResizeScene(float w, float h);
+
+	void UpdateProjectionMatrix();
 	
 	//Load and Save
 	bool LoadDefault(nlohmann::json &load_default_json);
@@ -34,15 +41,26 @@ public:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
-	bool VSync = true;
+	bool VSync = false;
+	uint scene_buffer_id = -1;
+	uint scene_texture_id;
+	uint scene_depth_id;
 	
 	bool GetVSync();
 	void SetVSync(bool VSync);
+
+	void CreateSceneBuffer();
+
+	void DebugDrawCube(const float3 * vertices, Color color) const;
+
+	void DebugDrawLines(std::vector<float3> lines);
 
 	bool normals = false;
 	bool vertex_normals = true;
 
 	bool grid = true;
+
+	ComponentCamera* camera;
 
 };
 

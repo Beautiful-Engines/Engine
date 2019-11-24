@@ -4,7 +4,8 @@
 #include "ModuleGUI.h"
 #include "WindowHierarchy.h"
 
-#include "ImGui\imgui_stdlib.h"
+#include "ImGui/imgui_stdlib.h"
+#include "imgui/imgui_internal.h"
 
 WindowHierarchy::WindowHierarchy() : WindowEngine() 
 {
@@ -36,22 +37,36 @@ bool WindowHierarchy::Draw()
 
 void WindowHierarchy::DrawNode(GameObject * go)
 {
-	static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+	static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 	static int selection_mask = (1 << 2);
-	static int node_clicked = -1;
+	node_clicked = -1;
 	select_iterator++;
 
 	ImGuiTreeNodeFlags node_flags = base_flags;
-	const bool is_selected = (selection_mask & (1 << select_iterator)) != 0;
-	if (is_selected)
-		node_flags |= ImGuiTreeNodeFlags_Selected;
+	//const bool is_selected = (selection_mask & (1 << select_iterator)) != 0;
+	if (App->scene->GetSelected()/*is_selected*/)
+	{
+		if (App->scene->GetSelected() == go)
+		{
+			node_flags |= ImGuiTreeNodeFlags_Selected;
+		}
+		if (go->GetChildren().size() > 0)
+		{
+			if (go->IsChild(App->scene->GetSelected()))
+				ImGui::SetNextTreeNodeOpen(true);
+		}
+	}
 	if (go->GetChildren().size() > 0)
 	{
 		bool node_open = ImGui::TreeNodeEx(go->GetName().c_str(), node_flags);
+
+		DragAndDrop(go);
+
 		if (ImGui::IsItemClicked()) {
-			node_clicked = select_iterator;
 			App->scene->SetSelected(go);
 			App->scene->ChangeSelected(go);
+			node_flags |= ImGuiTreeNodeFlags_Selected;
+			node_clicked = select_iterator;
 		}
 		if (node_open) {
 			for (int i = 0; i < go->GetChildren().size(); i++)
@@ -63,12 +78,16 @@ void WindowHierarchy::DrawNode(GameObject * go)
 
 	}
 	else {
-		node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
+		node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 		ImGui::TreeNodeEx(go->GetName().c_str(), node_flags);
+
+		DragAndDrop(go);
+
 		if (ImGui::IsItemClicked()) {
-			node_clicked = select_iterator;
 			App->scene->SetSelected(go);
 			App->scene->ChangeSelected(go);
+			node_flags |= ImGuiTreeNodeFlags_Selected;
+			SelectHierarchyItem(select_iterator, go);
 		}
 	}
 
@@ -80,4 +99,53 @@ void WindowHierarchy::DrawNode(GameObject * go)
 		else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, this commented bit preserve selection when clicking on item that is part of the selection
 			selection_mask = (1 << node_clicked);           // Click to single-select
 	}
+}
+
+void WindowHierarchy::DragAndDrop(GameObject* _go)
+{
+	// Source
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+	{
+		ImGui::SetDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F, &_go, sizeof(GameObject));
+		ImGui::EndDragDropSource();
+	}
+
+	// Target
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
+		{
+			GameObject* game_object = *(GameObject**)payload->Data;
+
+			if (!game_object->IsChild(_go) && game_object != _go)
+			{
+				game_object->GetParent()->DeleteChild(game_object);
+				game_object->SetParent(_go);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	// To Root
+	if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), (ImGuiID)"Hierarchy"))
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
+		{
+			GameObject* game_object = *(GameObject**)payload->Data;
+
+			if (!game_object->IsChild(App->scene->GetGameObjects().at(0)))
+			{
+				game_object->GetParent()->DeleteChild(game_object);
+				game_object->SetParent(App->scene->GetGameObjects().at(0));
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+}
+
+void WindowHierarchy::SelectHierarchyItem(int i, GameObject* go)
+{
+	node_clicked = i;
+	App->scene->SetSelected(go);
+	App->scene->ChangeSelected(go);
 }

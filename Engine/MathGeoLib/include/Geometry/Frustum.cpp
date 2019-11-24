@@ -621,8 +621,23 @@ bool Frustum::Intersects(const LineSegment &lineSegment) const
 
 bool Frustum::Intersects(const AABB &aabb) const
 {
-	///@todo This is a naive test. Implement a faster version.
-	return this->ToPolyhedron().Intersects(aabb);
+	math::float3 corners[8];
+	int nplanes = 6;
+	aabb.GetCornerPoints(corners);
+
+	for (int i = 0; i < nplanes; ++i)
+	{
+		int points_inside = 8;
+		for (int j = 0; j < 8; ++j)
+		{
+			if (GetPlane(i).IsOnPositiveSide(corners[j])) {
+				--points_inside;
+			}
+		}
+		if (points_inside == 0)
+			return false;
+	}
+	return true;
 }
 
 bool Frustum::Intersects(const OBB &obb) const
