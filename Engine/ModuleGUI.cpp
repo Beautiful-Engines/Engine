@@ -193,6 +193,8 @@ update_status ModuleGUI::CreateMainMenuBar()
 				if (ImGui::Checkbox("Bounding Box", &debug_bb))
 					App->scene->ActiveBBDebug(debug_bb);
 
+				ImGui::Checkbox("Quadtree", &App->scene->debug_quadtree);
+
 				if (ImGui::Checkbox("Normals", &normals))
 					App->renderer3D->normals = normals;
 
