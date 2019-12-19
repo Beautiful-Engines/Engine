@@ -75,6 +75,7 @@ enum update_status
 #define OUR_TEXTURE_EXTENSION ".dds"
 #define OUR_SCENE_EXTENSION ".mgr" // Marc Garrigó Rules
 #define OUR_MODEL_EXTENSION ".xfa" // X favor apruebanos
+#define OUR_ANIMATION_EXTENSION ".aqa" // Aprueba quete aprueba 
 
 
 #endif // !__Globals_H_

@@ -11,6 +11,7 @@
 #include "ImportModel.h"
 #include "ImportMesh.h"
 #include "ImportTexture.h"
+#include "ImportAnimation.h"
 
 #include <fstream>
 

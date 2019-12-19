@@ -111,6 +111,7 @@ void ImportMesh::Import(const aiScene* scene, const aiMesh* ai_mesh, ResourceMes
 	}
 
 	CreateOurMesh(_resource_mesh);
+	
 }
 
 bool ImportMesh::CreateOurMesh(ResourceMesh* mesh)

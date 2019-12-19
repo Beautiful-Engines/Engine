@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentAnimation.h" />
     <ClInclude Include="ComponentCamera.h" />
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="ComponentTexture.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="ImportAnimation.h" />
     <ClInclude Include="ImportMesh.h" />
     <ClInclude Include="ImportModel.h" />
     <ClInclude Include="ImportTexture.h" />
@@ -165,6 +167,7 @@
     <ClInclude Include="Par\par_shapes.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceAnimation.h" />
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="ResourceModel.h" />
     <ClInclude Include="ResourceTexture.h" />
@@ -267,6 +270,7 @@
     <ClCompile Include="ImGui\imgui_impl_sdl.cpp" />
     <ClCompile Include="ImGui\imgui_stdlib.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="ImportAnimation.cpp" />
     <ClCompile Include="ImportMesh.cpp" />
     <ClCompile Include="ImportModel.cpp" />
     <ClCompile Include="ImportTexture.cpp" />
@@ -277,6 +281,7 @@
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceAnimation.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="ResourceModel.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />

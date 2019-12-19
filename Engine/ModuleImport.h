@@ -6,6 +6,7 @@
 class ImportModel;
 class ImportMesh;
 class ImportTexture;
+class ImportAnimation;
 
 class ModuleImport : public Module
 {
@@ -25,6 +26,7 @@ public:
 	ImportModel* import_model;
 	ImportMesh* import_mesh;
 	ImportTexture* import_texture;
+	ImportAnimation* import_animation;
 
 };
 
