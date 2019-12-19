@@ -11,6 +11,14 @@ struct NodeAnimation
 	uint num_rotation_keys = 0;
 	uint num_scale_keys = 0;
 
+	float4x4 lastTransform = float4x4::identity;
+	int current_pos_index = -1;
+	int current_rot_index = -1;
+	int current_scale_index = -1;
+	int next_pos_index = -1;
+	int next_rot_index = -1;
+	int next_scale_index = -1;
+
 	float3* position_keys_value = nullptr;
 	double* position_keys_times = nullptr;
 
@@ -20,6 +28,9 @@ struct NodeAnimation
 	float3* scale_keys_value = nullptr;
 	double* scale_keys_times = nullptr;
 	
+	bool CalcCurrentIndex(float time, bool game_mode);
+	void CalcTransfrom(float time, bool interpolation);
+
 };
 
 class ResourceAnimation : public Resource
