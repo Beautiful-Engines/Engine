@@ -1,7 +1,12 @@
 #include "Application.h"
 #include "ModuleFileSystem.h"
 #include "ResourceAnimation.h"
+#include "ResourceBone.h"
+#include "ResourceGraph.h"
+
 #include "Assimp/include/anim.h"
+#include "Assimp/include/mesh.h"
+
 #include "ImportAnimation.h"
 
 ImportAnimation::ImportAnimation()
@@ -23,6 +28,7 @@ bool ImportAnimation::CleanUp()
 	return true;
 }
 
+// ANIMATION-------------------------------------
 void ImportAnimation::Import(aiAnimation* _animation)
 {
 	ResourceAnimation* anim = new ResourceAnimation();
@@ -153,72 +159,218 @@ bool ImportAnimation::CreateOurAnimation(ResourceAnimation* _animation)
 	return ret;
 }
 
-void ImportAnimation::LoadAnimationFromResource(ResourceAnimation* _resource_animation)
+void ImportAnimation::LoadAnimationFromResource(ResourceAnimation* _animation)
 {
 	char* buffer;
-	uint size = App->file_system->Load(_resource_animation->GetFile(), &buffer);
+	uint size = App->file_system->Load(_animation->GetFile(), &buffer);
 
 	char* cursor = buffer;
 	// amount of duration / ticks_per_second / channels / name
 	uint ranges[4];
 	uint bytes = sizeof(ranges);
 	memcpy(ranges, cursor, bytes);
-	_resource_animation->duration = ranges[0];
-	_resource_animation->ticks_per_second = ranges[1];
-	_resource_animation->num_channels = ranges[2];
-	_resource_animation->name = ranges[3];
+	_animation->duration = ranges[0];
+	_animation->ticks_per_second = ranges[1];
+	_animation->num_channels = ranges[2];
+	_animation->name = ranges[3];
 	cursor += bytes;
 
 	// loading nodes
-	if (_resource_animation->num_channels > 0)
+	if (_animation->num_channels > 0)
 	{
-		_resource_animation->nodes = new NodeAnimation[_resource_animation->num_channels];
-		for (int i = 0; i < _resource_animation->num_channels; i++)
+		_animation->nodes = new NodeAnimation[_animation->num_channels];
+		for (int i = 0; i < _animation->num_channels; i++)
 		{
 			// loading ranges
 			uint node_ranges[4];
 			uint bytes = sizeof(node_ranges);
 			memcpy(node_ranges, cursor, bytes);
-			_resource_animation->nodes[i].num_position_keys = node_ranges[0];
-			_resource_animation->nodes[i].num_rotation_keys = node_ranges[1];
-			_resource_animation->nodes[i].num_scale_keys = node_ranges[2];
-			_resource_animation->nodes[i].name = node_ranges[3];
+			_animation->nodes[i].num_position_keys = node_ranges[0];
+			_animation->nodes[i].num_rotation_keys = node_ranges[1];
+			_animation->nodes[i].num_scale_keys = node_ranges[2];
+			_animation->nodes[i].name = node_ranges[3];
 			cursor += bytes;
 
 			// loading position
-			bytes = sizeof(double) * _resource_animation->nodes[i].num_position_keys;
-			_resource_animation->nodes[i].position_keys_times = new double[_resource_animation->nodes[i].num_position_keys];
-			memcpy(_resource_animation->nodes[i].position_keys_times, cursor, bytes);
+			bytes = sizeof(double) * _animation->nodes[i].num_position_keys;
+			_animation->nodes[i].position_keys_times = new double[_animation->nodes[i].num_position_keys];
+			memcpy(_animation->nodes[i].position_keys_times, cursor, bytes);
 			cursor += bytes;
 
-			bytes = sizeof(float3) * _resource_animation->nodes[i].num_position_keys;
-			_resource_animation->nodes[i].position_keys_value = new float3[_resource_animation->nodes[i].num_position_keys];
-			memcpy(_resource_animation->nodes[i].position_keys_value, cursor, bytes);
+			bytes = sizeof(float3) * _animation->nodes[i].num_position_keys;
+			_animation->nodes[i].position_keys_value = new float3[_animation->nodes[i].num_position_keys];
+			memcpy(_animation->nodes[i].position_keys_value, cursor, bytes);
 			cursor += bytes;
 
 			// loading rotation
-			bytes = sizeof(double) * _resource_animation->nodes[i].num_rotation_keys;
-			_resource_animation->nodes[i].rotation_keys_times = new double[_resource_animation->nodes[i].num_rotation_keys];
-			memcpy(_resource_animation->nodes[i].rotation_keys_times, cursor, bytes);
+			bytes = sizeof(double) * _animation->nodes[i].num_rotation_keys;
+			_animation->nodes[i].rotation_keys_times = new double[_animation->nodes[i].num_rotation_keys];
+			memcpy(_animation->nodes[i].rotation_keys_times, cursor, bytes);
 			cursor += bytes;
 
-			bytes = sizeof(Quat) * _resource_animation->nodes[i].num_rotation_keys;
-			_resource_animation->nodes[i].rotation_keys_value = new Quat[_resource_animation->nodes[i].num_rotation_keys];
-			memcpy(_resource_animation->nodes[i].rotation_keys_value, cursor, bytes);
+			bytes = sizeof(Quat) * _animation->nodes[i].num_rotation_keys;
+			_animation->nodes[i].rotation_keys_value = new Quat[_animation->nodes[i].num_rotation_keys];
+			memcpy(_animation->nodes[i].rotation_keys_value, cursor, bytes);
 			cursor += bytes;
 
 			// loading scale
-			bytes = sizeof(double) * _resource_animation->nodes[i].num_scale_keys;
-			_resource_animation->nodes[i].scale_keys_times = new double[_resource_animation->nodes[i].num_scale_keys];
-			memcpy(_resource_animation->nodes[i].scale_keys_times, cursor, bytes);
+			bytes = sizeof(double) * _animation->nodes[i].num_scale_keys;
+			_animation->nodes[i].scale_keys_times = new double[_animation->nodes[i].num_scale_keys];
+			memcpy(_animation->nodes[i].scale_keys_times, cursor, bytes);
 			cursor += bytes;
 
-			bytes = sizeof(float3) * _resource_animation->nodes[i].num_scale_keys;
-			_resource_animation->nodes[i].scale_keys_value = new float3[_resource_animation->nodes[i].num_scale_keys];
-			memcpy(_resource_animation->nodes[i].scale_keys_value, cursor, bytes);
+			bytes = sizeof(float3) * _animation->nodes[i].num_scale_keys;
+			_animation->nodes[i].scale_keys_value = new float3[_animation->nodes[i].num_scale_keys];
+			memcpy(_animation->nodes[i].scale_keys_value, cursor, bytes);
 			cursor += bytes;
 		}
 	}
 
 	RELEASE_ARRAY(buffer);
+}
+
+
+// BONE-------------------------------------
+void ImportAnimation::ImportBone(aiBone* _bone)
+{
+	ResourceBone* bone = new ResourceBone();
+	bone->num_weights = _bone->mNumWeights;
+
+	aiVector3D position;
+	aiQuaternion rotation;
+	aiVector3D scale;
+
+	_bone->mOffsetMatrix.Decompose(scale, rotation, position);
+
+	bone->position.x = position.x;
+	bone->position.y = position.y;
+	bone->position.z = position.z;
+
+	bone->rotation.x = rotation.x;
+	bone->rotation.y = rotation.y;
+	bone->rotation.z = rotation.z;
+	bone->rotation.w = rotation.w;
+
+	bone->scale.x = scale.x;
+	bone->scale.y = scale.y;
+	bone->scale.z = scale.z;
+
+	if (_bone->mNumWeights > 0)
+	{
+		bone->weights = new Weight[bone->num_weights];
+
+		for (int i = 0; i < bone->num_weights; i++)
+		{
+			bone->weights[i].vertex_id = _bone->mWeights[i].mVertexId;
+			bone->weights[i].weight = _bone->mWeights[i].mWeight;
+		}
+
+	}
+
+	CreateOurBone(bone);
+
+	RELEASE(bone);
+}
+
+bool ImportAnimation::CreateOurBone(ResourceBone* _bone)
+{
+	// amount of num_weights / id_mesh 
+	uint ranges[2] = { _bone->num_weights, _bone->id_mesh };
+	uint size = sizeof(ranges) + sizeof(float3) * 2 + sizeof(Quat) + sizeof(uint) * _bone->num_weights + sizeof(float) * _bone->num_weights;
+
+	// Allocate
+	char* data = new char[size];
+	char* cursor = data;
+
+	// First store ranges
+	uint bytes = sizeof(ranges);
+	memcpy(cursor, ranges, bytes);
+	cursor += bytes;
+
+	bytes = sizeof(float3);
+	memcpy(cursor, &_bone->position, bytes);
+	cursor += bytes;
+
+	bytes = sizeof(Quat);
+	memcpy(cursor, &_bone->rotation, bytes);
+	cursor += bytes;
+
+	bytes = sizeof(float3);
+	memcpy(cursor, &_bone->scale, bytes);
+	cursor += bytes;
+
+	for (int i = 0; i < _bone->num_weights; i++)
+	{
+		bytes = sizeof(uint);
+		memcpy(cursor, &_bone->weights[i].vertex_id, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(float);
+		memcpy(cursor, &_bone->weights[i].weight, bytes);
+		cursor += bytes;
+	}
+
+	std::string file = LIBRARY_BONE_FOLDER + std::to_string(_bone->GetId()) + OUR_BONE_EXTENSION;
+	uint ret = App->file_system->Save(file.c_str(), data, size);
+	RELEASE_ARRAY(data);
+
+	return ret;
+}
+void ImportAnimation::LoadBoneFromResource(ResourceBone* _bone)
+{
+	char* buffer;
+	uint size = App->file_system->Load(_bone->GetFile(), &buffer);
+
+	char* cursor = buffer;
+	// amount of num_weights / id_mesh 
+	uint ranges[2];
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+	_bone->num_weights = ranges[0];
+	_bone->id_mesh = ranges[1];
+	cursor += bytes;
+
+	bytes = sizeof(float3);
+	memcpy(&_bone->position, cursor, bytes);
+	cursor += bytes;
+
+	bytes = sizeof(Quat);
+	memcpy(&_bone->rotation, cursor, bytes);
+	cursor += bytes;
+
+	bytes = sizeof(float3);
+	memcpy(&_bone->scale, cursor, bytes);
+	cursor += bytes;
+
+	// loading weights
+	if (_bone->num_weights > 0)
+	{
+		_bone->weights = new Weight[_bone->num_weights];
+		for (int i = 0; i < _bone->num_weights; i++)
+		{
+			bytes = sizeof(uint);
+			memcpy(&_bone->weights[i].vertex_id, cursor, bytes);
+			cursor += bytes;
+
+			bytes = sizeof(float);
+			memcpy(&_bone->weights[i].weight, cursor, bytes);
+			cursor += bytes;
+		}
+	}
+
+	RELEASE_ARRAY(buffer);
+}
+
+// GRAPH---------------------------------------------
+void ImportAnimation::ImportGraph()
+{
+	
+}
+bool ImportAnimation::CreateOurGraph(ResourceAnimationGraph* _graph)
+{
+
+}
+void ImportAnimation::LoadGraphFromResource(ResourceAnimationGraph* _graph)
+{
+
 }
