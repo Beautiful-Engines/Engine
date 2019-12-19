@@ -2,7 +2,10 @@
 #define __ImportAnimation_H_
 
 struct aiAnimation;
+struct aiBone;
 class ResourceAnimation;
+class ResourceBone;
+class ResourceAnimationGraph;
 
 class ImportAnimation
 {
@@ -13,9 +16,17 @@ public:
 	bool Init();
 	bool CleanUp();
 
-	void Import(aiAnimation* animation);
-	bool CreateOurAnimation(ResourceAnimation* animation);
-	void LoadAnimationFromResource(ResourceAnimation* animation);
+	void Import(aiAnimation* _animation);
+	bool CreateOurAnimation(ResourceAnimation* _animation);
+	void LoadAnimationFromResource(ResourceAnimation* _animation);
+
+	void ImportBone(aiBone* _bone);
+	bool CreateOurBone(ResourceBone* _bone);
+	void LoadBoneFromResource(ResourceBone* _bone);
+
+	void ImportGraph();
+	bool CreateOurGraph(ResourceAnimationGraph* _graph);
+	void LoadGraphFromResource(ResourceAnimationGraph* _graph);
 
 };
 

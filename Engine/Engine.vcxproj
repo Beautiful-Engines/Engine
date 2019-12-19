@@ -168,6 +168,8 @@
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceAnimation.h" />
+    <ClInclude Include="ResourceBone.h" />
+    <ClInclude Include="ResourceGraph.h" />
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="ResourceModel.h" />
     <ClInclude Include="ResourceTexture.h" />
@@ -282,6 +284,8 @@
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceAnimation.cpp" />
+    <ClCompile Include="ResourceBone.cpp" />
+    <ClCompile Include="ResourceGraph.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="ResourceModel.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />

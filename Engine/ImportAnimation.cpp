@@ -1,7 +1,12 @@
 #include "Application.h"
 #include "ModuleFileSystem.h"
 #include "ResourceAnimation.h"
+#include "ResourceBone.h"
+#include "ResourceGraph.h"
+
 #include "Assimp/include/anim.h"
+#include "Assimp/include/mesh.h"
+
 #include "ImportAnimation.h"
 
 ImportAnimation::ImportAnimation()
@@ -23,6 +28,7 @@ bool ImportAnimation::CleanUp()
 	return true;
 }
 
+// ANIMATION-------------------------------------
 void ImportAnimation::Import(aiAnimation* _animation)
 {
 	ResourceAnimation* anim = new ResourceAnimation();
@@ -221,4 +227,70 @@ void ImportAnimation::LoadAnimationFromResource(ResourceAnimation* _resource_ani
 	}
 
 	RELEASE_ARRAY(buffer);
+}
+
+
+// BONE-------------------------------------
+void ImportAnimation::ImportBone(aiBone* _bone)
+{
+	ResourceBone* bone = new ResourceBone();
+	bone->num_weights = _bone->mNumWeights;
+
+	aiVector3D position;
+	aiQuaternion rotation;
+	aiVector3D scale;
+
+	_bone->mOffsetMatrix.Decompose(scale, rotation, position);
+
+	bone->position.x = position.x;
+	bone->position.y = position.y;
+	bone->position.z = position.z;
+
+	bone->rotation.x = rotation.x;
+	bone->rotation.y = rotation.y;
+	bone->rotation.z = rotation.z;
+	bone->rotation.w = rotation.w;
+
+	bone->scale.x = scale.x;
+	bone->scale.y = scale.y;
+	bone->scale.z = scale.z;
+
+	if (_bone->mNumWeights > 0)
+	{
+		bone->weights = new Weight[bone->num_weights];
+
+		for (int i = 0; i < bone->num_weights; i++)
+		{
+			bone->weights[i].vertex_id = _bone->mWeights[i].mVertexId;
+			bone->weights[i].weight = _bone->mWeights[i].mWeight;
+		}
+
+	}
+
+	CreateOurBone(bone);
+
+	RELEASE(bone);
+}
+
+bool ImportAnimation::CreateOurBone(ResourceBone* _bone)
+{
+
+}
+void ImportAnimation::LoadBoneFromResource(ResourceBone* _bone)
+{
+
+}
+
+// GRAPH---------------------------------------------
+void ImportAnimation::ImportGraph()
+{
+	
+}
+bool ImportAnimation::CreateOurGraph(ResourceAnimationGraph* _graph)
+{
+
+}
+void ImportAnimation::LoadGraphFromResource(ResourceAnimationGraph* _graph)
+{
+
 }

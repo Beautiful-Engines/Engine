@@ -412,6 +412,12 @@
     <ClInclude Include="ComponentAnimation.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceBone.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceGraph.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -661,6 +667,12 @@
       <Filter>Sources\Importers</Filter>
     </ClCompile>
     <ClCompile Include="ResourceAnimation.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceBone.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceGraph.cpp">
       <Filter>Sources\Resources</Filter>
     </ClCompile>
   </ItemGroup>
