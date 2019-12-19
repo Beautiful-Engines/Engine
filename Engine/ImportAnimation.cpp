@@ -368,7 +368,7 @@ void ImportAnimation::ImportGraph()
 }
 bool ImportAnimation::CreateOurGraph(ResourceAnimationGraph* _graph)
 {
-
+	return true;
 }
 void ImportAnimation::LoadGraphFromResource(ResourceAnimationGraph* _graph)
 {
