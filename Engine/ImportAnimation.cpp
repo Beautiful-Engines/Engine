@@ -87,15 +87,17 @@ void ImportAnimation::Import(aiAnimation* _animation)
 	}
 
 	CreateOurAnimation(anim);
-	/*RELEASE(anim);*/
+	RELEASE(anim);
 }
 
 bool ImportAnimation::CreateOurAnimation(ResourceAnimation* _animation)
 {
 	// amount of duration / ticks_per_second / channels / name
-	uint ranges[2] = { _animation->num_channels, _animation->name_anim.size() };
-	uint size = sizeof(ranges);
-
+	
+	// num channels
+	uint size = sizeof(uint);
+	// name
+	size += _animation->name_anim.size();
 	// duration
 	size += sizeof(double);
 	// ticks_per_second
@@ -103,9 +105,10 @@ bool ImportAnimation::CreateOurAnimation(ResourceAnimation* _animation)
 
 	for (uint i = 0; i < _animation->num_channels; i++)
 	{
-		uint node_ranges[4] = { _animation->nodes[i].num_position_keys, _animation->nodes[i].num_rotation_keys, _animation->nodes[i].num_scale_keys, _animation->nodes[i].name_node.size() };
-		size += sizeof(node_ranges) + (sizeof(float3) * _animation->nodes[i].num_position_keys) + (sizeof(Quat) * _animation->nodes[i].num_rotation_keys)
-			+ (sizeof(float3) * _animation->nodes[i].num_scale_keys + _animation->nodes[i].name_node.size());
+		uint node_ranges[3] = { _animation->nodes[i].num_position_keys, _animation->nodes[i].num_rotation_keys, _animation->nodes[i].num_scale_keys };
+		size += sizeof(node_ranges) + _animation->nodes[i].name_node.size() 
+			+ (sizeof(double) * _animation->nodes[i].num_position_keys) + (sizeof(double) * _animation->nodes[i].num_rotation_keys) + (sizeof(double) * _animation->nodes[i].num_scale_keys)
+			+ (sizeof(float3) * _animation->nodes[i].num_position_keys)	+ (sizeof(Quat) * _animation->nodes[i].num_rotation_keys) + (sizeof(float3) * _animation->nodes[i].num_scale_keys);
 	}
 
 	// Allocate
@@ -113,8 +116,8 @@ bool ImportAnimation::CreateOurAnimation(ResourceAnimation* _animation)
 	char* cursor = data;
 
 	// First store ranges
-	uint bytes = sizeof(ranges);
-	memcpy(cursor, ranges, bytes);
+	uint bytes = sizeof(uint);
+	memcpy(cursor, &_animation->num_channels, bytes);
 	cursor += bytes;
 
 	bytes = _animation->name_anim.size();
@@ -132,10 +135,15 @@ bool ImportAnimation::CreateOurAnimation(ResourceAnimation* _animation)
 	// nodes
 	for (uint i = 0; i < _animation->num_channels; i++)
 	{
-		uint node_ranges[4] = { _animation->nodes[i].num_position_keys, _animation->nodes[i].num_rotation_keys, _animation->nodes[i].num_scale_keys, _animation->nodes[i].name_node.size() };
+		uint node_ranges[3] = { _animation->nodes[i].num_position_keys, _animation->nodes[i].num_rotation_keys, _animation->nodes[i].num_scale_keys };
 
 		bytes = sizeof(node_ranges);
 		memcpy(cursor, node_ranges, bytes);
+		cursor += bytes;
+
+		// name
+		bytes = _animation->nodes[i].name_node.size();
+		memcpy(cursor, _animation->nodes[i].name_node.c_str(), bytes);
 		cursor += bytes;
 
 		//position
@@ -162,14 +170,11 @@ bool ImportAnimation::CreateOurAnimation(ResourceAnimation* _animation)
 		memcpy(cursor, _animation->nodes[i].scale_keys_value, bytes);
 		cursor += bytes;
 
-		bytes = _animation->nodes[i].name_node.size();
-		memcpy(cursor, _animation->nodes[i].name_node.c_str(), bytes);
-		cursor += bytes;
 	}
 
 	std::string file = LIBRARY_ANIMATION_FOLDER + std::to_string(_animation->GetId()) + OUR_ANIMATION_EXTENSION;
 	uint ret = App->file_system->Save(file.c_str(), data, size);
-	/*RELEASE_ARRAY(data);*/
+	RELEASE_ARRAY(data);
 
 	return ret;
 }
@@ -180,17 +185,21 @@ void ImportAnimation::LoadAnimationFromResource(ResourceAnimation* _animation)
 	uint size = App->file_system->Load(_animation->GetFile(), &buffer);
 
 	char* cursor = buffer;
-	// amount of duration / ticks_per_second / channels / name
-	uint ranges[4];
+	uint ranges[1];
 	uint bytes = sizeof(ranges);
 	memcpy(ranges, cursor, bytes);
 	_animation->num_channels = ranges[0];
-	_animation->name_anim = ranges[1];
 	cursor += bytes;
 
+	// name
+	bytes = _animation->name_anim.size();
+	memcpy(&_animation->name_anim, cursor, bytes);
+	cursor += bytes;
+	// duration
 	bytes = sizeof(double);
 	memcpy(&_animation->duration, cursor, bytes);
 	cursor += bytes;
+	// ticks per second
 	bytes = sizeof(double);
 	memcpy(&_animation->ticks_per_second, cursor, bytes);
 	cursor += bytes;
@@ -202,13 +211,17 @@ void ImportAnimation::LoadAnimationFromResource(ResourceAnimation* _animation)
 		for (uint i = 0; i < _animation->num_channels; i++)
 		{
 			// loading ranges
-			uint node_ranges[4];
+			uint node_ranges[3];
 			uint bytes = sizeof(node_ranges);
 			memcpy(node_ranges, cursor, bytes);
 			_animation->nodes[i].num_position_keys = node_ranges[0];
 			_animation->nodes[i].num_rotation_keys = node_ranges[1];
 			_animation->nodes[i].num_scale_keys = node_ranges[2];
-			_animation->nodes[i].name_node = node_ranges[3];
+			cursor += bytes;
+
+			// name node
+			bytes = _animation->nodes[i].name_node.size();
+			memcpy(&_animation->nodes[i].name_node, cursor, bytes);
 			cursor += bytes;
 
 			// loading position

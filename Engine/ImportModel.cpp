@@ -102,6 +102,14 @@ uint ImportModel::ImportFBX(const char* _path)
 			model->nodes.push_back(ImportNode(scene->mRootNode->mChildren[i], scene, resource_mesh, model));
 		}
 
+		if (scene->HasAnimations())
+		{
+			for (int i = 0; i < scene->mNumAnimations; ++i)
+			{
+				App->importer->import_animation->Import(scene->mAnimations[i]);
+			}
+		}
+
 		aiReleaseImport(scene);
 	}
 	else
