@@ -13,7 +13,6 @@ ImportAnimation::ImportAnimation()
 {
 }
 
-
 ImportAnimation::~ImportAnimation()
 {
 }
@@ -32,6 +31,8 @@ bool ImportAnimation::CleanUp()
 void ImportAnimation::Import(aiAnimation* _animation)
 {
 	ResourceAnimation* anim = new ResourceAnimation();
+	if(_animation->mName.length > 0)
+		anim->name = _animation->mName.C_Str();
 	anim->duration = _animation->mDuration;
 	anim->ticks_per_second = _animation->mTicksPerSecond;
 	anim->num_channels = _animation->mNumChannels;
@@ -41,15 +42,16 @@ void ImportAnimation::Import(aiAnimation* _animation)
 	{
 		anim->nodes = new NodeAnimation[anim->num_channels];
 
-		for (int i = 0; i < anim->num_channels; i++)
+		for (uint i = 0; i < anim->num_channels; i++)
 		{
-			anim->nodes[i].name = _animation->mChannels[i]->mNodeName.C_Str();
+			if(_animation->mChannels[i]->mNodeName.length > 0)
+				anim->nodes[i].name = _animation->mChannels[i]->mNodeName.C_Str();
 			
 			//positions
 			anim->nodes[i].num_position_keys = _animation->mChannels[i]->mNumPositionKeys;
 			anim->nodes[i].position_keys_value = new float3[anim->nodes[i].num_position_keys];
 			anim->nodes[i].position_keys_times = new double[anim->nodes[i].num_position_keys];
-			for (int j = 0; j < anim->nodes[i].num_position_keys; j++)
+			for (uint j = 0; j < anim->nodes[i].num_position_keys; j++)
 			{
 				anim->nodes[i].position_keys_times[j] = _animation->mChannels[i]->mPositionKeys[j].mTime;
 				anim->nodes[i].position_keys_value[j].x = _animation->mChannels[i]->mPositionKeys[j].mValue.x;
@@ -61,7 +63,7 @@ void ImportAnimation::Import(aiAnimation* _animation)
 			anim->nodes[i].num_rotation_keys = _animation->mChannels[i]->mNumRotationKeys;
 			anim->nodes[i].rotation_keys_value = new Quat[anim->nodes[i].num_rotation_keys];
 			anim->nodes[i].rotation_keys_times = new double[anim->nodes[i].num_rotation_keys];
-			for (int j = 0; j < anim->nodes[i].num_rotation_keys; j++)
+			for (uint j = 0; j < anim->nodes[i].num_rotation_keys; j++)
 			{
 				anim->nodes[i].rotation_keys_times[j] = _animation->mChannels[i]->mRotationKeys[j].mTime;
 				anim->nodes[i].rotation_keys_value[j].x = _animation->mChannels[i]->mRotationKeys[j].mValue.x;
@@ -74,7 +76,7 @@ void ImportAnimation::Import(aiAnimation* _animation)
 			anim->nodes[i].num_scale_keys = _animation->mChannels[i]->mNumScalingKeys;
 			anim->nodes[i].scale_keys_value = new float3[anim->nodes[i].num_scale_keys];
 			anim->nodes[i].scale_keys_times = new double[anim->nodes[i].num_scale_keys];
-			for (int j = 0; j < anim->nodes[i].num_scale_keys; j++)
+			for (uint j = 0; j < anim->nodes[i].num_scale_keys; j++)
 			{
 				anim->nodes[i].scale_keys_times[j] = _animation->mChannels[i]->mScalingKeys[j].mTime;
 				anim->nodes[i].scale_keys_value[j].x = _animation->mChannels[i]->mScalingKeys[j].mValue.x;
@@ -85,16 +87,21 @@ void ImportAnimation::Import(aiAnimation* _animation)
 	}
 
 	CreateOurAnimation(anim);
-	RELEASE(anim);
+	/*RELEASE(anim);*/
 }
 
 bool ImportAnimation::CreateOurAnimation(ResourceAnimation* _animation)
 {
 	// amount of duration / ticks_per_second / channels / name
-	uint ranges[4] = { _animation->duration, _animation->ticks_per_second, _animation->num_channels, _animation->name.size() };
+	uint ranges[2] = { _animation->num_channels, _animation->name.size() };
 	uint size = sizeof(ranges);
 
-	for (int i = 0; i < _animation->num_channels; i++)
+	// duration
+	size += sizeof(double);
+	// ticks_per_second
+	size += sizeof(double);
+
+	for (uint i = 0; i < _animation->num_channels; i++)
 	{
 		uint node_ranges[4] = { _animation->nodes[i].num_position_keys, _animation->nodes[i].num_rotation_keys, _animation->nodes[i].num_scale_keys, _animation->nodes[i].name.size() };
 		size += sizeof(node_ranges) + sizeof(float3) * _animation->nodes[i].num_position_keys + sizeof(Quat) * _animation->nodes[i].num_rotation_keys
@@ -114,8 +121,16 @@ bool ImportAnimation::CreateOurAnimation(ResourceAnimation* _animation)
 	memcpy(cursor, _animation->name.c_str(), bytes);
 	cursor += bytes;
 
+	bytes = sizeof(double);
+	memcpy(cursor, &_animation->duration, bytes);
+	cursor += bytes;
+
+	bytes = sizeof(double);
+	memcpy(cursor, &_animation->ticks_per_second, bytes);
+	cursor += bytes;
+
 	// nodes
-	for (int i = 0; i < _animation->num_channels; i++)
+	for (uint i = 0; i < _animation->num_channels; i++)
 	{
 		uint node_ranges[4] = { _animation->nodes[i].num_position_keys, _animation->nodes[i].num_rotation_keys, _animation->nodes[i].num_scale_keys, _animation->nodes[i].name.size() };
 
@@ -154,7 +169,7 @@ bool ImportAnimation::CreateOurAnimation(ResourceAnimation* _animation)
 
 	std::string file = LIBRARY_ANIMATION_FOLDER + std::to_string(_animation->GetId()) + OUR_ANIMATION_EXTENSION;
 	uint ret = App->file_system->Save(file.c_str(), data, size);
-	RELEASE_ARRAY(data);
+	/*RELEASE_ARRAY(data);*/
 
 	return ret;
 }
@@ -179,7 +194,7 @@ void ImportAnimation::LoadAnimationFromResource(ResourceAnimation* _animation)
 	if (_animation->num_channels > 0)
 	{
 		_animation->nodes = new NodeAnimation[_animation->num_channels];
-		for (int i = 0; i < _animation->num_channels; i++)
+		for (uint i = 0; i < _animation->num_channels; i++)
 		{
 			// loading ranges
 			uint node_ranges[4];
@@ -259,7 +274,7 @@ void ImportAnimation::ImportBone(aiBone* _bone)
 	{
 		bone->weights = new Weight[bone->num_weights];
 
-		for (int i = 0; i < bone->num_weights; i++)
+		for (uint i = 0; i < bone->num_weights; i++)
 		{
 			bone->weights[i].vertex_id = _bone->mWeights[i].mVertexId;
 			bone->weights[i].weight = _bone->mWeights[i].mWeight;
@@ -299,7 +314,7 @@ bool ImportAnimation::CreateOurBone(ResourceBone* _bone)
 	memcpy(cursor, &_bone->scale, bytes);
 	cursor += bytes;
 
-	for (int i = 0; i < _bone->num_weights; i++)
+	for (uint i = 0; i < _bone->num_weights; i++)
 	{
 		bytes = sizeof(uint);
 		memcpy(cursor, &_bone->weights[i].vertex_id, bytes);
@@ -318,10 +333,10 @@ bool ImportAnimation::CreateOurBone(ResourceBone* _bone)
 }
 void ImportAnimation::LoadBoneFromResource(ResourceBone* _bone)
 {
-	char* buffer;
-	uint size = App->file_system->Load(_bone->GetFile(), &buffer);
+	char* data;
+	uint size = App->file_system->Load(_bone->GetFile(), &data);
 
-	char* cursor = buffer;
+	char* cursor = data;
 	// amount of num_weights / id_mesh 
 	uint ranges[2];
 	uint bytes = sizeof(ranges);
@@ -346,7 +361,7 @@ void ImportAnimation::LoadBoneFromResource(ResourceBone* _bone)
 	if (_bone->num_weights > 0)
 	{
 		_bone->weights = new Weight[_bone->num_weights];
-		for (int i = 0; i < _bone->num_weights; i++)
+		for (uint i = 0; i < _bone->num_weights; i++)
 		{
 			bytes = sizeof(uint);
 			memcpy(&_bone->weights[i].vertex_id, cursor, bytes);
@@ -358,14 +373,10 @@ void ImportAnimation::LoadBoneFromResource(ResourceBone* _bone)
 		}
 	}
 
-	RELEASE_ARRAY(buffer);
+	RELEASE_ARRAY(data);
 }
 
 // GRAPH---------------------------------------------
-void ImportAnimation::ImportGraph()
-{
-	
-}
 bool ImportAnimation::CreateOurGraph(ResourceAnimationGraph* _graph)
 {
 	return true;

@@ -9,6 +9,9 @@
 #include "ResourceTexture.h"
 #include "ImportModel.h"
 #include "ResourceModel.h"
+#include "ImportAnimation.h"
+#include "ResourceAnimation.h"
+#include "ResourceBone.h"
 #include "Primitive.h"
 
 #include <fstream>
@@ -45,6 +48,14 @@ Resource* ModuleResource::CreateResource(const char* extension, uint UID)
 	else if (extension == OUR_MODEL_EXTENSION)
 	{
 		r = new ResourceModel();
+	}
+	else if (extension == OUR_ANIMATION_EXTENSION)
+	{
+		r = new ResourceAnimation();
+	}
+	else if (extension == OUR_BONE_EXTENSION)
+	{
+		r = new ResourceBone();
 	}
 	
 	if (r != nullptr && UID != 0)
@@ -151,6 +162,20 @@ void ModuleResource::LoadFile(const char * _path)
 			resource->SetFile(exported_file);
 			resource->SetName(name);
 			App->importer->import_model->LoadModel((ResourceModel*)resource);
+		}
+		else if ("." + extension == OUR_ANIMATION_EXTENSION)
+		{
+			resource = CreateResource(OUR_ANIMATION_EXTENSION, UID);
+			resource->SetFile(exported_file);
+			resource->SetName(name);
+			App->importer->import_animation->LoadAnimationFromResource((ResourceAnimation*)resource);
+		}
+		else if ("." + extension == OUR_BONE_EXTENSION)
+		{
+			resource = CreateResource(OUR_BONE_EXTENSION, UID);
+			resource->SetFile(exported_file);
+			resource->SetName(name);
+			App->importer->import_animation->LoadBoneFromResource((ResourceBone*)resource);
 		}
 	}
 }

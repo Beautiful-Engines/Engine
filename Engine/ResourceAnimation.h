@@ -6,7 +6,7 @@
 
 struct NodeAnimation
 {
-	std::string name = "";
+	std::string name = "noname";
 	uint num_position_keys = 0;
 	uint num_rotation_keys = 0;
 	uint num_scale_keys = 0;
@@ -40,7 +40,7 @@ public:
 	~ResourceAnimation();
 
 public:
-	std::string name = "";
+	std::string name = "noname";
 	double duration = 0;
 	double ticks_per_second = 0;
 

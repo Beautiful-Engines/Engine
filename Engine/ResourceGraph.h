@@ -3,6 +3,15 @@
 
 #include "Resource.h"
 
+struct Node
+{
+	Node() {};
+	~Node() {};
+
+	uint node_id = 0;
+
+};
+
 class ResourceGraph : public Resource
 {
 public:

@@ -34,7 +34,7 @@ public:
 
 protected:
 	uint id = 0;
-	std::string name = "";
+	std::string name = "noname";
 	std::string file = "";
 	RESOURCE_TYPE type = RESOURCE_TYPE::NONE;
 	uint cantity = 0;

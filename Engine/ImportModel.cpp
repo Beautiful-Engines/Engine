@@ -8,6 +8,7 @@
 #include "ComponentTexture.h"
 #include "ImportMesh.h"
 #include "ImportTexture.h"
+#include "ImportAnimation.h"
 #include "ResourceModel.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
@@ -80,6 +81,15 @@ uint ImportModel::ImportFBX(const char* _path)
 
 	// Scene
 	const aiScene *scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
+
+	// Animations
+	if (scene != nullptr && scene->HasAnimations())
+	{
+		for (int i = 0; i < scene->mNumAnimations; ++i)
+		{
+			App->importer->import_animation->Import(scene->mAnimations[i]);
+		}
+	}
 
 	// Mesh
 	if (scene != nullptr && scene->HasMeshes())
@@ -167,6 +177,16 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 		resource_node.name += "_mesh";
 		resource_node.mesh = _resource_mesh->GetId();
 		App->importer->import_mesh->Import(_scene, ai_mesh, _resource_mesh);
+
+		// Bones
+		if (ai_mesh->mNumBones > 0)
+		{
+			for (int i = 0; i < ai_mesh->mNumBones; i++)
+			{
+				aiBone* ai_bone = ai_mesh->mBones[i];
+				App->importer->import_animation->ImportBone(ai_bone);
+			}
+		}
 
 		// Texture
 		if (ai_mesh->mMaterialIndex >= 0)
