@@ -6,8 +6,8 @@
 
 struct Weight
 {
-	uint vertex_id;
-	float weight;
+	uint vertex_id = 0u;
+	float weight = 0.0f;
 };
 class ResourceBone : public Resource
 {

@@ -109,10 +109,16 @@ void ModuleResource::LoadAllAssets()
 {
 	App->importer->import_texture->DefaultTexture();
 
+	LoadByFolder(ASSETS_FOLDER);
+
+}
+
+void ModuleResource::LoadByFolder(const char* _folder)
+{
 	std::vector<std::string> files_temp;
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
-	App->file_system->DiscoverFiles(ASSETS_FOLDER, files_temp, directories);
+	App->file_system->DiscoverFiles(_folder, files_temp, directories);
 	for (int i = 0; i < files_temp.size(); ++i)
 	{
 		if (files_temp[i].find(".meta") > 1000)
@@ -123,8 +129,29 @@ void ModuleResource::LoadAllAssets()
 
 	for (; iterator != files.end(); ++iterator)
 	{
-		App->file_system->SplitFilePath((*iterator).c_str(), nullptr, nullptr);
-		App->importer->ImportFile((ASSETS_FOLDER + (*iterator)).c_str());
+		if (first_textures && (*iterator).find(".fbx") > 1000)
+		{
+			App->file_system->SplitFilePath((*iterator).c_str(), nullptr, nullptr);
+			App->importer->ImportFile((_folder + (*iterator)).c_str(), false, true);
+		}
+		else if (!first_textures && (*iterator).find(".fbx") < 1000)
+		{
+			App->file_system->SplitFilePath((*iterator).c_str(), nullptr, nullptr);
+			App->importer->ImportFile((_folder + (*iterator)).c_str(), false, true);
+		}
+	}
+
+	std::vector<std::string>::iterator iterator2 = directories.begin();
+	for (; iterator2 != directories.end(); ++iterator2)
+	{
+		std::string folder = _folder + (*iterator2) + "/";
+		LoadByFolder(folder.c_str());
+	}
+
+	if (first_textures)
+	{
+		first_textures = false;
+		LoadByFolder(ASSETS_FOLDER);
 	}
 }
 

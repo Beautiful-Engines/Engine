@@ -34,7 +34,7 @@ bool WindowProject::Draw()
 	std::vector<std::string> files_temp;
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
-	App->file_system->DiscoverFiles(ASSETS_FOLDER, files_temp, directories);
+	App->file_system->DiscoverFiles(folder.c_str(), files_temp, directories);
 	
 	for (int i = 0; i < files_temp.size(); ++i)
 	{
@@ -62,6 +62,7 @@ bool WindowProject::Draw()
 		if ((i + 1) % columns == 0)
 			line++;
 
+
 		ImGui::PopID();
 	}
 	for (int i = 0; i < files.size(); ++i)
@@ -71,11 +72,11 @@ bool WindowProject::Draw()
 		ImGui::SetCursorPosX(pos.x + (i - (line * columns)) * (image_size + spacing) + offset);
 		ImGui::SetCursorPosY(pos.y + line * (image_size + spacing) + offset);
 
-		if (App->resource->Get(App->resource->GetId(ASSETS_FOLDER + files[i])) != nullptr)
+		if (App->resource->Get(App->resource->GetId(folder.c_str() + files[i])) != nullptr)
 		{
-			if (App->resource->Get(App->resource->GetId(ASSETS_FOLDER + files[i]))->GetType() == Resource::RESOURCE_TYPE::RESOURCE_TEXTURE)
+			if (App->resource->Get(App->resource->GetId(folder.c_str() + files[i]))->GetType() == Resource::RESOURCE_TYPE::RESOURCE_TEXTURE)
 			{
-				ImGui::Image((void*)(intptr_t)((ResourceTexture*)App->resource->Get(App->resource->GetId(ASSETS_FOLDER + files[i])))->id_texture,
+				ImGui::Image((void*)(intptr_t)((ResourceTexture*)App->resource->Get(App->resource->GetId(folder.c_str() + files[i])))->id_texture,
 					ImVec2(image_size, image_size), ImVec2(0, 1), ImVec2(1, 0));
 			}
 			else
@@ -87,7 +88,7 @@ bool WindowProject::Draw()
 
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 		{
-			uint id = App->resource->GetId(ASSETS_FOLDER + files[i]);
+			uint id = App->resource->GetId(folder.c_str() + files[i]);
 			ImGui::SetDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F, &id, sizeof(uint));
 			ImGui::EndDragDropSource();
 		}

@@ -47,7 +47,7 @@ bool ModuleImport::CleanUp()
 	return true;
 }
 
-void ModuleImport::ImportFile(const char* _path, bool _change_meta)
+void ModuleImport::ImportFile(const char* _path, bool _change_meta, bool _final_path)
 {
 
 	//copy file
@@ -55,8 +55,12 @@ void ModuleImport::ImportFile(const char* _path, bool _change_meta)
 	App->file_system->NormalizePath(normalized_path);
 	std::string file, extension;
 	App->file_system->SplitFilePath(normalized_path.c_str(), nullptr, &file, &extension);
+	std::string final_path = "";
+	if(!_final_path)
+		final_path = ASSETS_FOLDER + file;
+	else
+		final_path = _path;
 
-	std::string final_path = ASSETS_FOLDER + file;
 	std::string meta_path = final_path + ".meta";
 
 	if (!App->file_system->Exists(final_path.c_str()))
@@ -90,7 +94,7 @@ void ModuleImport::ImportFile(const char* _path, bool _change_meta)
 			App->resource->LoadFile(meta_path.c_str());
 		else
 		{
-			ImportFile(_path, true);
+			ImportFile(_path, true, true);
 		}
 
 	}
