@@ -10,6 +10,7 @@ class GameObject;
 enum class ComponentType {
 	MESH,
 	TEXTURE,
+	ANIMATION,
 	TRANSFORM,
 	CAMERA,
 	OTHER

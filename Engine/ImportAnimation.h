@@ -16,15 +16,14 @@ public:
 	bool Init();
 	bool CleanUp();
 
-	void Import(aiAnimation* _animation);
+	uint Import(aiAnimation* _animation);
 	bool CreateOurAnimation(ResourceAnimation* _animation);
 	void LoadAnimationFromResource(ResourceAnimation* _animation);
 
-	void ImportBone(aiBone* _bone);
+	uint ImportBone(aiBone* _bone);
 	bool CreateOurBone(ResourceBone* _bone);
 	void LoadBoneFromResource(ResourceBone* _bone);
 
-	void ImportGraph();
 	bool CreateOurGraph(ResourceAnimationGraph* _graph);
 	void LoadGraphFromResource(ResourceAnimationGraph* _graph);
 

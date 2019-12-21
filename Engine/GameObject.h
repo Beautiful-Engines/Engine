@@ -6,6 +6,7 @@
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
+#include "ComponentAnimation.h"
 #include "ComponentCamera.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
 #include "MathGeoLib\include\Geometry\OBB.h"
@@ -47,6 +48,8 @@ public:
 	ComponentTransform* GetTransform() const;
 
 	ComponentMesh* GetMesh();
+
+	ComponentAnimation* GetAnimation();
 
 	ComponentCamera* GetCamera() const;
 

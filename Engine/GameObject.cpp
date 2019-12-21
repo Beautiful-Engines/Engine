@@ -264,6 +264,18 @@ ComponentMesh * GameObject::GetMesh()
 	return false;
 }
 
+ComponentAnimation * GameObject::GetAnimation()
+{
+	for (uint i = 0; i < this->GetComponents().size(); ++i)
+	{
+		if (this->GetComponents()[i] != nullptr && this->GetComponents()[i]->GetType() == ComponentType::ANIMATION)
+		{
+			return (ComponentAnimation*)this->GetComponents()[i];
+		}
+	}
+	return false;
+}
+
 void GameObject::SetStatic(bool _static) 
 {
 	for (int i = 0; i < children.size(); i++)

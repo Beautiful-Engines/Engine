@@ -28,8 +28,9 @@ bool ImportAnimation::CleanUp()
 }
 
 // ANIMATION-------------------------------------
-void ImportAnimation::Import(aiAnimation* _animation)
+uint ImportAnimation::Import(aiAnimation* _animation)
 {
+	uint ret = 0;
 	ResourceAnimation* anim = new ResourceAnimation();
 	if(_animation->mName.length > 0)
 		anim->name_anim = _animation->mName.C_Str();
@@ -87,7 +88,10 @@ void ImportAnimation::Import(aiAnimation* _animation)
 	}
 
 	CreateOurAnimation(anim);
+	ret = anim->GetId();
 	RELEASE(anim);
+
+	return ret;
 }
 
 bool ImportAnimation::CreateOurAnimation(ResourceAnimation* _animation)
@@ -264,8 +268,9 @@ void ImportAnimation::LoadAnimationFromResource(ResourceAnimation* _animation)
 
 
 // BONE-------------------------------------
-void ImportAnimation::ImportBone(aiBone* _bone)
+uint ImportAnimation::ImportBone(aiBone* _bone)
 {
+	uint ret = 0;
 	ResourceBone* bone = new ResourceBone();
 	bone->num_weights = _bone->mNumWeights;
 
@@ -301,8 +306,10 @@ void ImportAnimation::ImportBone(aiBone* _bone)
 	}
 
 	CreateOurBone(bone);
-
+	ret = bone->GetId();
 	RELEASE(bone);
+
+	return ret;
 }
 
 bool ImportAnimation::CreateOurBone(ResourceBone* _bone)

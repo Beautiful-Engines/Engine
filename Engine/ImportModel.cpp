@@ -6,12 +6,14 @@
 
 #include "GameObject.h"
 #include "ComponentTexture.h"
+#include "ComponentAnimation.h"
 #include "ImportMesh.h"
 #include "ImportTexture.h"
 #include "ImportAnimation.h"
 #include "ResourceModel.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "ResourceAnimation.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -106,7 +108,7 @@ uint ImportModel::ImportFBX(const char* _path)
 		{
 			for (int i = 0; i < scene->mNumAnimations; ++i)
 			{
-				App->importer->import_animation->Import(scene->mAnimations[i]);
+				model->animation = App->importer->import_animation->Import(scene->mAnimations[i]);
 			}
 		}
 
@@ -184,7 +186,7 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 			for (int i = 0; i < ai_mesh->mNumBones; i++)
 			{
 				aiBone* ai_bone = ai_mesh->mBones[i];
-				App->importer->import_animation->ImportBone(ai_bone);
+				resource_node.bone = App->importer->import_animation->ImportBone(ai_bone);
 			}
 		}
 
@@ -300,6 +302,23 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 		go_model->SetIdNode(_resource_model->GetId() + _resource_model->GetCantities());
 		go_model->is_static = true;
 
+		// Animation
+		if (_resource_model->animation > 0)
+		{
+			ComponentAnimation* animation = new ComponentAnimation(go_model);
+			ResourceAnimation* resource_animation = nullptr;
+			if (App->resource->Get(_resource_model->animation) != nullptr)
+				resource_animation = (ResourceAnimation*)App->resource->GetAndUse(_resource_model->animation);
+			else
+			{
+				resource_animation = (ResourceAnimation*)App->resource->CreateResource(OUR_ANIMATION_EXTENSION, _resource_model->animation);
+				resource_animation->SetFile(LIBRARY_ANIMATION_FOLDER + std::to_string(_resource_model->animation) + OUR_ANIMATION_EXTENSION);
+				App->importer->import_animation->LoadAnimationFromResource(resource_animation);
+			}
+			go_model->GetAnimation()->animation = resource_animation;
+		}
+		
+
 		for each (ResourceModel::ModelNode node in _resource_model->nodes)
 		{
 			GameObject* go_node = new GameObject();
@@ -351,10 +370,11 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				if (App->resource->Get(node.mesh) != nullptr)
 					resource_mesh = (ResourceMesh*)App->resource->GetAndUse(node.mesh);
 				else
+				{
 					resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION, node.mesh);
-				
-				resource_mesh->SetFile(LIBRARY_MESH_FOLDER + std::to_string(node.mesh) + OUR_MESH_EXTENSION);
-				App->importer->import_mesh->LoadMeshFromResource(resource_mesh);
+					resource_mesh->SetFile(LIBRARY_MESH_FOLDER + std::to_string(node.mesh) + OUR_MESH_EXTENSION);
+					App->importer->import_mesh->LoadMeshFromResource(resource_mesh);
+				}
 				go_node->GetMesh()->AddResourceMesh(resource_mesh);
 
 				// Texture
@@ -365,6 +385,13 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				}
 				texture->default_texture = (ResourceTexture*)App->resource->GetAndUse(App->resource->GetId("DefaultTexture"));
 				resource_mesh->id_buffer_default_texture = texture->default_texture->id_texture;
+
+				// Bone
+				if (node.bone > 0)
+				{
+					/*ResourceBone* resource_bone = (ResourceBone*)App->resource->GetAndUse(node.bone);
+					App->importer->import_animation->LoadBoneFromResource(resource_bone);*/
+				}
 			}
 
 			App->scene->AddGameObject(go_node);
