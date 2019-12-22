@@ -418,6 +418,9 @@
     <ClInclude Include="ResourceGraph.h">
       <Filter>Sources\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="WindowAnimGraph.h">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -677,6 +680,9 @@
     </ClCompile>
     <ClCompile Include="ComponentAnimation.cpp">
       <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowAnimGraph.cpp">
+      <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
