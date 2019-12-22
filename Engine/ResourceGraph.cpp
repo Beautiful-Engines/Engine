@@ -10,7 +10,7 @@ ResourceGraph::~ResourceGraph()
 {
 }
 
-Node * ResourceGraph::addNode(const char * name, float2 pos)
+Node* ResourceGraph::addNode(const char * name, float2 pos)
 {
 	return nullptr;
 }
@@ -19,12 +19,12 @@ void ResourceGraph::pushLink(NodeLink * link)
 {
 }
 
-Node * ResourceGraph::getNode(uint ID)
+Node* ResourceGraph::getNode(uint ID)
 {
 	return nullptr;
 }
 
-NodeLink * ResourceGraph::getLink(uint ID)
+NodeLink* ResourceGraph::getLink(uint ID)
 {
 	return nullptr;
 }
@@ -37,7 +37,7 @@ Node::Node(const char * name, uint graphID, float2 pos, float2 size)
 {
 }
 
-NodeLink * Node::addLink(linkType type, bool addToList, uint ID)
+NodeLink* Node::addLink(linkType type, bool addToList, uint ID)
 {
 	return nullptr;
 }

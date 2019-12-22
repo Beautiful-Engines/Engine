@@ -26,7 +26,7 @@ public:
 	~ResourceModel();
 
 	std::vector<ModelNode> nodes;
-	uint animation = 0;
+	std::vector<uint> animations;
 };
 
 

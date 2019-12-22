@@ -76,23 +76,12 @@ uint ImportModel::ImportFBX(const char* _path)
 	// Scene
 	const aiScene *scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
-	if (scene != nullptr && scene->HasMeshes())
-	{
-		if (scene->HasAnimations())
-		{
-			for (int i = 0; i < scene->mNumAnimations; ++i)
-			{
-				model->animation = App->importer->import_animation->Import(scene->mAnimations[i]);
-			}
-		}
-	}
-
 	// Create meta
 	nlohmann::json json = {
 		{ "exported_file", LIBRARY_MODEL_FOLDER + std::to_string(model->GetId()) + OUR_MODEL_EXTENSION },
 		{ "name", model->GetName()},
 		{ "id", model->GetId() },
-		{ "animation", model->animation },
+		{ "animations", nlohmann::json::array() },
 		{ "meshes",nlohmann::json::array()}
 	};
 
@@ -116,7 +105,21 @@ uint ImportModel::ImportFBX(const char* _path)
 			model->nodes.push_back(ImportNode(scene->mRootNode->mChildren[i], scene, resource_mesh, model));
 		}
 
-		
+		if (scene->HasAnimations())
+		{
+			for (int i = 0; i < scene->mNumAnimations; ++i)
+			{
+				model->animations.push_back(App->importer->import_animation->Import(scene->mAnimations[i]));
+
+				// adding animations to meta
+				nlohmann::json::iterator _iterator = json.find("animations");
+				nlohmann::json json_mesh = {
+					{"id_animation", model->animations[i]},
+					{ "exported_file_animation", LIBRARY_ANIMATION_FOLDER + std::to_string(model->animations.back()) + OUR_ANIMATION_EXTENSION }
+				};
+				_iterator.value().push_back(json_mesh);
+			}
+		}
 
 		aiReleaseImport(scene);
 	}
@@ -245,7 +248,8 @@ void ImportModel::CreateOurModelFile(ResourceModel* _resource)
 			{"rotation",{iterator_node->rotation.x, iterator_node->rotation.y, iterator_node->rotation.z, iterator_node->rotation.w }},
 			{"parent", iterator_node->parent},
 			{"texture", iterator_node->texture},
-			{"mesh", iterator_node->mesh}
+			{"mesh", iterator_node->mesh},
+			{"bone", iterator_node->bone}
 		};
 		json_model.push_back(json_nodes);
 	}
@@ -305,22 +309,25 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 		go_model->is_static = true;
 
 		// Animation
-		if (_resource_model->animation > 0)
-		{
-			ComponentAnimation* animation = new ComponentAnimation(go_model);
-			ResourceAnimation* resource_animation = nullptr;
-			if (App->resource->Get(_resource_model->animation) != nullptr)
-				resource_animation = (ResourceAnimation*)App->resource->GetAndUse(_resource_model->animation);
-			else
+		std::vector<uint>::iterator iterator_animation = _resource_model->animations.begin();
+
+		for (; iterator_animation != _resource_model->animations.end(); ++iterator_animation) {
+			if (*iterator_animation > 0)
 			{
-				resource_animation = (ResourceAnimation*)App->resource->CreateResource(OUR_ANIMATION_EXTENSION, _resource_model->animation);
-				resource_animation->SetFile(LIBRARY_ANIMATION_FOLDER + std::to_string(_resource_model->animation) + OUR_ANIMATION_EXTENSION);
-				App->importer->import_animation->LoadAnimationFromResource(resource_animation);
+				ComponentAnimation* animation = new ComponentAnimation(go_model);
+				ResourceAnimation* resource_animation = nullptr;
+				if (App->resource->Get(*iterator_animation) != nullptr)
+					resource_animation = (ResourceAnimation*)App->resource->GetAndUse(*iterator_animation);
+				else
+				{
+					resource_animation = (ResourceAnimation*)App->resource->CreateResource(OUR_ANIMATION_EXTENSION, *iterator_animation);
+					resource_animation->SetFile(LIBRARY_ANIMATION_FOLDER + std::to_string(*iterator_animation) + OUR_ANIMATION_EXTENSION);
+					App->importer->import_animation->LoadAnimationFromResource(resource_animation);
+				}
+				go_model->GetAnimation()->resource_animation = resource_animation;
 			}
-			go_model->GetAnimation()->resource_animation = resource_animation;
 		}
 		
-
 		for each (ResourceModel::ModelNode node in _resource_model->nodes)
 		{
 			GameObject* go_node = new GameObject();
