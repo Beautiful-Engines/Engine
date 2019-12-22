@@ -11,6 +11,24 @@ enum linkType
 	OUTPUT_LINK
 };
 
+struct NodeLink
+{
+	NodeLink(linkType type, uint nodeID);
+
+	void connect(uint nodeLinkID) { connectedNodeLink = nodeLinkID; }
+
+	float2 nodePos = { 0,0 };
+
+	uint ID = 0;
+	uint nodeID = 0;
+	uint connectedNodeLink = 0;
+
+	linkType type = INPUT_LINK;
+
+	bool linking = false;
+};
+
+struct Transition;
 struct Node
 {
 	Node(const char* name, uint graphID, float2 pos, float2 size = { 150, 80 });
@@ -51,22 +69,7 @@ struct Transition
 
 };
 
-struct NodeLink
-{
-	NodeLink(linkType type, uint nodeID);
 
-	void connect(uint nodeLinkID) { connectedNodeLink = nodeLinkID; }
-
-	float2 nodePos = { 0,0 };
-
-	uint ID = 0;
-	uint nodeID = 0;
-	uint connectedNodeLink = 0;
-
-	linkType type = INPUT_LINK;
-
-	bool linking = false;
-};
 
 class ResourceGraph : public Resource
 {
