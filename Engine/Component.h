@@ -11,6 +11,7 @@ enum class ComponentType {
 	MESH,
 	TEXTURE,
 	ANIMATION,
+	BONE,
 	TRANSFORM,
 	CAMERA,
 	OTHER

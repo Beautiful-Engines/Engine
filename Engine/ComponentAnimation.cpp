@@ -3,7 +3,6 @@
 #include "ResourceAnimation.h"
 #include "ComponentAnimation.h"
 
-#include "glew/glew.h"
 
 ComponentAnimation::ComponentAnimation(GameObject* _game_object) : Component(_game_object, ComponentType::ANIMATION)
 {

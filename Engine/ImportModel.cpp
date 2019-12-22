@@ -14,6 +14,7 @@
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 #include "ResourceAnimation.h"
+#include "ResourceBone.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -398,8 +399,15 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				// Bone
 				if (node.bone > 0)
 				{
-					/*ResourceBone* resource_bone = (ResourceBone*)App->resource->GetAndUse(node.bone);
-					App->importer->import_animation->LoadBoneFromResource(resource_bone);*/
+					ResourceBone* resource_bone = nullptr;
+					if (App->resource->Get(node.bone) != nullptr)
+						resource_bone = (ResourceBone*)App->resource->GetAndUse(node.bone);
+					else
+					{
+						resource_bone = (ResourceBone*)App->resource->CreateResource(OUR_BONE_EXTENSION, node.bone);
+						resource_bone->SetFile(LIBRARY_BONE_FOLDER + std::to_string(node.bone) + OUR_BONE_EXTENSION);
+						App->importer->import_animation->LoadBoneFromResource(resource_bone);
+					}
 				}
 			}
 

@@ -375,10 +375,10 @@ bool ImportAnimation::CreateOurBone(ResourceBone* _bone)
 }
 void ImportAnimation::LoadBoneFromResource(ResourceBone* _bone)
 {
-	char* data;
-	uint size = App->file_system->Load(_bone->GetFile(), &data);
+	char* buffer;
+	uint size = App->file_system->Load(_bone->GetFile(), &buffer);
 
-	char* cursor = data;
+	char* cursor = buffer;
 	// amount of num_weights / id_mesh 
 	uint ranges[2];
 	uint bytes = sizeof(ranges);
@@ -415,7 +415,7 @@ void ImportAnimation::LoadBoneFromResource(ResourceBone* _bone)
 		}
 	}
 
-	RELEASE_ARRAY(data);
+	RELEASE_ARRAY(buffer);
 }
 
 // GRAPH---------------------------------------------
