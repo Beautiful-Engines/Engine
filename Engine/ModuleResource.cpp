@@ -189,7 +189,11 @@ void ModuleResource::LoadFile(const char * _path)
 			resource->SetFile(exported_file);
 			resource->SetName(name);
 			ResourceModel* resource_model = (ResourceModel*)resource;
-			resource_model->animation = json["animation"];
+
+			for (nlohmann::json::iterator iterator = json.find("animations").value().begin(); iterator != json.find("animations").value().end(); ++iterator)
+			{
+				resource_model->animations.push_back((*iterator)["id_animation"]);
+			}
 			App->importer->import_model->LoadModel(resource_model);
 		}
 		else if ("." + extension == OUR_ANIMATION_EXTENSION)

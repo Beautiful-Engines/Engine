@@ -175,7 +175,7 @@ bool WindowProperties::Draw()
 			{
 				ImGui::Text("Animation Name:");
 				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 }, "%s", resource_animation->name_anim);
+				ImGui::TextColored({ 255, 255, 0, 255 }, "%s", resource_animation->name_anim.c_str());
 				ImGui::Text("Animation Duration:");
 				ImGui::SameLine();
 				ImGui::TextColored({ 255, 255, 0, 255 }, "%i", resource_animation->duration);
