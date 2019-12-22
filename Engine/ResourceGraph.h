@@ -5,34 +5,13 @@
 #include <map>
 #include "MathGeoLib\include\Math\MathAll.h"
 
+struct Node;
+struct NodeLink;
+
 enum linkType
 {
 	INPUT_LINK,
 	OUTPUT_LINK
-};
-
-struct Node
-{
-	Node(const char* name, uint graphID, float2 pos, float2 size = { 150, 80 });
-	~Node() {};
-
-	NodeLink* addLink(linkType type, bool addToList = true, uint ID = 0);
-	uint drawLinks() const;
-
-	void connectLink(uint linkID);
-
-	uint node_ID = 0;
-	std::string name;
-	float2 pos, gridPos, size = { 0.0f,0.0f };
-
-	uint graphID = 0;
-	uint animationID = 0;
-
-	std::list<NodeLink*> links;
-	int inputCount = 0;
-	int outputCount = 0;
-
-	std::list<Transition*> transitions;
 };
 
 struct Transition
@@ -66,6 +45,30 @@ struct NodeLink
 	linkType type = INPUT_LINK;
 
 	bool linking = false;
+};
+
+struct Node
+{
+	Node(const char* name, uint graphID, float2 pos, float2 size = { 150, 80 });
+	~Node() {};
+
+	NodeLink* addLink(linkType type, bool addToList = true, uint ID = 0);
+	uint drawLinks() const;
+
+	void connectLink(uint linkID);
+
+	uint node_ID = 0;
+	std::string name;
+	float2 pos, gridPos, size = { 0.0f,0.0f };
+
+	uint graphID = 0;
+	uint animationID = 0;
+
+	std::list<NodeLink*> links;
+	int inputCount = 0;
+	int outputCount = 0;
+
+	std::list<Transition*> transitions;
 };
 
 class ResourceGraph : public Resource
