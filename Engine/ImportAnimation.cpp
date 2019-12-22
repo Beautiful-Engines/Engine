@@ -290,6 +290,7 @@ uint ImportAnimation::ImportBone(aiBone* _bone)
 	uint ret = 0;
 	ResourceBone* bone = new ResourceBone();
 	bone->num_weights = _bone->mNumWeights;
+	bone->name_bone = _bone->mName.C_Str();
 
 	aiVector3D position;
 	aiQuaternion rotation;
@@ -334,6 +335,9 @@ bool ImportAnimation::CreateOurBone(ResourceBone* _bone)
 	// amount of num_weights / id_mesh 
 	uint ranges[2] = { _bone->num_weights, _bone->id_mesh };
 	uint size = sizeof(ranges) + sizeof(float3) * 2 + sizeof(Quat) + sizeof(uint) * _bone->num_weights + sizeof(float) * _bone->num_weights;
+	// name
+	size += sizeof(uint);
+	size += _bone->name_bone.size();
 
 	// Allocate
 	char* data = new char[size];
@@ -342,6 +346,14 @@ bool ImportAnimation::CreateOurBone(ResourceBone* _bone)
 	// First store ranges
 	uint bytes = sizeof(ranges);
 	memcpy(cursor, ranges, bytes);
+	cursor += bytes;
+
+	bytes = sizeof(uint);
+	uint name_size = _bone->name_bone.size();
+	memcpy(cursor, &name_size, bytes);
+	cursor += bytes;
+	bytes = _bone->name_bone.size();
+	memcpy(cursor, _bone->name_bone.c_str(), bytes);
 	cursor += bytes;
 
 	bytes = sizeof(float3);
@@ -385,6 +397,16 @@ void ImportAnimation::LoadBoneFromResource(ResourceBone* _bone)
 	memcpy(ranges, cursor, bytes);
 	_bone->num_weights = ranges[0];
 	_bone->id_mesh = ranges[1];
+	cursor += bytes;
+
+	// name
+	bytes = sizeof(uint);
+	uint name_size;
+	memcpy(&name_size, cursor, bytes);
+	cursor += bytes;
+	bytes = name_size;
+	_bone->name_bone.resize(bytes);
+	memcpy(&_bone->name_bone[0], cursor, bytes);
 	cursor += bytes;
 
 	bytes = sizeof(float3);

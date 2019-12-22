@@ -24,6 +24,7 @@ public:
 	Weight* weights;
 
 	uint id_mesh;
+	std::string name_bone;
 
 };
 

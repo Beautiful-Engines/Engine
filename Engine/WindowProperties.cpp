@@ -7,10 +7,12 @@
 #include "ComponentTexture.h"
 #include "ComponentCamera.h"
 #include "ComponentAnimation.h"
+#include "ComponentBone.h"
 #include "GameObject.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 #include "ResourceAnimation.h"
+#include "ResourceBone.h"
 #include "ModuleInput.h"
 #include "ModuleGUI.h"
 #include "WindowProperties.h"
@@ -34,9 +36,7 @@ bool WindowProperties::Draw()
 	mesh = nullptr;
 	texture = nullptr;
 	camera = nullptr;
-	animation = nullptr;
 	resource_texture = nullptr;
-	resource_animation = nullptr;
 
 	go = App->scene->GetSelected();
 
@@ -62,14 +62,21 @@ bool WindowProperties::Draw()
 			}
 			if (go->GetComponents()[i]->GetType() == ComponentType::ANIMATION)
 			{
-				animation = (ComponentAnimation*)go->GetComponents()[i];
-				resource_animation = animation->resource_animation;
+				animations_temp.push_back((ComponentAnimation*)go->GetComponents()[i]);
+			}
+			if (go->GetComponents()[i]->GetType() == ComponentType::BONE)
+			{
+				bones_temp.push_back((ComponentBone*)go->GetComponents()[i]);
 			}
 			if (go->GetComponents()[i]->GetType() == ComponentType::CAMERA)
 			{
 				camera = (ComponentCamera*)go->GetComponents()[i];
 			}
 		}	
+		animations = animations_temp;
+		animations_temp.clear();
+		bones = bones_temp;
+		bones_temp.clear();
 	}
 
 	ImGuiWindowFlags aboutFlags = 0;
@@ -169,19 +176,38 @@ bool WindowProperties::Draw()
 				ImGui::Checkbox("Checker texture", &texture->checkered);
 			}
 		}
-		if (animation != nullptr)
+		if (animations.size() > 0)
 		{
 			if (ImGui::CollapsingHeader("Animation"))
 			{
-				ImGui::Text("Animation Name:");
-				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 }, "%s", resource_animation->name_anim.c_str());
-				ImGui::Text("Animation Duration:");
-				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 }, "%i", resource_animation->duration);
-				ImGui::Text("Animation Ticks Per Second:");
-				ImGui::SameLine();
-				ImGui::TextColored({ 255, 255, 0, 255 }, "%i", resource_animation->ticks_per_second);
+				std::vector<ComponentAnimation*>::iterator iterator_animation = animations.begin();
+
+				for (; iterator_animation != animations.end(); ++iterator_animation)
+				{
+					ImGui::Text("Animation Name:");
+					ImGui::SameLine();
+					ImGui::TextColored({ 255, 255, 0, 255 }, "%s", (*iterator_animation)->resource_animation->name_anim.c_str());
+					ImGui::Text("Animation Duration:");
+					ImGui::SameLine();
+					ImGui::TextColored({ 255, 255, 0, 255 }, "%i", (*iterator_animation)->resource_animation->duration);
+					ImGui::Text("Animation Ticks Per Second:");
+					ImGui::SameLine();
+					ImGui::TextColored({ 255, 255, 0, 255 }, "%i", (*iterator_animation)->resource_animation->ticks_per_second);
+				}
+			}
+		}
+		if (bones.size() > 0)
+		{
+			if (ImGui::CollapsingHeader("Bones"))
+			{
+				std::vector<ComponentBone*>::iterator iterator_bone = bones.begin();
+
+				for (; iterator_bone != bones.end(); ++iterator_bone)
+				{
+					ImGui::Text("Bone Name:");
+					ImGui::SameLine();
+					ImGui::TextColored({ 255, 255, 0, 255 }, "%s", (*iterator_bone)->resource_bone->name_bone.c_str());
+				}
 			}
 		}
 		if (camera != nullptr)

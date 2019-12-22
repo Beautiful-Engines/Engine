@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "ComponentTexture.h"
 #include "ComponentAnimation.h"
+#include "ComponentBone.h"
 #include "ImportMesh.h"
 #include "ImportTexture.h"
 #include "ImportAnimation.h"
@@ -188,12 +189,12 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 		App->importer->import_mesh->Import(_scene, ai_mesh, _resource_mesh);
 
 		// Bones
-		if (ai_mesh->mNumBones > 0)
+		if (ai_mesh->HasBones())
 		{
 			for (int i = 0; i < ai_mesh->mNumBones; i++)
 			{
 				aiBone* ai_bone = ai_mesh->mBones[i];
-				resource_node.bone = App->importer->import_animation->ImportBone(ai_bone);
+				resource_node.bones.push_back(App->importer->import_animation->ImportBone(ai_bone));
 			}
 		}
 
@@ -207,7 +208,7 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 				std::string file_name;
 				App->file_system->SplitFilePath(texture_path.C_Str(), nullptr, &file_name);
 
-				if (App->resource->Get(App->resource->GetId(ASSETS_FOLDER + file_name)))
+				if (App->resource->Get(App->resource->GetId(ASSETS_FOLDER + file_name)) != nullptr)
 					resource_node.texture = App->resource->Get(App->resource->GetId(ASSETS_FOLDER + file_name))->GetId();
 				else
 				{
@@ -250,8 +251,18 @@ void ImportModel::CreateOurModelFile(ResourceModel* _resource)
 			{"parent", iterator_node->parent},
 			{"texture", iterator_node->texture},
 			{"mesh", iterator_node->mesh},
-			{"bone", iterator_node->bone}
+			{"bones", nlohmann::json::array() }
 		};
+
+		for (int i = 0; i < iterator_node->bones.size(); ++i)
+		{
+			nlohmann::json::iterator _iterator = json_nodes.find("bones");
+			nlohmann::json json_bones = {
+				{"id_bone", iterator_node->bones[i]}
+			};
+			_iterator.value().push_back(json_bones);
+		}
+
 		json_model.push_back(json_nodes);
 	}
 	std::ofstream ofstreammodel(LIBRARY_MODEL_FOLDER + std::to_string(_resource->GetId()) + OUR_MODEL_EXTENSION);
@@ -295,6 +306,11 @@ bool ImportModel::LoadNode(nlohmann::json::iterator _iterator, ResourceModel* _r
 	node.parent = (*_iterator)["parent"];
 	node.texture = (*_iterator)["texture"];
 	node.mesh = (*_iterator)["mesh"];
+
+	for (nlohmann::json::iterator iterator = (*_iterator).find("bones").value().begin(); iterator != (*_iterator).find("bones").value().end(); ++iterator)
+	{
+		node.bones.push_back((*iterator)["id_bone"]);
+	}
 
 	_resource->nodes.push_back(node);
 
@@ -397,17 +413,21 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				resource_mesh->id_buffer_default_texture = texture->default_texture->id_texture;
 
 				// Bone
-				if (node.bone > 0)
+				std::vector<uint>::iterator iterator_bone = node.bones.begin();
+
+				for (; iterator_bone != node.bones.end(); ++iterator_bone) 
 				{
+					ComponentBone* bone = new ComponentBone(go_node);
 					ResourceBone* resource_bone = nullptr;
-					if (App->resource->Get(node.bone) != nullptr)
-						resource_bone = (ResourceBone*)App->resource->GetAndUse(node.bone);
+					if (App->resource->Get(*iterator_bone) != nullptr)
+						resource_bone = (ResourceBone*)App->resource->GetAndUse(*iterator_bone);
 					else
 					{
-						resource_bone = (ResourceBone*)App->resource->CreateResource(OUR_BONE_EXTENSION, node.bone);
-						resource_bone->SetFile(LIBRARY_BONE_FOLDER + std::to_string(node.bone) + OUR_BONE_EXTENSION);
+						resource_bone = (ResourceBone*)App->resource->CreateResource(OUR_BONE_EXTENSION, *iterator_bone);
+						resource_bone->SetFile(LIBRARY_BONE_FOLDER + std::to_string(*iterator_bone) + OUR_BONE_EXTENSION);
 						App->importer->import_animation->LoadBoneFromResource(resource_bone);
 					}
+					bone->resource_bone = resource_bone;
 				}
 			}
 

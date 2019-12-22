@@ -9,8 +9,8 @@ class ComponentMesh;
 class ComponentTexture;
 class ComponentCamera;
 class ComponentAnimation;
+class ComponentBone;
 class ResourceTexture;
-class ResourceAnimation;
 
 class WindowProperties : public WindowEngine
 {
@@ -25,9 +25,11 @@ private:
 	ComponentMesh *mesh = nullptr;
 	ComponentTexture *texture = nullptr;
 	ComponentCamera *camera = nullptr;
-	ComponentAnimation *animation = nullptr;
+	std::vector < ComponentAnimation*> animations;
+	std::vector < ComponentAnimation*> animations_temp;
+	std::vector<ComponentBone*> bones;
+	std::vector<ComponentBone*> bones_temp;
 	ResourceTexture* resource_texture = nullptr;
-	ResourceAnimation* resource_animation = nullptr;
 
 };
 

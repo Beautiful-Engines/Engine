@@ -19,7 +19,7 @@ public:
 		
 		uint mesh = 0;
 		uint texture = 0;
-		uint bone = 0;
+		std::vector<uint> bones;
 	};
 public:
 	ResourceModel(uint UID = 0);
