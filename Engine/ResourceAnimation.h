@@ -30,6 +30,7 @@ struct NodeAnimation
 	
 	bool CalcCurrentIndex(float time, bool game_mode);
 	void CalcTransfrom(float time, bool interpolation);
+	void AnimBlending(const float4x4& blendtrans, float time);
 
 };
 
