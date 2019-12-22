@@ -189,12 +189,10 @@ void ImportAnimation::LoadAnimationFromResource(ResourceAnimation* _animation)
 	uint size = App->file_system->Load(_animation->GetFile(), &buffer);
 
 	char* cursor = buffer;
-	uint ranges[1];
-	uint bytes = sizeof(ranges);
-	memcpy(ranges, cursor, bytes);
-	_animation->num_channels = ranges[0];
+	// num channels
+	uint bytes = sizeof(uint);
+	memcpy(&_animation->num_channels, cursor, bytes);
 	cursor += bytes;
-
 	// name
 	bytes = _animation->name_anim.size();
 	memcpy(&_animation->name_anim, cursor, bytes);
