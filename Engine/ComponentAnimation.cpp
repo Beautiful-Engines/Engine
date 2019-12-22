@@ -17,12 +17,12 @@ ComponentAnimation::~ComponentAnimation()
 void ComponentAnimation::Save(const nlohmann::json::iterator& _iterator)
 {
 	nlohmann::json json;
-	if (animation != nullptr)
+	if (resource_animation != nullptr)
 	{
 		json = {
 		{"type", type},
 		{"enabled", enabled},
-		{"animation", animation->GetId()},
+		{"animation", resource_animation->GetId()},
 		};
 	}
 	else
@@ -42,5 +42,5 @@ void ComponentAnimation::Load(const nlohmann::json _json)
 	type = _json["type"];
 	enabled = _json["enabled"];
 	if (_json["animation"] != 0)
-		animation = (ResourceAnimation*)App->resource->Get(_json["animation"]);
+		resource_animation = (ResourceAnimation*)App->resource->Get(_json["animation"]);
 }

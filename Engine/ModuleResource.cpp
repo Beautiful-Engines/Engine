@@ -188,7 +188,9 @@ void ModuleResource::LoadFile(const char * _path)
 			resource = CreateResource(OUR_MODEL_EXTENSION, UID);
 			resource->SetFile(exported_file);
 			resource->SetName(name);
-			App->importer->import_model->LoadModel((ResourceModel*)resource);
+			ResourceModel* resource_model = (ResourceModel*)resource;
+			resource_model->animation = json["animation"];
+			App->importer->import_model->LoadModel(resource_model);
 		}
 		else if ("." + extension == OUR_ANIMATION_EXTENSION)
 		{

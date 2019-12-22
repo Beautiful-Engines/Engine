@@ -15,7 +15,7 @@ public:
 	void Load(const nlohmann::json _json);
 
 public:
-	ResourceAnimation* animation = nullptr;
+	ResourceAnimation* resource_animation = nullptr;
 
 };
 

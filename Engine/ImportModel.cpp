@@ -73,16 +73,28 @@ uint ImportModel::ImportFBX(const char* _path)
 	ResourceModel* model = (ResourceModel*)App->resource->CreateResource(OUR_MODEL_EXTENSION);
 	model->SetName(_path);
 	
+	// Scene
+	const aiScene *scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
+
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		if (scene->HasAnimations())
+		{
+			for (int i = 0; i < scene->mNumAnimations; ++i)
+			{
+				model->animation = App->importer->import_animation->Import(scene->mAnimations[i]);
+			}
+		}
+	}
+
 	// Create meta
 	nlohmann::json json = {
 		{ "exported_file", LIBRARY_MODEL_FOLDER + std::to_string(model->GetId()) + OUR_MODEL_EXTENSION },
 		{ "name", model->GetName()},
 		{ "id", model->GetId() },
+		{ "animation", model->animation },
 		{ "meshes",nlohmann::json::array()}
 	};
-
-	// Scene
-	const aiScene *scene = aiImportFile(_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	// Mesh
 	if (scene != nullptr && scene->HasMeshes())
@@ -104,13 +116,7 @@ uint ImportModel::ImportFBX(const char* _path)
 			model->nodes.push_back(ImportNode(scene->mRootNode->mChildren[i], scene, resource_mesh, model));
 		}
 
-		if (scene->HasAnimations())
-		{
-			for (int i = 0; i < scene->mNumAnimations; ++i)
-			{
-				model->animation = App->importer->import_animation->Import(scene->mAnimations[i]);
-			}
-		}
+		
 
 		aiReleaseImport(scene);
 	}
@@ -128,10 +134,7 @@ uint ImportModel::ImportFBX(const char* _path)
 	// create our model
 	CreateOurModelFile(model);
 
-	
-
 	return UID;
-
 }
 
 ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiScene* _scene, ResourceMesh* _resource_mesh, ResourceModel* _resource_model, ResourceModel::ModelNode* _resource_node)
@@ -256,7 +259,6 @@ bool ImportModel::LoadModel(ResourceModel* _resource)
 
 	std::ifstream ifstream(path);
 	nlohmann::json json = nlohmann::json::parse(ifstream);
-
 	for (nlohmann::json::iterator iterator = json.begin(); iterator != json.end(); ++iterator)
 	{
 		LoadNode(iterator, _resource);
@@ -315,7 +317,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				resource_animation->SetFile(LIBRARY_ANIMATION_FOLDER + std::to_string(_resource_model->animation) + OUR_ANIMATION_EXTENSION);
 				App->importer->import_animation->LoadAnimationFromResource(resource_animation);
 			}
-			go_model->GetAnimation()->animation = resource_animation;
+			go_model->GetAnimation()->resource_animation = resource_animation;
 		}
 		
 
