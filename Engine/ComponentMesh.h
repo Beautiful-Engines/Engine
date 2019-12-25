@@ -15,7 +15,7 @@ public:
 	ComponentMesh(GameObject* _game_object);
 	~ComponentMesh();
 
-	void Update();
+	void Update(float dt);
 
 	void Save(const nlohmann::json::iterator& _iterator);
 	void Load(const nlohmann::json _json);

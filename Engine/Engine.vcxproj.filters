@@ -424,6 +424,9 @@
     <ClInclude Include="ComponentBone.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
+    <ClInclude Include="WindowAnimTimer.h">
+      <Filter>Sources\EngineWindows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -689,6 +692,9 @@
     </ClCompile>
     <ClCompile Include="ComponentBone.cpp">
       <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowAnimTimer.cpp">
+      <Filter>Sources\EngineWindows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

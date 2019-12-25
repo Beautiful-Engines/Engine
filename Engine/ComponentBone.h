@@ -14,8 +14,11 @@ public:
 	void Save(const nlohmann::json::iterator& _iterator);
 	void Load(const nlohmann::json _json);
 
+	void DebugDrawBones();
+
 public:
 	ResourceBone* resource_bone = nullptr;
+	bool debug = true;
 
 };
 

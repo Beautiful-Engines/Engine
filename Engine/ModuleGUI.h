@@ -12,6 +12,7 @@ class WindowProperties;
 class WindowPrimitives;
 class WindowProject;
 class WindowResources;
+class WindowAnimTimer;
 class WindowScene;
 
 class ModuleGUI : public Module
@@ -41,6 +42,7 @@ public:
 	WindowProperties* window_properties = nullptr;
 	WindowProject* window_project = nullptr;
 	WindowResources* window_resources = nullptr;
+	WindowAnimTimer* window_anim_timer = nullptr;
 	WindowScene* window_scene = nullptr;
 
 private:

@@ -38,15 +38,19 @@ GameObject::~GameObject()
 
 }
 
-void GameObject::Update()
+void GameObject::Update(float dt)
 {
 	std::vector<Component*>::iterator iterator_component = components.begin();
 	
 	for (; iterator_component != components.end(); ++iterator_component) {
-		if (*iterator_component != nullptr && (*iterator_component)->GetType() == ComponentType::MESH)
+		if (*iterator_component != nullptr && ((*iterator_component)->GetType() == ComponentType::MESH || (*iterator_component)->GetType() == ComponentType::ANIMATION))
 		{
-			(*iterator_component)->Update();
+			(*iterator_component)->Update(dt);
 		}
+	}
+	if (GetBone())
+	{
+		GetBone()->DebugDrawBones();
 	}
 	if (GetCamera()) {
 		if (!GetCamera()->IsEnabled())
@@ -62,7 +66,7 @@ void GameObject::Update()
 		for (; iterator_go != children.end(); ++iterator_go) {
 			if (*iterator_go != nullptr && (*iterator_go)->IsEnabled())
 			{
-				(*iterator_go)->Update();
+				(*iterator_go)->Update(dt);
 			}
 		}
 	}
@@ -271,6 +275,18 @@ ComponentAnimation * GameObject::GetAnimation()
 		if (this->GetComponents()[i] != nullptr && this->GetComponents()[i]->GetType() == ComponentType::ANIMATION)
 		{
 			return (ComponentAnimation*)this->GetComponents()[i];
+		}
+	}
+	return false;
+}
+
+ComponentBone * GameObject::GetBone()
+{
+	for (uint i = 0; i < this->GetComponents().size(); ++i)
+	{
+		if (this->GetComponents()[i] != nullptr && this->GetComponents()[i]->GetType() == ComponentType::BONE)
+		{
+			return (ComponentBone*)this->GetComponents()[i];
 		}
 	}
 	return false;

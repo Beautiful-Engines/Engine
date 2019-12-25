@@ -23,7 +23,7 @@ ComponentMesh::~ComponentMesh()
 
 }
 
-void ComponentMesh::Update()
+void ComponentMesh::Update(float dt)
 {
 	std::vector<Component*> components = my_game_object->GetComponents();
 	std::vector<Component*>::iterator iterator_component = components.begin();

@@ -417,7 +417,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 
 				for (; iterator_bone != node.bones.end(); ++iterator_bone) 
 				{
-					ComponentBone* bone = new ComponentBone(go_node);
+					
 					ResourceBone* resource_bone = nullptr;
 					if (App->resource->Get(*iterator_bone) != nullptr)
 						resource_bone = (ResourceBone*)App->resource->GetAndUse(*iterator_bone);
@@ -427,7 +427,23 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 						resource_bone->SetFile(LIBRARY_BONE_FOLDER + std::to_string(*iterator_bone) + OUR_BONE_EXTENSION);
 						App->importer->import_animation->LoadBoneFromResource(resource_bone);
 					}
+
+					GameObject* go_bone = new GameObject();
+					go_bone->SetName(resource_bone->name_bone);
+					go_model->SetIdNode(resource_bone->GetId() + resource_bone->GetCantities());
+					if (go_bone->GetParent() == nullptr)
+						go_bone->SetParent(go_node);
+
+					ComponentTransform* transform = go_bone->GetTransform();
+					transform->local_position = resource_bone->position;
+					transform->local_rotation = resource_bone->rotation;
+					transform->local_scale = resource_bone->scale;
+					transform->GetTransformMatrix();
+
+					ComponentBone* bone = new ComponentBone(go_bone);
 					bone->resource_bone = resource_bone;
+					App->scene->AddGameObject(go_bone);
+					go_bone->is_static = true;
 				}
 			}
 

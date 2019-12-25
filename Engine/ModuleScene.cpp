@@ -70,7 +70,7 @@ update_status ModuleScene::Update(float dt)
 	if (App->renderer3D->grid)
 		DrawGrid();
 
-	game_objects[0]->Update();
+	game_objects[0]->Update(dt);
 
 	if(debug_quadtree)
 		quadtree.Draw();
@@ -171,6 +171,10 @@ bool ModuleScene::LoadScene(bool _tmp)
 						component = new ComponentMesh(game_object);
 					else if (json_component["type"] == ComponentType::TEXTURE)
 						component = new ComponentTexture(game_object);
+					else if (json_component["type"] == ComponentType::ANIMATION)
+						component = new ComponentAnimation(game_object);
+					else if (json_component["type"] == ComponentType::BONE)
+						component = new ComponentBone(game_object);
 					else if (json_component["type"] == ComponentType::CAMERA)
 						component = new ComponentCamera(game_object);
 
@@ -309,6 +313,18 @@ void ModuleScene::SetSelected(GameObject* go)
 const std::vector<GameObject*> ModuleScene::GetGameObjects() const
 {
 	return game_objects;
+}
+
+GameObject* ModuleScene::GetGameObject(uint id)
+{
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i]->GetId() == id)
+		{
+			return game_objects[i];
+		}
+	}
+	return nullptr;
 }
 
 void ModuleScene::FrustrumCulling()

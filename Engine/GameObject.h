@@ -7,6 +7,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentAnimation.h"
+#include "ComponentBone.h"
 #include "ComponentCamera.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
 #include "MathGeoLib\include\Geometry\OBB.h"
@@ -18,7 +19,7 @@ public:
 	GameObject();
 	virtual ~GameObject();
 
-	virtual void Update();
+	virtual void Update(float dt);
 
 	void Enable();
 	void Disable();
@@ -50,6 +51,8 @@ public:
 	ComponentMesh* GetMesh();
 
 	ComponentAnimation* GetAnimation();
+
+	ComponentBone* GetBone();
 
 	ComponentCamera* GetCamera() const;
 

@@ -19,7 +19,9 @@
 #include "WindowProperties.h"
 #include "WindowProject.h"
 #include "WindowResources.h"
+#include "WindowAnimTimer.h"
 #include "WindowScene.h"
+
 
 #include "Primitive.h"
 
@@ -43,6 +45,7 @@ bool ModuleGUI::Init()
 	window_properties = new WindowProperties();
 	window_project = new WindowProject();
 	window_resources = new WindowResources();
+	window_anim_timer = new WindowAnimTimer();
 	window_scene = new WindowScene();
 
 	// Push windows into vector
@@ -54,6 +57,7 @@ bool ModuleGUI::Init()
 	windows_engine.push_back(window_primitives);
 	windows_engine.push_back(window_properties);
 	windows_engine.push_back(window_resources);
+	windows_engine.push_back(window_anim_timer);
 	windows_engine.push_back(window_project);
 	
 
@@ -281,6 +285,7 @@ update_status ModuleGUI::CreateMainMenuBar()
 			ImGui::Checkbox("Project", &window_project->enabled);
 			ImGui::Checkbox("Hierarchy", &window_hierarchy->enabled);
 			ImGui::Checkbox("Object Properties", &window_properties->enabled);
+			ImGui::Checkbox("Animation Timer", &window_anim_timer->enabled);
 			ImGui::Checkbox("Demo Window", &demo);
 			ImGui::EndMenu();
 		}
@@ -292,17 +297,9 @@ update_status ModuleGUI::CreateMainMenuBar()
 		}
 		if (ImGui::Checkbox("Play", &App->timemanager->play))
 			App->timemanager->ChechState();
-			/*if (App->timemanager->play)
-				App->timemanager->state = WANTS_PLAY;
-			else
-			App->timemanager->state = WANTS_EDITOR;*/
 
 		if (ImGui::Checkbox("Pause", &App->timemanager->pause))
 			App->timemanager->ChechState();
-			//if (App->timemanager->pause)
-			//	App->timemanager->state = WANTS_PAUSE;
-			//else if (!App->timemanager->play)
-			//	App->timemanager->state = WANTS_EDITOR;
 
 		ImGui::Text("Game Timer:"); ImGui::SameLine();
 		ImGui::TextColored({ 255, 255, 0, 255 }, "%f", App->timemanager->GetTimeSincePlay()); ImGui::SameLine();

@@ -1,0 +1,234 @@
+#include "Application.h"
+#include "ModuleScene.h"
+#include "ModuleTimeManager.h"
+#include "GameObject.h"
+#include "ComponentAnimation.h"
+#include "ResourceAnimation.h"
+#include "WindowAnimTimer.h"
+
+WindowAnimTimer::WindowAnimTimer() :WindowEngine()
+{
+	enabled = true;
+}
+
+WindowAnimTimer::~WindowAnimTimer()
+{
+}
+
+bool WindowAnimTimer::FillInfo()
+{
+	bool ret = false;
+
+	if (App->scene->GetSelected() != nullptr && App->scene->GetSelected()->GetAnimation())
+	{
+		component_animation = (ComponentAnimation*)App->scene->GetSelected()->GetAnimation();
+
+		num_frames = component_animation->resource_animation->duration;
+
+		ret = true;
+	}
+
+	return ret;
+}
+
+
+bool WindowAnimTimer::Draw()
+{
+	ImGuiWindowFlags aboutFlags = 0;
+	aboutFlags |= ImGuiWindowFlags_HorizontalScrollbar;
+	ImGui::Begin("Animation", &enabled, aboutFlags);
+
+	if (FillInfo())
+	{
+		//Animation bar Progress
+		ImGui::SetCursorPosX(85);
+		ImGui::ProgressBar((component_animation->animation_time / (component_animation->resource_animation->duration / component_animation->resource_animation->ticks_per_second)), { windows_size,0 });
+		ImGui::SameLine();
+		if (ImGui::Button("Play"))
+		{
+			component_animation->play = true;
+			component_animation->pause = false;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Pause"))
+		{
+			component_animation->pause = !component_animation->pause;
+			mouse_mov.x = progress;
+			button_position = progress;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Stop") && component_animation->play)
+		{
+			component_animation->play = false;
+			component_animation->animation_time = 0.0f;
+			component_animation->pause = false;
+		}
+
+
+		//Animation typeos of Keys
+		ImGui::BeginGroup();
+
+		ImGui::SetCursorPosY(85);
+
+		ImGui::Text("Position");
+
+		ImGui::SetCursorPosY(125);
+
+		ImGui::Text("Rotation");
+
+		ImGui::SetCursorPosY(165);
+
+		ImGui::Text("Scale");
+
+		ImGui::EndGroup();
+
+		ImGui::SameLine();
+
+		//Animation TimeLine
+		ImGui::BeginChild("TimeLine", ImVec2(windows_size, 180), true, ImGuiWindowFlags_HorizontalScrollbar);
+		ImVec2 p = ImGui::GetCursorScreenPos();
+		ImVec2 redbar = ImGui::GetCursorScreenPos();
+		ImGui::InvisibleButton("scrollbar", { num_frames*zoom ,140 });
+		ImGui::SetCursorScreenPos(p);
+
+		for (int i = 0; i < num_frames; i++)
+		{
+			ImGui::BeginGroup();
+
+			ImGui::GetWindowDrawList()->AddLine({ p.x,p.y }, ImVec2(p.x, p.y + 135), IM_COL32(100, 100, 100, 255), 1.0f);
+
+			char frame[8];
+			sprintf(frame, "%01d", i);
+			ImVec2 aux = { p.x + 3,p.y };
+			ImGui::GetWindowDrawList()->AddText(aux, ImColor(1.0f, 1.0f, 1.0f, 1.0f), frame);
+
+			if (component_animation->resource_animation != nullptr && node_animation != nullptr)
+			{
+				if (node_animation->position_keys_times[i] == i)
+				{
+					ImGui::GetWindowDrawList()->AddCircleFilled(ImVec2(p.x + 1, p.y + 35), 6.0f, ImColor(1.0f, 0.0f, 0.0f, 0.5f));
+				}
+				if (node_animation->rotation_keys_times[i] == i)
+				{
+					ImGui::GetWindowDrawList()->AddCircleFilled(ImVec2(p.x + 1, p.y + 75), 6.0f, ImColor(0.0f, 1.0f, 0.0f, 0.5f));
+				}
+				if (node_animation->scale_keys_times[i] == i)
+				{
+					ImGui::GetWindowDrawList()->AddCircleFilled(ImVec2(p.x + 1, p.y + 115), 6.0f, ImColor(0.0f, 0.0f, 1.0f, 0.5f));
+				}
+			}
+
+			p = { p.x + zoom,p.y };
+
+			ImGui::EndGroup();
+
+			ImGui::SameLine();
+
+		}
+
+		//RedLine 
+		if (!App->timemanager->play && !component_animation->play && !component_animation->pause)
+		{
+			ImGui::GetWindowDrawList()->AddLine({ redbar.x,redbar.y - 10 }, ImVec2(redbar.x, redbar.y + 165), IM_COL32(255, 0, 0, 100), 1.0f);
+			progress = 0.0f;
+			ImGui::SetScrollX(0);
+		}
+		else if (!component_animation->pause)
+		{
+			float aux_progression_bar = progress;
+
+			ImGui::GetWindowDrawList()->AddLine({ redbar.x + progress,redbar.y - 10 }, ImVec2(redbar.x + progress, redbar.y + 165), IM_COL32(255, 0, 0, 255), 1.0f);
+
+			if (!App->timemanager->pause)
+			{
+				progress = (component_animation->animation_time * component_animation->resource_animation->ticks_per_second)*zoom;
+				scrolled = false;
+			}
+
+			if (progress != 0 && progress > windows_size && !scrolled)
+			{
+				float scroolPos = ImGui::GetScrollX();
+				ImGui::SetScrollX(scroolPos + windows_size);
+				scrolled = true;
+			}
+
+			if (aux_progression_bar > progress)
+			{
+				progress = 0.0f;
+				ImGui::SetScrollX(0);
+			}
+		}
+
+		if (component_animation->pause)
+		{
+			ImGui::SetCursorPos({ button_position,ImGui::GetCursorPosY() + 140 });
+			ImGui::PushID("scrollButton");
+			ImGui::Button("", { 20, 15 });
+			ImGui::PopID();
+
+			if (ImGui::IsItemClicked(0) && dragging == false)
+			{
+				dragging = true;
+				offset = ImGui::GetMousePos().x - ImGui::GetWindowPos().x - button_position;
+			}
+
+			if (dragging && ImGui::IsMouseDown(0))
+			{
+				button_position = ImGui::GetMousePos().x - ImGui::GetWindowPos().x - offset;
+				if (button_position < 0)
+					button_position = 0;
+				if (button_position > num_frames*zoom - 20)
+					button_position = num_frames * zoom - 20;
+
+				progress = button_position;
+				component_animation->animation_time = progress / (component_animation->resource_animation->ticks_per_second *zoom);
+
+			}
+			else
+			{
+				dragging = false;
+			}
+
+			ImGui::GetWindowDrawList()->AddLine({ redbar.x + progress,redbar.y - 10 }, ImVec2(redbar.x + progress, redbar.y + 165), IM_COL32(255, 0, 0, 255), 1.0f);
+		}
+
+		ImGui::EndChild();
+
+		ImGui::SameLine();
+
+		ImGui::BeginGroup();
+
+		ImGui::BeginChild("All Animations", ImVec2(250, 140), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+
+		if (component_animation->resource_animation != nullptr)
+		{
+			for (int i = 0; i < component_animation->resource_animation->num_channels; i++)
+			{
+				if (ImGui::Button(component_animation->resource_animation->nodes[i].name_node.c_str()))
+				{
+					node_animation = &component_animation->resource_animation->nodes[i];
+				}
+			}
+		}
+
+		ImGui::EndChild();
+
+		//ImGui::SameLine();
+
+		ImGui::BeginChild("Selected Bone", ImVec2(250, 30), true);
+
+		if (node_animation != nullptr)
+		{
+			ImGui::Text(node_animation->name_node.c_str());
+		}
+
+		ImGui::EndChild();
+		ImGui::EndGroup();
+
+		ImGui::NewLine();
+	}
+
+	ImGui::End();
+
+	return true;
+}
