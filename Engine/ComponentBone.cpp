@@ -20,8 +20,8 @@ void ComponentBone::DebugDrawBones()
 {
 	if (debug)
 	{
-		glColor3f(1.0f, 0.0f, 0.0f);
-		glLineWidth(2.f);
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glLineWidth(20.0f);
 
 		ComponentTransform* transform = (ComponentTransform*)this->GetMyGameObject()->GetTransform();
 		float3 position;
@@ -33,7 +33,7 @@ void ComponentBone::DebugDrawBones()
 		auto children = this->GetMyGameObject()->GetChildren();
 		for (auto child : children)
 		{
-			ComponentTransform* transform_child = (ComponentTransform*)this->GetMyGameObject()->GetTransform();
+			ComponentTransform* transform_child = (ComponentTransform*)child->GetTransform();
 			float3 position_child;
 			Quat rot_child;
 			float3 scale_child;
