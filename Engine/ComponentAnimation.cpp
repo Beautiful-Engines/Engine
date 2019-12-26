@@ -71,6 +71,9 @@ void ComponentAnimation::Update(float dt)
 						transform->local_transform_matrix = resource_animation->nodes[i].lastTransform;
 					}
 				}
+
+				go->GetTransform()->SetTransformMatrix(transform->GetTransformMatrix());
+				
 			}
 		}
 
@@ -90,6 +93,7 @@ void ComponentAnimation::Update(float dt)
 				loop = blend_loop;
 			}
 		}
+
 	}
 }
 

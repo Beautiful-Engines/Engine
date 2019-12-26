@@ -192,7 +192,7 @@ ResourceMesh* ComponentMesh::GetResourceMesh()
 
 float* ComponentMesh::Skining()
 {
-	if (resource_mesh != nullptr && this->GetMyGameObject()->GetParent() != nullptr && this->GetMyGameObject()->GetParent()->GetAnimation() != nullptr)
+	/*if (resource_mesh != nullptr && this->GetMyGameObject()->GetParent()->GetParent()->GetAnimation() != nullptr)
 	{
 		float* vertices = new float[resource_mesh->n_vertices * 3];
 		memset(vertices, 0, sizeof(float)*resource_mesh->n_vertices * 3);
@@ -220,13 +220,15 @@ float* ComponentMesh::Skining()
 					vertices[vertex_index * 3 + 2] += movement_weight.z * resource_bone->weights[j].weight;
 				}
 			}
+			component_bone = nullptr;
+			resource_bone = nullptr;
 		}
 
 		if (!has_bones)
 			return nullptr;
 		else
 			return vertices;
-	}
+	}*/
 
 	return nullptr;
 }
