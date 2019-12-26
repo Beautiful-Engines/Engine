@@ -44,7 +44,7 @@ void ComponentAnimation::Update(float dt)
 					if (resource_animation->nodes[i].CalcCurrentIndex(animation_time * resource_animation->ticks_per_second, play))
 					{
 						resource_animation->nodes[i].CalcTransfrom(animation_time * resource_animation->ticks_per_second, interpolation);
-						transform->local_transform_matrix = resource_animation->nodes[i].lastTransform;
+						resource_animation->nodes[i].lastTransform.Decompose(transform->local_position, transform->local_rotation, transform->local_scale);
 					}
 				}
 				else
@@ -66,11 +66,10 @@ void ComponentAnimation::Update(float dt)
 						blend_animation->nodes[i].CalcTransfrom(blend_animation_time * blend_animation->ticks_per_second, interpolation);
 
 						resource_animation->nodes[i].AnimBlending(blend_animation->nodes[i].lastTransform, blend_time / total_blend_time);
-						transform->local_transform_matrix = resource_animation->nodes[i].lastTransform;
+						resource_animation->nodes[i].lastTransform.Decompose(transform->local_position, transform->local_rotation, transform->local_scale);
 					}
 				}
 
-				go->GetTransform()->SetTransformMatrix(transform->GetTransformMatrix());
 				go->GetTransform()->GetTransformMatrix();
 				
 			}
