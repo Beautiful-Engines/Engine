@@ -325,7 +325,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 		std::vector< ResourceModel::ModelNode> vector_nodes;
 		GameObject* go_model = App->scene->CreateGameObject(_resource_model->GetName());
 		go_model->SetIdNode(_resource_model->GetId() + _resource_model->GetCantities());
-		go_model->is_static = true;
+		/*go_model->is_static = true;*/
 		go_model->resource_model = _resource_model;
 
 		// Animation
@@ -427,7 +427,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 			}
 
 			App->scene->AddGameObject(go_node);
-			go_node->is_static = true;
+			/*go_node->is_static = true;*/
 			
 		}
 
@@ -530,7 +530,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				}
 
 				App->scene->AddGameObject(go_node);
-				go_node->is_static = true;
+				/*go_node->is_static = true;*/
 			}
 		}
 		return go_model;

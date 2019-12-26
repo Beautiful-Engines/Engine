@@ -71,6 +71,7 @@ void ComponentAnimation::Update(float dt)
 				}
 
 				go->GetTransform()->SetTransformMatrix(transform->GetTransformMatrix());
+				go->GetTransform()->GetTransformMatrix();
 				
 			}
 		}
@@ -139,7 +140,7 @@ void ComponentAnimation::FillBones(uint _id)
 		{
 			bones_go.push_back((*iterator_go)->GetId());
 		}
-		else if ((*iterator_go)->GetChildren().size() > 0)
+		if ((*iterator_go)->GetChildren().size() > 0)
 		{
 			for (uint i = 0; i < (*iterator_go)->GetChildren().size(); i++)
 			{
