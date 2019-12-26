@@ -311,6 +311,8 @@ uint ImportAnimation::ImportBone(aiBone* _bone)
 	bone->scale.y = scale.y;
 	bone->scale.z = scale.z;
 
+	bone->offset = float4x4::FromTRS({ position.x, position.y, position.z }, { rotation.x, rotation.y, rotation.z, rotation.w }, {scale.x, scale.y, scale.z});
+
 	if (_bone->mNumWeights > 0)
 	{
 		bone->weights = new Weight[bone->num_weights];
@@ -420,6 +422,8 @@ void ImportAnimation::LoadBoneFromResource(ResourceBone* _bone)
 	bytes = sizeof(float3);
 	memcpy(&_bone->scale, cursor, bytes);
 	cursor += bytes;
+
+	_bone->offset = float4x4::FromTRS({ _bone->position.x, _bone->position.y, _bone->position.z }, { _bone->rotation.x, _bone->rotation.y, _bone->rotation.z, _bone->rotation.w }, { _bone->scale.x, _bone->scale.y, _bone->scale.z });
 
 	// loading weights
 	if (_bone->num_weights > 0)

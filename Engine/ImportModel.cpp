@@ -324,6 +324,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 		GameObject* go_model = App->scene->CreateGameObject(_resource_model->GetName());
 		go_model->SetIdNode(_resource_model->GetId() + _resource_model->GetCantities());
 		go_model->is_static = true;
+		go_model->resource_model = _resource_model;
 
 		// Animation
 		std::vector<uint>::iterator iterator_animation = _resource_model->animations.begin();
@@ -355,7 +356,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 			// Parent
 			for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
 			{
-				if (App->scene->GetGameObjects()[i]->GetIdNode()  == node.parent + _resource_model->GetCantities())
+				if (App->scene->GetGameObjects()[i]->GetIdNode() == node.parent + _resource_model->GetCantities())
 				{
 					go_node->SetParent(App->scene->GetGameObjects()[i]);
 					break;
@@ -415,9 +416,9 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				// Bone
 				std::vector<uint>::iterator iterator_bone = node.bones.begin();
 
-				for (; iterator_bone != node.bones.end(); ++iterator_bone) 
+				for (; iterator_bone != node.bones.end(); ++iterator_bone)
 				{
-					
+
 					ResourceBone* resource_bone = nullptr;
 					if (App->resource->Get(*iterator_bone) != nullptr)
 						resource_bone = (ResourceBone*)App->resource->GetAndUse(*iterator_bone);
@@ -449,6 +450,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 
 			App->scene->AddGameObject(go_node);
 			go_node->is_static = true;
+			
 		}
 		return go_model;
 	}

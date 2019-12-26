@@ -20,6 +20,8 @@ public:
 	Quat rotation;
 	float3 scale;
 
+	float4x4 offset;
+
 	uint num_weights;
 	Weight* weights;
 

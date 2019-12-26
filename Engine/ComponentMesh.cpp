@@ -8,6 +8,8 @@
 #include "ModuleScene.h"
 #include "ModuleResource.h"
 #include "ResourceMesh.h"
+#include "ResourceModel.h"
+#include "ResourceBone.h"
 #include "ComponentMesh.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
 
@@ -39,7 +41,7 @@ void ComponentMesh::Update(float dt)
 	if (draw)
 	{
 		Draw(component_texture);
-		draw = false;
+		/*draw = false;*/
 	}
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
@@ -79,6 +81,9 @@ void ComponentMesh::Draw(ComponentTexture *component_texture)
 	glColor3f(1.f, 1.f, 1.f);
 	glBindBuffer(GL_ARRAY_BUFFER, resource_mesh->id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
+
+	Skining();
+	
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 	if (component_texture != nullptr && textures)
@@ -183,5 +188,46 @@ void ComponentMesh::AddResourceMesh(ResourceMesh* _resource_mesh)
 ResourceMesh* ComponentMesh::GetResourceMesh()
 {
 	return resource_mesh;
+}
+
+float* ComponentMesh::Skining()
+{
+	if (resource_mesh != nullptr && this->GetMyGameObject()->GetParent() != nullptr && this->GetMyGameObject()->GetParent()->GetAnimation() != nullptr)
+	{
+		float* vertices = new float[resource_mesh->n_vertices * 3];
+		memset(vertices, 0, sizeof(float)*resource_mesh->n_vertices * 3);
+
+		bool has_bones = false;
+		for (int i = 0; i < GetMyGameObject()->GetChildren().size(); i++)
+		{
+			ComponentBone* component_bone = GetMyGameObject()->GetChildren()[i]->GetBone();
+			ResourceBone* resource_bone = GetMyGameObject()->GetChildren()[i]->GetBone()->resource_bone;
+			if (component_bone != nullptr && resource_bone != nullptr)
+			{
+				has_bones = true;
+				float4x4 bone_transform = GetMyGameObject()->GetTransform()->transform_matrix.Inverted() * (component_bone->GetMyGameObject()->GetTransform()->transform_matrix) * resource_bone->offset;
+
+				for (int j = 0; j < resource_bone->num_weights; j++)
+				{
+					uint vertex_index = resource_bone->weights[j].vertex_id;
+					if (vertex_index * 3 >= resource_mesh->n_vertices * 3)
+						continue;
+					
+					float3 movement_weight = bone_transform.TransformPos(resource_mesh->vertices[vertex_index]);
+
+					vertices[vertex_index * 3] += movement_weight.x * resource_bone->weights[j].weight;
+					vertices[vertex_index * 3 + 1] += movement_weight.y * resource_bone->weights[j].weight;
+					vertices[vertex_index * 3 + 2] += movement_weight.z * resource_bone->weights[j].weight;
+				}
+			}
+		}
+
+		if (!has_bones)
+			return nullptr;
+		else
+			return vertices;
+	}
+
+	return nullptr;
 }
 

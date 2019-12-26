@@ -30,6 +30,8 @@ public:
 	void Draw(ComponentTexture *component_texture);
 	void DrawNormals();
 
+	float* Skining();
+
 public:
 
 	bool vertex_normals = false;

@@ -9,6 +9,7 @@
 #include "ComponentAnimation.h"
 #include "ComponentBone.h"
 #include "ComponentCamera.h"
+#include "ResourceModel.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
 #include "MathGeoLib\include\Geometry\OBB.h"
 #include "nlohmann/json.hpp"
@@ -69,6 +70,8 @@ public:
 	AABB abb;
 	OBB obb;
 
+	ResourceModel* resource_model = nullptr;
+
 private:
 	bool enabled = true;
 
@@ -81,6 +84,7 @@ private:
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> children;
 
+	
 	
 	bool focus = false;
 	
