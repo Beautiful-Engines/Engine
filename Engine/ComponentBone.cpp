@@ -20,9 +20,6 @@ void ComponentBone::DebugDrawBones()
 {
 	if (debug)
 	{
-		glColor3f(0.0f, 1.0f, 0.0f);
-		glLineWidth(20.0f);
-
 		ComponentTransform* transform = (ComponentTransform*)this->GetMyGameObject()->GetTransform();
 		float3 position;
 		Quat rot;
@@ -39,7 +36,15 @@ void ComponentBone::DebugDrawBones()
 			float3 scale_child;
 
 			transform_child->GetTransformMatrix().Decompose(position_child, rot_child, scale_child);
+			glColor3f(0.0f, 1.0f, 0.0f);
+			glLineWidth(20.0f);
 			glBegin(GL_LINES);
+			glVertex3f(position.x, position.y, position.z);
+			glVertex3f(position_child.x, position_child.y, position_child.z);
+			glEnd();
+			glColor3f(1.0f, 0.0f, 0.0f);
+			glPointSize(20.0f);
+			glBegin(GL_POINTS);
 			glVertex3f(position.x, position.y, position.z);
 			glVertex3f(position_child.x, position_child.y, position_child.z);
 			glEnd();
