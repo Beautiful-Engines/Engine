@@ -18,7 +18,7 @@ void ComponentAnimation::Update(float dt)
 {
 	if (!bones_loaded)
 	{
-		FillBones(resource_animation->GetId());
+		FillBones(this->GetMyGameObject()->GetId());
 		bones_loaded = true;
 	}
 
@@ -32,12 +32,10 @@ void ComponentAnimation::Update(float dt)
 			animation_time -= resource_animation->duration / resource_animation->ticks_per_second;
 		}
 
-		for (int i = 0; i < resource_animation->num_channels; i++)
+		for (int i = 0; i < bones_go.size(); i++)
 		{
-			if (bones_go[i] == NULL)
-				continue;
-
 			GameObject* go = App->scene->GetGameObject(bones_go[i]);
+
 			if (go != nullptr)
 			{
 				ComponentTransform* transform = go->GetTransform();
@@ -131,18 +129,24 @@ void ComponentAnimation::Load(const nlohmann::json _json)
 
 void ComponentAnimation::FillBones(uint _id)
 {
-	for (int i = 0; i < resource_animation->num_channels; i++)
-	{
-		std::vector<GameObject*> go = this->GetMyGameObject()->GetChildren();
-		std::vector<GameObject*>::iterator iterator_go = go.begin();
+	
+	std::vector<GameObject*> go = App->scene->GetGameObject(_id)->GetChildren();
+	std::vector<GameObject*>::iterator iterator_go = go.begin();
 
-		for (; iterator_go != go.end(); ++iterator_go) 
+	for (; iterator_go != go.end(); ++iterator_go) 
+	{
+		if ((*iterator_go) != nullptr && (*iterator_go)->GetBone() != nullptr)
 		{
-			if ((*iterator_go) != nullptr)
-			{
-				bones_go.push_back((*iterator_go)->GetId());
-			}
+			bones_go.push_back((*iterator_go)->GetId());
 		}
-		
+		else if ((*iterator_go)->GetChildren().size() > 0)
+		{
+			for (uint i = 0; i < (*iterator_go)->GetChildren().size(); i++)
+			{
+				FillBones((*iterator_go)->GetChildren()[i]->GetId());
+			}
+				
+		}
 	}
+
 }
