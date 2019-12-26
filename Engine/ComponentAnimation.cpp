@@ -16,11 +16,11 @@ ComponentAnimation::~ComponentAnimation()
 
 void ComponentAnimation::Update(float dt)
 {
-	if (!bones_loaded)
+	/*if (!bones_loaded)
 	{
 		FillBones(this->GetMyGameObject()->GetId());
 		bones_loaded = true;
-	}
+	}*/
 
 	if (resource_animation != nullptr)
 	{
@@ -32,9 +32,9 @@ void ComponentAnimation::Update(float dt)
 			animation_time -= resource_animation->duration / resource_animation->ticks_per_second;
 		}
 
-		for (int i = 0; i < bones_go.size(); i++)
+		for (int i = 0; i < resource_animation->num_channels; i++)
 		{
-			GameObject* go = App->scene->GetGameObject(bones_go[i]);
+			GameObject* go = App->scene->GetGameObjectByName(resource_animation->nodes[i].name_node);
 
 			if (go != nullptr)
 			{
