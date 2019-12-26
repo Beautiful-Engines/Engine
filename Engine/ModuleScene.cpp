@@ -327,6 +327,20 @@ GameObject* ModuleScene::GetGameObject(uint id)
 	return nullptr;
 }
 
+GameObject* ModuleScene::GetGameObjectByName(std::string _name)
+{
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		uint pos = game_objects[i]->GetName().find_last_of("_");
+		std::string name = game_objects[i]->GetName().substr(0, pos).c_str();
+		if (name == _name)
+		{
+			return game_objects[i];
+		}
+	}
+	return nullptr;
+}
+
 void ModuleScene::FrustrumCulling()
 {
 	std::vector<GameObject*> objects_hit;

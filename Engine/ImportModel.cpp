@@ -321,6 +321,8 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 {
 	if (_resource_model != nullptr)
 	{
+		bool is_last = false;
+		std::vector< ResourceModel::ModelNode> vector_nodes;
 		GameObject* go_model = App->scene->CreateGameObject(_resource_model->GetName());
 		go_model->SetIdNode(_resource_model->GetId() + _resource_model->GetCantities());
 		go_model->is_static = true;
@@ -348,6 +350,15 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 		
 		for each (ResourceModel::ModelNode node in _resource_model->nodes)
 		{
+			if (node.id == _resource_model->nodes.back().id)
+				is_last = true;
+
+			if (node.bones.size() > 0 && !is_last)
+			{
+				vector_nodes.push_back(node);
+				continue;
+			}
+
 			GameObject* go_node = new GameObject();
 			go_node->SetName(node.name);
 			go_node->SetIdNode(node.id + _resource_model->GetCantities());
@@ -413,44 +424,114 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				texture->default_texture = (ResourceTexture*)App->resource->GetAndUse(App->resource->GetId("DefaultTexture"));
 				resource_mesh->id_buffer_default_texture = texture->default_texture->id_texture;
 
-				// Bone
-				std::vector<uint>::iterator iterator_bone = node.bones.begin();
-
-				for (; iterator_bone != node.bones.end(); ++iterator_bone)
-				{
-
-					ResourceBone* resource_bone = nullptr;
-					if (App->resource->Get(*iterator_bone) != nullptr)
-						resource_bone = (ResourceBone*)App->resource->GetAndUse(*iterator_bone);
-					else
-					{
-						resource_bone = (ResourceBone*)App->resource->CreateResource(OUR_BONE_EXTENSION, *iterator_bone);
-						resource_bone->SetFile(LIBRARY_BONE_FOLDER + std::to_string(*iterator_bone) + OUR_BONE_EXTENSION);
-						App->importer->import_animation->LoadBoneFromResource(resource_bone);
-					}
-
-					GameObject* go_bone = new GameObject();
-					go_bone->SetName(resource_bone->name_bone);
-					go_model->SetIdNode(resource_bone->GetId() + resource_bone->GetCantities());
-					if (go_bone->GetParent() == nullptr)
-						go_bone->SetParent(go_node);
-
-					ComponentTransform* transform = go_bone->GetTransform();
-					transform->local_position = resource_bone->position;
-					transform->local_rotation = resource_bone->rotation;
-					transform->local_scale = resource_bone->scale;
-					transform->GetTransformMatrix();
-
-					ComponentBone* bone = new ComponentBone(go_bone);
-					bone->resource_bone = resource_bone;
-					App->scene->AddGameObject(go_bone);
-					go_bone->is_static = true;
-				}
 			}
 
 			App->scene->AddGameObject(go_node);
 			go_node->is_static = true;
 			
+		}
+
+		if (is_last)
+		{
+			for each (ResourceModel::ModelNode node in vector_nodes)
+			{
+				GameObject* go_node = new GameObject();
+				go_node->SetName(node.name);
+				go_node->SetIdNode(node.id + _resource_model->GetCantities());
+				go_node->SetIdNodeParent(node.parent + _resource_model->GetCantities());
+
+				// Parent
+				for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
+				{
+					if (App->scene->GetGameObjects()[i]->GetIdNode() == node.parent + _resource_model->GetCantities())
+					{
+						go_node->SetParent(App->scene->GetGameObjects()[i]);
+						break;
+					}
+				}
+
+				for (uint i = 0; i < App->scene->GetGameObjects().size(); ++i)
+				{
+					if (App->scene->GetGameObjects()[i]->GetIdNodeParent() == node.id + _resource_model->GetCantities())
+					{
+						for (uint j = 0; j < App->scene->GetGameObjects().size(); ++j)
+						{
+							if (App->scene->GetGameObjects()[j]->IsChild(App->scene->GetGameObjects()[i]))
+							{
+								App->scene->GetGameObjects()[j]->DeleteChild(App->scene->GetGameObjects()[i]);
+							}
+						}
+						App->scene->GetGameObjects()[i]->SetParent(go_node);
+					}
+				}
+
+				if (go_node->GetParent() == nullptr)
+					go_node->SetParent(go_model);
+
+				// Transform
+				ComponentTransform* transform = go_node->GetTransform();
+				transform->local_position = node.position;
+				transform->local_rotation = node.rotation;
+				transform->local_scale = node.scale;
+				transform->GetTransformMatrix();
+
+				// Mesh
+				if (node.mesh > 0)
+				{
+					ComponentMesh* mesh = new ComponentMesh(go_node);
+					ComponentTexture* texture = new ComponentTexture(go_node);
+					ResourceMesh* resource_mesh = nullptr;
+					if (App->resource->Get(node.mesh) != nullptr)
+						resource_mesh = (ResourceMesh*)App->resource->GetAndUse(node.mesh);
+					else
+					{
+						resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION, node.mesh);
+						resource_mesh->SetFile(LIBRARY_MESH_FOLDER + std::to_string(node.mesh) + OUR_MESH_EXTENSION);
+						App->importer->import_mesh->LoadMeshFromResource(resource_mesh);
+					}
+					go_node->GetMesh()->AddResourceMesh(resource_mesh);
+
+					// Texture
+					if (node.texture > 0)
+					{
+						texture->texture = (ResourceTexture*)App->resource->GetAndUse(node.texture);
+						resource_mesh->id_buffer_texture = texture->texture->id_texture;
+					}
+					texture->default_texture = (ResourceTexture*)App->resource->GetAndUse(App->resource->GetId("DefaultTexture"));
+					resource_mesh->id_buffer_default_texture = texture->default_texture->id_texture;
+
+					// Bone
+					std::vector<uint>::iterator iterator_bone = node.bones.begin();
+
+					for (; iterator_bone != node.bones.end(); ++iterator_bone)
+					{
+
+						ResourceBone* resource_bone = nullptr;
+						if (App->resource->Get(*iterator_bone) != nullptr)
+							resource_bone = (ResourceBone*)App->resource->GetAndUse(*iterator_bone);
+						else
+						{
+							resource_bone = (ResourceBone*)App->resource->CreateResource(OUR_BONE_EXTENSION, *iterator_bone);
+							resource_bone->SetFile(LIBRARY_BONE_FOLDER + std::to_string(*iterator_bone) + OUR_BONE_EXTENSION);
+							App->importer->import_animation->LoadBoneFromResource(resource_bone);
+						}
+
+						GameObject* go_bone = App->scene->GetGameObjectByName(resource_bone->name_bone);
+
+						ComponentTransform* transform = go_bone->GetTransform();
+						transform->local_position = resource_bone->position;
+						transform->local_rotation = resource_bone->rotation;
+						transform->local_scale = resource_bone->scale;
+						transform->GetTransformMatrix();
+
+						ComponentBone* bone = new ComponentBone(go_bone);
+						bone->resource_bone = resource_bone;
+					}
+				}
+
+				App->scene->AddGameObject(go_node);
+				go_node->is_static = true;
+			}
 		}
 		return go_model;
 	}

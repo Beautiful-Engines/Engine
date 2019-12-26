@@ -79,6 +79,7 @@ private:
 	uint id_node = 0u;
 	uint id_node_parent = 0u;
 	std::string name;
+	std::string bone_name;
 	std::vector<Component*> components;
 
 	GameObject* parent = nullptr;
