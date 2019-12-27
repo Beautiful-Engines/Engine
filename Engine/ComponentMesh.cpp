@@ -10,6 +10,7 @@
 #include "ResourceMesh.h"
 #include "ResourceModel.h"
 #include "ResourceBone.h"
+#include "ResourceAnimation.h"
 #include "ComponentMesh.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
 
@@ -40,8 +41,8 @@ void ComponentMesh::Update(float dt)
 	}
 	if (draw)
 	{
+		Skining();
 		Draw(component_texture);
-		/*draw = false;*/
 	}
 	if (App->renderer3D->normals || vertex_normals || face_normals)
 		DrawNormals();
@@ -79,11 +80,19 @@ void ComponentMesh::Draw(ComponentTexture *component_texture)
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glColor3f(1.f, 1.f, 1.f);
-	glBindBuffer(GL_ARRAY_BUFFER, resource_mesh->id_vertex);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
-
-	Skining();
 	
+	if (deformable_mesh == nullptr)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, resource_mesh->id_vertex);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
+	}
+	else
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, resource_mesh->id_vertex);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * resource_mesh->n_vertices, deformable_mesh->vertices, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
+	}
+		
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 	if (component_texture != nullptr && textures)
@@ -152,16 +161,6 @@ float3 ComponentMesh::GetMaxPoint()
 }
 AABB ComponentMesh::GetBB()
 {
-	/*if (debug_bb)
-	{
-		static float3 corners[8];
-		GetMyGameObject()->abb.GetCornerPoints(corners);
-		App->renderer3D->DebugDrawCube(corners, { 0, 255, 0, 255 });
-		GetMyGameObject()->obb.GetCornerPoints(corners);
-		App->renderer3D->DebugDrawCube(corners, { 0, 0, 255, 255 });
-		if (App->camera->lines.size() > 0)
-			App->renderer3D->DebugDrawLines(App->camera->lines);
-	}*/
 	AABB bounding_box;
 	bounding_box.SetNegativeInfinity();
 	bounding_box.Enclose(resource_mesh->vertices, resource_mesh->n_vertices);
@@ -190,46 +189,59 @@ ResourceMesh* ComponentMesh::GetResourceMesh()
 	return resource_mesh;
 }
 
-float* ComponentMesh::Skining()
+void ComponentMesh::Skining()
 {
-	/*if (resource_mesh != nullptr && this->GetMyGameObject()->GetParent()->GetParent()->GetAnimation() != nullptr)
+	// searching the animation
+	GameObject* go = this->GetMyGameObject();
+	
+	while (go->GetAnimation() == nullptr && go->GetName() != "root")
 	{
-		float* vertices = new float[resource_mesh->n_vertices * 3];
-		memset(vertices, 0, sizeof(float)*resource_mesh->n_vertices * 3);
+		go = go->GetParent();
+	}
 
-		bool has_bones = false;
-		for (int i = 0; i < GetMyGameObject()->GetChildren().size(); i++)
+	if (go->GetAnimation() != nullptr && resource_mesh != nullptr)
+	{
+		deformable_mesh = new ResourceMesh();
+		deformable_mesh->vertices = new float3[resource_mesh->n_vertices];
+		deformable_mesh->normals = new float3[resource_mesh->n_normals];
+		memset(deformable_mesh->vertices, 0, sizeof(float3) * resource_mesh->n_vertices);
+		memset(deformable_mesh->normals, 0, sizeof(float3) * resource_mesh->n_normals);
+
+		for (int i = 0; i < go->GetAnimation()->resource_animation->num_channels; i++)
 		{
-			ComponentBone* component_bone = GetMyGameObject()->GetChildren()[i]->GetBone();
-			ResourceBone* resource_bone = GetMyGameObject()->GetChildren()[i]->GetBone()->resource_bone;
-			if (component_bone != nullptr && resource_bone != nullptr)
+			GameObject* go_node = App->scene->GetGameObjectByName(go->GetAnimation()->resource_animation->nodes[i].name_node);
+			
+			if (go_node->GetBone() != nullptr)
 			{
-				has_bones = true;
-				float4x4 bone_transform = GetMyGameObject()->GetTransform()->transform_matrix.Inverted() * (component_bone->GetMyGameObject()->GetTransform()->transform_matrix) * resource_bone->offset;
+				ResourceBone* resource_bone = go_node->GetBone()->resource_bone;
+				float4x4 transform = go_node->GetTransform()->GetTransformMatrix();
+				transform = GetMyGameObject()->GetTransform()->GetTransformMatrix().Inverted() * transform;
+				transform = transform * resource_bone->offset;
 
 				for (int j = 0; j < resource_bone->num_weights; j++)
 				{
 					uint vertex_index = resource_bone->weights[j].vertex_id;
-					if (vertex_index * 3 >= resource_mesh->n_vertices * 3)
+					if (vertex_index >= resource_mesh->n_vertices)
 						continue;
-					
-					float3 movement_weight = bone_transform.TransformPos(resource_mesh->vertices[vertex_index]);
 
-					vertices[vertex_index * 3] += movement_weight.x * resource_bone->weights[j].weight;
-					vertices[vertex_index * 3 + 1] += movement_weight.y * resource_bone->weights[j].weight;
-					vertices[vertex_index * 3 + 2] += movement_weight.z * resource_bone->weights[j].weight;
+					// transforming mesh position
+					float3 matrix_position = transform.TransformPos(resource_mesh->vertices[vertex_index]);
+
+					deformable_mesh->vertices[vertex_index].x += matrix_position.x * resource_bone->weights[j].weight;
+					deformable_mesh->vertices[vertex_index].y += matrix_position.y * resource_bone->weights[j].weight;
+					deformable_mesh->vertices[vertex_index].z += matrix_position.z * resource_bone->weights[j].weight;
+
+					// transforming normals
+					if (resource_mesh->n_normals > 0)
+					{
+						matrix_position = transform.TransformPos(resource_mesh->normals[vertex_index]);
+						deformable_mesh->normals[vertex_index].x += matrix_position.x * resource_bone->weights[j].weight;
+						deformable_mesh->normals[vertex_index].y += matrix_position.y * resource_bone->weights[j].weight;
+						deformable_mesh->normals[vertex_index].z += matrix_position.z * resource_bone->weights[j].weight;
+					}
 				}
 			}
-			component_bone = nullptr;
-			resource_bone = nullptr;
 		}
-
-		if (!has_bones)
-			return nullptr;
-		else
-			return vertices;
-	}*/
-
-	return nullptr;
+	}
 }
 

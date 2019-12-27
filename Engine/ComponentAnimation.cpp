@@ -16,11 +16,6 @@ ComponentAnimation::~ComponentAnimation()
 
 void ComponentAnimation::Update(float dt)
 {
-	/*if (!bones_loaded)
-	{
-		FillBones(this->GetMyGameObject()->GetId());
-		bones_loaded = true;
-	}*/
 
 	if (resource_animation != nullptr)
 	{
@@ -70,7 +65,7 @@ void ComponentAnimation::Update(float dt)
 					}
 				}
 
-				go->GetTransform()->GetTransformMatrix();
+				transform->GetTransformMatrix();
 				
 			}
 		}

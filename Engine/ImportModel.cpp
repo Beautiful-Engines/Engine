@@ -497,7 +497,8 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 					if (node.texture > 0)
 					{
 						texture->texture = (ResourceTexture*)App->resource->GetAndUse(node.texture);
-						resource_mesh->id_buffer_texture = texture->texture->id_texture;
+						if(texture->texture != nullptr)
+							resource_mesh->id_buffer_texture = texture->texture->id_texture;
 					}
 					texture->default_texture = (ResourceTexture*)App->resource->GetAndUse(App->resource->GetId("DefaultTexture"));
 					resource_mesh->id_buffer_default_texture = texture->default_texture->id_texture;

@@ -34,7 +34,7 @@ public:
 	float total_blend_time = 0.2f;
 	float speed = 1.0f;
 
-	bool loop = false;
+	bool loop = true;
 	bool blend_loop = false;
 	bool play = false;
 	bool pause = false;

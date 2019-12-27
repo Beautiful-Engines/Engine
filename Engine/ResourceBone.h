@@ -20,7 +20,7 @@ public:
 	Quat rotation;
 	float3 scale;
 
-	float4x4 offset;
+	float4x4 offset = float4x4::identity;
 
 	uint num_weights;
 	Weight* weights;

@@ -30,7 +30,7 @@ public:
 	void Draw(ComponentTexture *component_texture);
 	void DrawNormals();
 
-	float* Skining();
+	void Skining();
 
 public:
 
@@ -43,7 +43,7 @@ public:
 
 private:
 	ResourceMesh* resource_mesh = nullptr;
-
+	ResourceMesh* deformable_mesh = nullptr;
 }; 
 
 #endif // !__ComponentMesh_H__
