@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleResource.h"
 #include "ModuleScene.h"
+#include "ModuleTimeManager.h"
 #include "GameObject.h"
 #include "ResourceAnimation.h"
 #include "ComponentAnimation.h"
@@ -19,12 +20,20 @@ void ComponentAnimation::Update(float dt)
 
 	if (resource_animation != nullptr)
 	{
-		if (!pause)
-			animation_time += dt * speed;
+		
+		animation_time += dt * speed;
 
 		if (animation_time > resource_animation->duration / resource_animation->ticks_per_second && loop)
 		{
 			animation_time -= resource_animation->duration / resource_animation->ticks_per_second;
+		}
+		else if (animation_time > resource_animation->duration / resource_animation->ticks_per_second)
+		{
+			if(running)
+				resource_animation = run_animation;
+			else
+				resource_animation = idle_animation;
+			loop = true;
 		}
 
 		for (int i = 0; i < resource_animation->num_channels; i++)
@@ -34,9 +43,9 @@ void ComponentAnimation::Update(float dt)
 			if (go != nullptr)
 			{
 				ComponentTransform* transform = go->GetTransform();
-				if (!blend || !smooth)
+				if (!blend)
 				{
-					if (resource_animation->nodes[i].CalcCurrentIndex(animation_time * resource_animation->ticks_per_second, play))
+					if (resource_animation->nodes[i].CalcCurrentIndex(animation_time * resource_animation->ticks_per_second))
 					{
 						resource_animation->nodes[i].CalcTransfrom(animation_time * resource_animation->ticks_per_second, interpolation);
 						resource_animation->nodes[i].lastTransform.Decompose(transform->local_position, transform->local_rotation, transform->local_scale);
@@ -45,7 +54,7 @@ void ComponentAnimation::Update(float dt)
 				else
 				{
 
-					ResourceAnimation* blend_animation = (ResourceAnimation*)App->resource->Get(blend_id);
+					blend_animation = (ResourceAnimation*)App->resource->Get(blend_id);
 
 					if (blend_animation != nullptr)
 					{
@@ -54,8 +63,8 @@ void ComponentAnimation::Update(float dt)
 							blend_animation_time -= blend_animation->duration / blend_animation->ticks_per_second;
 						}
 
-						resource_animation->nodes[i].CalcCurrentIndex(animation_time * resource_animation->ticks_per_second, play);
-						blend_animation->nodes[i].CalcCurrentIndex(blend_animation_time * blend_animation->ticks_per_second, play);
+						resource_animation->nodes[i].CalcCurrentIndex(animation_time * resource_animation->ticks_per_second);
+						blend_animation->nodes[i].CalcCurrentIndex(blend_animation_time * blend_animation->ticks_per_second);
 
 						resource_animation->nodes[i].CalcTransfrom(animation_time * resource_animation->ticks_per_second, interpolation);
 						blend_animation->nodes[i].CalcTransfrom(blend_animation_time * blend_animation->ticks_per_second, interpolation);
@@ -70,17 +79,17 @@ void ComponentAnimation::Update(float dt)
 			}
 		}
 
-		if (blend && smooth)
+		if (blend)
 		{
 			blend_time += dt * speed;
 			blend_animation_time += dt * speed;
 
 			if (blend_time > total_blend_time)
 			{
-				FillBones(blend_id);
 				animation_time = blend_animation_time;
 				blend_animation_time = 0.0f;
 				blend_time = 0.0f;
+				resource_animation = blend_animation;
 				blend_id = 0;
 				blend = false;
 				loop = blend_loop;
@@ -94,12 +103,15 @@ void ComponentAnimation::Update(float dt)
 void ComponentAnimation::Save(const nlohmann::json::iterator& _iterator)
 {
 	nlohmann::json json;
-	if (resource_animation != nullptr)
+	if (resource_animation != nullptr && attack_animation != nullptr)
 	{
 		json = {
 		{"type", type},
 		{"enabled", enabled},
 		{"animation", resource_animation->GetId()},
+		{"attack", attack_animation->GetId()},
+		{"run", run_animation->GetId()},
+		{"idle", idle_animation->GetId()},
 		};
 	}
 	else
@@ -108,9 +120,11 @@ void ComponentAnimation::Save(const nlohmann::json::iterator& _iterator)
 		{"type", type},
 		{"enabled", enabled},
 		{"animation", 0},
+		{"attack", 0},
+		{"run", 0},
+		{"idle", 0},
 		};
 	}
-	bones_loaded = false;
 	_iterator.value().push_back(json);
 }
 
@@ -120,28 +134,11 @@ void ComponentAnimation::Load(const nlohmann::json _json)
 	enabled = _json["enabled"];
 	if (_json["animation"] != 0)
 		resource_animation = (ResourceAnimation*)App->resource->Get(_json["animation"]);
+	if (_json["attack"] != 0)
+		attack_animation = (ResourceAnimation*)App->resource->Get(_json["attack"]);
+	if (_json["run"] != 0)
+		run_animation = (ResourceAnimation*)App->resource->Get(_json["run"]);
+	if (_json["idle"] != 0)
+		idle_animation = (ResourceAnimation*)App->resource->Get(_json["idle"]);
 }
 
-void ComponentAnimation::FillBones(uint _id)
-{
-	
-	std::vector<GameObject*> go = App->scene->GetGameObject(_id)->GetChildren();
-	std::vector<GameObject*>::iterator iterator_go = go.begin();
-
-	for (; iterator_go != go.end(); ++iterator_go) 
-	{
-		if ((*iterator_go) != nullptr && (*iterator_go)->GetBone() != nullptr)
-		{
-			bones_go.push_back((*iterator_go)->GetId());
-		}
-		if ((*iterator_go)->GetChildren().size() > 0)
-		{
-			for (uint i = 0; i < (*iterator_go)->GetChildren().size(); i++)
-			{
-				FillBones((*iterator_go)->GetChildren()[i]->GetId());
-			}
-				
-		}
-	}
-
-}

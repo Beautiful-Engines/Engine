@@ -43,27 +43,6 @@ bool WindowAnimTimer::Draw()
 		//Animation bar Progress
 		ImGui::SetCursorPosX(85);
 		ImGui::ProgressBar((component_animation->animation_time / (component_animation->resource_animation->duration / component_animation->resource_animation->ticks_per_second)), { windows_size,0 });
-		ImGui::SameLine();
-		if (ImGui::Button("Play"))
-		{
-			component_animation->play = true;
-			component_animation->pause = false;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Pause"))
-		{
-			component_animation->pause = !component_animation->pause;
-			mouse_mov.x = progress;
-			button_position = progress;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Stop") && component_animation->play)
-		{
-			component_animation->play = false;
-			component_animation->animation_time = 0.0f;
-			component_animation->pause = false;
-		}
-
 
 		//Animation typeos of Keys
 		ImGui::BeginGroup();
@@ -127,13 +106,13 @@ bool WindowAnimTimer::Draw()
 		}
 
 		//RedLine 
-		if (!App->timemanager->play && !component_animation->play && !component_animation->pause)
+		if (!App->timemanager->play)
 		{
 			ImGui::GetWindowDrawList()->AddLine({ redbar.x,redbar.y - 10 }, ImVec2(redbar.x, redbar.y + 165), IM_COL32(255, 0, 0, 100), 1.0f);
 			progress = 0.0f;
 			ImGui::SetScrollX(0);
 		}
-		else if (!component_animation->pause)
+		else
 		{
 			float aux_progression_bar = progress;
 
@@ -159,39 +138,6 @@ bool WindowAnimTimer::Draw()
 			}
 		}
 
-		if (component_animation->pause)
-		{
-			ImGui::SetCursorPos({ button_position,ImGui::GetCursorPosY() + 140 });
-			ImGui::PushID("scrollButton");
-			ImGui::Button("", { 20, 15 });
-			ImGui::PopID();
-
-			if (ImGui::IsItemClicked(0) && dragging == false)
-			{
-				dragging = true;
-				offset = ImGui::GetMousePos().x - ImGui::GetWindowPos().x - button_position;
-			}
-
-			if (dragging && ImGui::IsMouseDown(0))
-			{
-				button_position = ImGui::GetMousePos().x - ImGui::GetWindowPos().x - offset;
-				if (button_position < 0)
-					button_position = 0;
-				if (button_position > num_frames*zoom - 20)
-					button_position = num_frames * zoom - 20;
-
-				progress = button_position;
-				component_animation->animation_time = progress / (component_animation->resource_animation->ticks_per_second *zoom);
-
-			}
-			else
-			{
-				dragging = false;
-			}
-
-			ImGui::GetWindowDrawList()->AddLine({ redbar.x + progress,redbar.y - 10 }, ImVec2(redbar.x + progress, redbar.y + 165), IM_COL32(255, 0, 0, 255), 1.0f);
-		}
-
 		ImGui::EndChild();
 
 		ImGui::SameLine();
@@ -212,8 +158,6 @@ bool WindowAnimTimer::Draw()
 		}
 
 		ImGui::EndChild();
-
-		//ImGui::SameLine();
 
 		ImGui::BeginChild("Selected Bone", ImVec2(250, 30), true);
 

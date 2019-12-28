@@ -16,16 +16,16 @@ public:
 	void Save(const nlohmann::json::iterator& _iterator);
 	void Load(const nlohmann::json _json);
 
-	void FillBones(uint _id);
-
 public:
 	ResourceAnimation* resource_animation = nullptr;
+	ResourceAnimation* idle_animation = nullptr;
+	ResourceAnimation* attack_animation = nullptr;
+	ResourceAnimation* run_animation = nullptr;
+	ResourceAnimation* blend_animation = nullptr;
 
-	std::vector<uint> bones_go;
 	uint blend_id = 0u;
-	bool bones_loaded = false;
 	bool blend = false;
-	bool smooth = false;
+	bool running = false;
 	bool interpolation = false;
 
 	float animation_time = 0.0f;
@@ -36,8 +36,6 @@ public:
 
 	bool loop = true;
 	bool blend_loop = false;
-	bool play = false;
-	bool pause = false;
 
 };
 

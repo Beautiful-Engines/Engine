@@ -88,8 +88,6 @@ bool WindowProperties::Draw()
 
 		if (trans != nullptr)
 		{
-			/*if (ImGui::Button("Delete", { 100,20 }))
-				App->scene->DeleteGameObject(go);*/
 			if (ImGui::Checkbox("Hide", &go->hide))
 			{
 				if (go->hide)
@@ -184,15 +182,43 @@ bool WindowProperties::Draw()
 
 				for (; iterator_animation != animations.end(); ++iterator_animation)
 				{
-					ImGui::Text("Animation Name:");
+					// Idle
+					ImGui::Text("Animation Name: ");
 					ImGui::SameLine();
-					ImGui::TextColored({ 255, 255, 0, 255 }, "%s", (*iterator_animation)->resource_animation->name_anim.c_str());
+					ImGui::TextColored({ 255, 255, 0, 255 }, "Idle");
 					ImGui::Text("Animation Duration:");
 					ImGui::SameLine();
-					ImGui::TextColored({ 255, 255, 0, 255 }, "%i", (*iterator_animation)->resource_animation->duration);
+					ImGui::TextColored({ 255, 255, 0, 255 }, "%.2f", (*iterator_animation)->resource_animation->duration);
 					ImGui::Text("Animation Ticks Per Second:");
 					ImGui::SameLine();
-					ImGui::TextColored({ 255, 255, 0, 255 }, "%i", (*iterator_animation)->resource_animation->ticks_per_second);
+					ImGui::TextColored({ 255, 255, 0, 255 }, "%.2f", (*iterator_animation)->resource_animation->ticks_per_second);
+
+					if ((*iterator_animation)->attack_animation != nullptr)
+					{
+						// Attack, Just to delivery, then delete
+						ImGui::Text("Animation Name: ");
+						ImGui::SameLine();
+						ImGui::TextColored({ 255, 255, 0, 255 }, "Attack");
+						ImGui::Text("Animation Duration:");
+						ImGui::SameLine();
+						ImGui::TextColored({ 255, 255, 0, 255 }, "%.2f", (*iterator_animation)->attack_animation->duration);
+						ImGui::Text("Animation Ticks Per Second:");
+						ImGui::SameLine();
+						ImGui::TextColored({ 255, 255, 0, 255 }, "%.2f", (*iterator_animation)->attack_animation->ticks_per_second);
+					}
+					if ((*iterator_animation)->run_animation != nullptr)
+					{
+						// Run, Just to delivery, then delete
+						ImGui::Text("Animation Name: ");
+						ImGui::SameLine();
+						ImGui::TextColored({ 255, 255, 0, 255 }, "Run");
+						ImGui::Text("Animation Duration:");
+						ImGui::SameLine();
+						ImGui::TextColored({ 255, 255, 0, 255 }, "%.2f", (*iterator_animation)->run_animation->duration);
+						ImGui::Text("Animation Ticks Per Second:");
+						ImGui::SameLine();
+						ImGui::TextColored({ 255, 255, 0, 255 }, "%.2f", (*iterator_animation)->run_animation->ticks_per_second);
+					}
 				}
 			}
 		}

@@ -325,8 +325,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 		std::vector< ResourceModel::ModelNode> vector_nodes;
 		GameObject* go_model = App->scene->CreateGameObject(_resource_model->GetName());
 		go_model->SetIdNode(_resource_model->GetId() + _resource_model->GetCantities());
-		go_model->is_static = false;
-		/*go_model->is_static = true;*/
+		go_model->is_static = true;
 		go_model->resource_model = _resource_model;
 
 		// Animation
@@ -346,9 +345,29 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 					App->importer->import_animation->LoadAnimationFromResource(resource_animation);
 				}
 				go_model->GetAnimation()->resource_animation = resource_animation;
+				go_model->GetAnimation()->idle_animation = resource_animation;
+			}
+		}
+
+		// Just for delivery, then delete it
+		if (go_model->GetName().find("@") < 1000)
+		{
+			uint pos = go_model->GetName().find("@");
+			if (go_model->GetName().find("attack") < 1000)
+			{
+				App->scene->GetGameObjectByName(go_model->GetName().substr(0, pos) + "@idle.fbx")->GetAnimation()->attack_animation = go_model->GetAnimation()->resource_animation;
+				App->scene->DeleteGameObject(go_model);
+				return nullptr;
+			}
+			else if (go_model->GetName().find("run") < 1000)
+			{
+				App->scene->GetGameObjectByName(go_model->GetName().substr(0, pos) + "@idle.fbx")->GetAnimation()->run_animation = go_model->GetAnimation()->resource_animation;
+				App->scene->DeleteGameObject(go_model);
+				return nullptr;
 			}
 		}
 		
+
 		for each (ResourceModel::ModelNode node in _resource_model->nodes)
 		{
 			if (node.id == _resource_model->nodes.back().id)
@@ -428,7 +447,6 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 			}
 
 			App->scene->AddGameObject(go_node);
-			go_node->is_static = false;
 			/*go_node->is_static = true;*/
 			
 		}
@@ -519,6 +537,7 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 							App->importer->import_animation->LoadBoneFromResource(resource_bone);
 						}
 
+						resource_bone->id_mesh = node.mesh;
 						GameObject* go_bone = App->scene->GetGameObjectByName(resource_bone->name_bone);
 
 						ComponentTransform* transform = go_bone->GetTransform();
@@ -533,7 +552,6 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				}
 
 				App->scene->AddGameObject(go_node);
-				go_node->is_static = false;
 				/*go_node->is_static = true;*/
 			}
 		}

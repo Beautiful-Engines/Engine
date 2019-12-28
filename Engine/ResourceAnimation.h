@@ -28,7 +28,7 @@ struct NodeAnimation
 	float3* scale_keys_value = nullptr;
 	double* scale_keys_times = nullptr;
 	
-	bool CalcCurrentIndex(float time, bool game_mode);
+	bool CalcCurrentIndex(float time);
 	void CalcTransfrom(float time, bool interpolation);
 	void AnimBlending(const float4x4& blendtrans, float time);
 

@@ -199,7 +199,7 @@ void ComponentMesh::Skining()
 		go = go->GetParent();
 	}
 
-	if (go->GetAnimation() != nullptr && resource_mesh != nullptr)
+	if (go->GetAnimation() != nullptr && resource_mesh != nullptr && go->GetAnimation()->resource_animation != nullptr && go->GetAnimation()->resource_animation->num_channels > 1)
 	{
 		deformable_mesh = new ResourceMesh();
 		deformable_mesh->vertices = new float3[resource_mesh->n_vertices];
@@ -214,30 +214,33 @@ void ComponentMesh::Skining()
 			if (go_node->GetBone() != nullptr)
 			{
 				ResourceBone* resource_bone = go_node->GetBone()->resource_bone;
-				float4x4 transform = go_node->GetTransform()->GetTransformMatrix();
-				transform = GetMyGameObject()->GetTransform()->GetTransformMatrix().Inverted() * transform;
-				transform = transform * resource_bone->offset;
-
-				for (int j = 0; j < resource_bone->num_weights; j++)
+				if (resource_bone->id_mesh == this->GetResourceMesh()->GetId())
 				{
-					uint vertex_index = resource_bone->weights[j].vertex_id;
-					if (vertex_index >= resource_mesh->n_vertices)
-						continue;
+					float4x4 transform = go_node->GetTransform()->GetTransformMatrix();
+					transform = GetMyGameObject()->GetTransform()->GetTransformMatrix().Inverted() * transform;
+					transform = transform * resource_bone->offset;
 
-					// transforming mesh position
-					float3 matrix_position = transform.TransformPos(resource_mesh->vertices[vertex_index]);
-
-					deformable_mesh->vertices[vertex_index].x += matrix_position.x * resource_bone->weights[j].weight;
-					deformable_mesh->vertices[vertex_index].y += matrix_position.y * resource_bone->weights[j].weight;
-					deformable_mesh->vertices[vertex_index].z += matrix_position.z * resource_bone->weights[j].weight;
-
-					// transforming normals
-					if (resource_mesh->n_normals > 0)
+					for (int j = 0; j < resource_bone->num_weights; j++)
 					{
-						matrix_position = transform.TransformPos(resource_mesh->normals[vertex_index]);
-						deformable_mesh->normals[vertex_index].x += matrix_position.x * resource_bone->weights[j].weight;
-						deformable_mesh->normals[vertex_index].y += matrix_position.y * resource_bone->weights[j].weight;
-						deformable_mesh->normals[vertex_index].z += matrix_position.z * resource_bone->weights[j].weight;
+						uint vertex_index = resource_bone->weights[j].vertex_id;
+						if (vertex_index >= resource_mesh->n_vertices)
+							continue;
+
+						// transforming mesh position
+						float3 matrix_position = transform.TransformPos(resource_mesh->vertices[vertex_index]);
+
+						deformable_mesh->vertices[vertex_index].x += matrix_position.x * resource_bone->weights[j].weight;
+						deformable_mesh->vertices[vertex_index].y += matrix_position.y * resource_bone->weights[j].weight;
+						deformable_mesh->vertices[vertex_index].z += matrix_position.z * resource_bone->weights[j].weight;
+
+						// transforming normals
+						if (resource_mesh->n_normals > 0)
+						{
+							matrix_position = transform.TransformPos(resource_mesh->normals[vertex_index]);
+							deformable_mesh->normals[vertex_index].x += matrix_position.x * resource_bone->weights[j].weight;
+							deformable_mesh->normals[vertex_index].y += matrix_position.y * resource_bone->weights[j].weight;
+							deformable_mesh->normals[vertex_index].z += matrix_position.z * resource_bone->weights[j].weight;
+						}
 					}
 				}
 			}

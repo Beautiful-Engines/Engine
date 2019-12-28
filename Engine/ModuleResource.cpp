@@ -2,7 +2,7 @@
 #include "ModuleFileSystem.h"
 #include "ModuleImport.h"
 #include "ModuleResource.h"
-
+#include "ModuleScene.h"
 #include "ImportMesh.h"
 #include "ResourceMesh.h"
 #include "ImportTexture.h"
@@ -110,6 +110,8 @@ void ModuleResource::LoadAllAssets()
 	App->importer->import_texture->DefaultTexture();
 
 	LoadByFolder(ASSETS_FOLDER);
+
+	/*App->scene->LoadScene();*/
 
 }
 

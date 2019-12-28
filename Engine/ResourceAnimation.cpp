@@ -11,11 +11,11 @@ ResourceAnimation::~ResourceAnimation()
 {
 }
 
-bool NodeAnimation::CalcCurrentIndex(float time, bool game_mode)
+bool NodeAnimation::CalcCurrentIndex(float time)
 {
 	bool ret = false;
 
-	if (/*(App->timemanager->state == EDITOR && !game_mode) || */current_pos_index == -1 || current_rot_index == -1 || current_scale_index == -1 || next_pos_index == -1 || next_rot_index == -1 || next_scale_index == -1)
+	if (current_pos_index == -1 || current_rot_index == -1 || current_scale_index == -1 || next_pos_index == -1 || next_rot_index == -1 || next_scale_index == -1)
 	{
 		current_pos_index = current_rot_index = current_scale_index = 0;
 		next_pos_index = next_rot_index = next_scale_index = 1;
