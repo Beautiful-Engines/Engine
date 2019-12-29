@@ -64,7 +64,7 @@ void ComponentTransform::SetLocalPosition(float3 position)
 
 void ComponentTransform::SetLocalScale(float3 _scale)
 {
-	scale = _scale;
+	local_scale = _scale;
 	GetTransformMatrix();
 }
 
