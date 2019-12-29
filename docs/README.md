@@ -1,5 +1,3 @@
-# Engine
-
 Engine is a 3D game engine developed by two students from CITM-UPC Terrassa, Alejandro París and Cere Venteo.
 
 - Alejandro GitHub account: [Alejandro París](https://github.com/AlejandroParis)
