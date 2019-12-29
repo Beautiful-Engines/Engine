@@ -33,6 +33,7 @@ void ModuleTimeManager::PrepareUpdate()
 	case WANTS_PAUSE:
 		LOG("PAUSE");
 		PauseGameClock();
+		game_dt = 0.0f;
 		state = PAUSE;
 		break;
 	case WANTS_EDITOR:

@@ -91,6 +91,8 @@ Before the render of the mesh, it calculates a morphed version of it, adapting t
 	- Mouse Hold Left: look around target
 - Mouse Wheel: zoom in/out
 - Mouse Hold Shift: movement speed x2, zoom speed x2
+- Hold 2: animation run
+- 1: attack
 
 #### Shortcuts
 - LCTRL + S: Save scene
