@@ -137,7 +137,7 @@ void ComponentAnimation::Save(const nlohmann::json::iterator& _iterator)
 		{ "bones",nlohmann::json::array()}
 		};
 	}
-	for (uint i = 0; i < resource_animation->num_channels; i++) 
+	for (uint i = 0; resource_animation!=nullptr && i < resource_animation->num_channels; i++)
 	{
 		nlohmann::json::iterator _iterator_bones = json.find("bones");
 		nlohmann::json json_bones = {
