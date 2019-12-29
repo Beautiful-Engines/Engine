@@ -14,9 +14,6 @@ Engine is a 3D game engine developed by two students from CITM-UPC Terrassa, Ale
 <img src="cere.jpg"><br>
 
 ## The Engine
-<img src="game.png" width="800"><br>
-
-### Features
 
 #### Game Objects
 - Drag from Project panel creates a new GameObject.
@@ -75,7 +72,11 @@ On the Update, it loops through all the bones and apply the corresponding transf
 To do the interpolation, it basically does a Lerp operation of the current frame and the next frame based on the percentage of time elapsed. For animation blending, it temporally keeps the new resource that will be assigned and do interpolation between the frame of the current animation and the first frame of the next animation before finally swaping the animations.
 Before the render of the mesh, it calculates a morphed version of it, adapting to the linked bones and rendering it instead of the original one.
 
-<img src="instructions.png" width="800"><br>
+#### Editor
+<img src="editor.gif" width="800"><br>
+
+####In-Game
+<img src="ingame.gif" width="800"><br>
 
 ### Controls
 
