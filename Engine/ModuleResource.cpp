@@ -28,7 +28,7 @@ ModuleResource::~ModuleResource()
 bool ModuleResource::Start()
 {
 	LOG("importing all assets");
-	LoadAllAssets();
+	
 
 	return true;
 }

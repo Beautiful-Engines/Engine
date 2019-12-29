@@ -48,7 +48,8 @@ bool ModuleScene::Start()
 	GameObject *root = CreateGameObject("root");
 	CreateCamera();
 	CreateQuadtree();
-	
+	App->resource->LoadAllAssets();
+
 	return true;
 }
 
