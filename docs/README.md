@@ -115,7 +115,7 @@ Before the render of the mesh, it calculates a morphed version of it, adapting t
 
 ### Game Video
 
-<iframe width="427" height="240" src="https://www.youtube.com/embed/_k4s6vhPNEY frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="427" height="240" src="https://www.youtube.com/embed/_k4s6vhPNEY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ## License
 
