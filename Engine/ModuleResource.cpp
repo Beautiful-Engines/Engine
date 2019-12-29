@@ -114,13 +114,19 @@ void ModuleResource::LoadAllAssets()
 	// just for delivery, then delete it
 	std::string path = "skeleton@idle.fbx";
 	path = ASSETS_FOLDER + path;
-	App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
+	GameObject* go = App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
+	go->SetStatic(false);
+	go->GetTransform()->SetLocalScale({ 0.3, 0.3, 0.3 });
+	go->SetStatic(true);
+
 	path = "skeleton@attack.fbx";
 	path = ASSETS_FOLDER + path;
-	App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
+	go = App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
+	
 	path = "skeleton@run.fbx";
 	path = ASSETS_FOLDER + path;
-	App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
+	go = App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
+	
 	path = "street environment_v01.fbx";
 	path = ASSETS_FOLDER + path;
 	App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
