@@ -182,16 +182,20 @@ bool WindowProperties::Draw()
 
 				for (; iterator_animation != animations.end(); ++iterator_animation)
 				{
-					// Idle
-					ImGui::Text("Animation Name: ");
-					ImGui::SameLine();
-					ImGui::TextColored({ 255, 255, 0, 255 }, "Idle");
-					ImGui::Text("Animation Duration:");
-					ImGui::SameLine();
-					ImGui::TextColored({ 255, 255, 0, 255 }, "%.2f", (*iterator_animation)->resource_animation->duration);
-					ImGui::Text("Animation Ticks Per Second:");
-					ImGui::SameLine();
-					ImGui::TextColored({ 255, 255, 0, 255 }, "%.2f", (*iterator_animation)->resource_animation->ticks_per_second);
+					if ((*iterator_animation)->resource_animation != nullptr)
+					{
+						// Idle
+						ImGui::Text("Animation Name: ");
+						ImGui::SameLine();
+						ImGui::TextColored({ 255, 255, 0, 255 }, "Idle");
+						ImGui::Text("Animation Duration:");
+						ImGui::SameLine();
+						ImGui::TextColored({ 255, 255, 0, 255 }, "%.2f", (*iterator_animation)->resource_animation->duration);
+						ImGui::Text("Animation Ticks Per Second:");
+						ImGui::SameLine();
+						ImGui::TextColored({ 255, 255, 0, 255 }, "%.2f", (*iterator_animation)->resource_animation->ticks_per_second);
+					}
+					
 
 					if ((*iterator_animation)->attack_animation != nullptr)
 					{
