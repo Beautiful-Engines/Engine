@@ -75,7 +75,7 @@ Before the render of the mesh, it calculates a morphed version of it, adapting t
 #### Editor
 <img src="editor.gif" width="800"><br>
 
-####InGame
+#### InGame
 <img src="ingame.gif" width="800"><br>
 
 ### Controls
