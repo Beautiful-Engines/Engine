@@ -15,7 +15,7 @@ public:
 	ComponentMesh(GameObject* _game_object);
 	~ComponentMesh();
 
-	void Update();
+	void Update(float dt);
 
 	void Save(const nlohmann::json::iterator& _iterator);
 	void Load(const nlohmann::json _json);
@@ -30,6 +30,8 @@ public:
 	void Draw(ComponentTexture *component_texture);
 	void DrawNormals();
 
+	void Skining();
+
 public:
 
 	bool vertex_normals = false;
@@ -41,7 +43,7 @@ public:
 
 private:
 	ResourceMesh* resource_mesh = nullptr;
-
+	ResourceMesh* deformable_mesh = nullptr;
 }; 
 
 #endif // !__ComponentMesh_H__

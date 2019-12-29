@@ -111,13 +111,16 @@ void ImportMesh::Import(const aiScene* scene, const aiMesh* ai_mesh, ResourceMes
 	}
 
 	CreateOurMesh(_resource_mesh);
+	//TODO QUITAR ESTA MIERDA
+	GLBuffer(_resource_mesh);
+	
 }
 
 bool ImportMesh::CreateOurMesh(ResourceMesh* mesh)
 {
 	// amount of indexes / vertices / normals / texture_coords
 	uint ranges[4] = { mesh->n_indexes, mesh->n_vertices, mesh->n_normals, mesh->n_uv };
-	uint size = sizeof(ranges) + sizeof(uint) * mesh->n_indexes + sizeof(float3) * mesh->n_vertices + sizeof(float3) * mesh->n_normals + sizeof(float2) * mesh->n_uv;
+	uint size = sizeof(ranges) + (sizeof(uint) * mesh->n_indexes) + (sizeof(float3) * mesh->n_vertices) + (sizeof(float3) * mesh->n_normals) + (sizeof(float2) * mesh->n_uv);
 
 	// Allocate
 	char* data = new char[size];

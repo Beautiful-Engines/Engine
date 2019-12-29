@@ -21,6 +21,7 @@ public:
 
 private:
 	uint columns, image_size, spacing, offset;
+	std::string folder = ASSETS_FOLDER;
 };
 
 

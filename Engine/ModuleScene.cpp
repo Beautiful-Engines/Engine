@@ -17,6 +17,7 @@
 #include "ModuleScene.h"
 
 #include "ResourceMesh.h"
+#include "ResourceAnimation.h"
 
 
 #include "glew\glew.h"
@@ -47,6 +48,8 @@ bool ModuleScene::Start()
 	GameObject *root = CreateGameObject("root");
 	CreateCamera();
 	CreateQuadtree();
+	App->resource->LoadAllAssets();
+
 	return true;
 }
 
@@ -56,7 +59,8 @@ update_status ModuleScene::PreUpdate(float dt)
 }
 
 update_status ModuleScene::Update(float dt)
-{
+{	
+
 	if (App->timemanager->saved)
 	{
 		App->scene->SaveScene(true);
@@ -70,7 +74,7 @@ update_status ModuleScene::Update(float dt)
 	if (App->renderer3D->grid)
 		DrawGrid();
 
-	game_objects[0]->Update();
+	game_objects[0]->Update(dt);
 
 	if(debug_quadtree)
 		quadtree.Draw();
@@ -81,6 +85,26 @@ update_status ModuleScene::Update(float dt)
 		SaveScene();
 	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		LoadScene();
+
+	
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && App->timemanager->play)
+	{
+		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->blend_id = GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->attack_animation->GetId();
+		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->blend = true;
+		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->blend_loop = false;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_2) == KEY_REPEAT && App->timemanager->play && !GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->running)
+	{
+		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->blend_id = GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->run_animation->GetId();
+		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->blend = true;
+		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->blend_loop = true;
+		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->running = true;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_2) == KEY_UP && App->timemanager->play)
+	{
+		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->resource_animation = GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->idle_animation;
+		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->running = false;
+	}
 	
 	return UPDATE_CONTINUE;
 }
@@ -171,6 +195,10 @@ bool ModuleScene::LoadScene(bool _tmp)
 						component = new ComponentMesh(game_object);
 					else if (json_component["type"] == ComponentType::TEXTURE)
 						component = new ComponentTexture(game_object);
+					else if (json_component["type"] == ComponentType::ANIMATION)
+						component = new ComponentAnimation(game_object);
+					else if (json_component["type"] == ComponentType::BONE)
+						component = new ComponentBone(game_object);
 					else if (json_component["type"] == ComponentType::CAMERA)
 						component = new ComponentCamera(game_object);
 
@@ -309,6 +337,32 @@ void ModuleScene::SetSelected(GameObject* go)
 const std::vector<GameObject*> ModuleScene::GetGameObjects() const
 {
 	return game_objects;
+}
+
+GameObject* ModuleScene::GetGameObject(uint id)
+{
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i]->GetId() == id)
+		{
+			return game_objects[i];
+		}
+	}
+	return nullptr;
+}
+
+GameObject* ModuleScene::GetGameObjectByName(std::string _name)
+{
+	for (uint i = 0; i < game_objects.size(); ++i)
+	{
+		uint pos = game_objects[i]->GetName().find_last_of("_");
+		std::string name = game_objects[i]->GetName().substr(0, pos).c_str();
+		if (name == _name)
+		{
+			return game_objects[i];
+		}
+	}
+	return nullptr;
 }
 
 void ModuleScene::FrustrumCulling()
@@ -471,8 +525,6 @@ void ModuleScene::MouseClicking(const LineSegment& line)
 	{
 		if (game_objects[i] == clicked)
 		{
-			//App->gui->window_hierarchy->select_iterator = i;
-			//App->gui->window_hierarchy->node_clicked = i;
 			App->scene->SetSelected(game_objects[i]);
 			App->scene->ChangeSelected(game_objects[i]);
 			LOG("%s", game_objects[i]->GetName().c_str());

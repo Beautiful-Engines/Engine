@@ -10,6 +10,8 @@ class GameObject;
 enum class ComponentType {
 	MESH,
 	TEXTURE,
+	ANIMATION,
+	BONE,
 	TRANSFORM,
 	CAMERA,
 	OTHER
@@ -21,7 +23,7 @@ public:
 	Component(GameObject* my_game_object, ComponentType _type);
 	virtual ~Component();
 
-	virtual void Update();
+	virtual void Update(float dt);
 
 	virtual void Enable();
 	virtual void Disable();

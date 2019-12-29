@@ -34,6 +34,9 @@ public:
 	void SetSelected(GameObject * go);
 	const std::vector<GameObject*> GetGameObjects() const;
 
+	GameObject* GetGameObject(uint id);
+	GameObject* GetGameObjectByName(std::string _name);
+
 	void FrustrumCulling();
 
 	bool AnyCamera();

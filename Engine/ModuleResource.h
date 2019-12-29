@@ -21,6 +21,9 @@ public:
 	std::map<uint, Resource*> GetResources();
 	Resource* CreateResource(const char* extension, uint UID = 0);
 	void LoadAllAssets();
+	void LoadByFolder(const char* _folder);
+
+	bool first_textures = true;
 
 protected:
 	std::map<uint, Resource*> resources;

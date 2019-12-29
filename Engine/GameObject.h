@@ -6,7 +6,10 @@
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
+#include "ComponentAnimation.h"
+#include "ComponentBone.h"
 #include "ComponentCamera.h"
+#include "ResourceModel.h"
 #include "MathGeoLib\include\Geometry\AABB.h"
 #include "MathGeoLib\include\Geometry\OBB.h"
 #include "nlohmann/json.hpp"
@@ -17,7 +20,7 @@ public:
 	GameObject();
 	virtual ~GameObject();
 
-	virtual void Update();
+	virtual void Update(float dt);
 
 	void Enable();
 	void Disable();
@@ -48,6 +51,10 @@ public:
 
 	ComponentMesh* GetMesh();
 
+	ComponentAnimation* GetAnimation();
+
+	ComponentBone* GetBone();
+
 	ComponentCamera* GetCamera() const;
 
 	void SetStatic(bool _static);
@@ -63,6 +70,8 @@ public:
 	AABB abb;
 	OBB obb;
 
+	ResourceModel* resource_model = nullptr;
+
 private:
 	bool enabled = true;
 
@@ -70,11 +79,13 @@ private:
 	uint id_node = 0u;
 	uint id_node_parent = 0u;
 	std::string name;
+	std::string bone_name;
 	std::vector<Component*> components;
 
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> children;
 
+	
 	
 	bool focus = false;
 	

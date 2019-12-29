@@ -19,12 +19,14 @@ public:
 		
 		uint mesh = 0;
 		uint texture = 0;
+		std::vector<uint> bones;
 	};
 public:
 	ResourceModel(uint UID = 0);
 	~ResourceModel();
 
 	std::vector<ModelNode> nodes;
+	std::vector<uint> animations;
 };
 
 

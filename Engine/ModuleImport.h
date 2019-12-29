@@ -6,6 +6,7 @@
 class ImportModel;
 class ImportMesh;
 class ImportTexture;
+class ImportAnimation;
 
 class ModuleImport : public Module
 {
@@ -18,13 +19,14 @@ public:
 	bool CleanUp() override;
 
 
-	void ImportFile(const char* _path, bool _change_meta = false);
+	void ImportFile(const char* _path, bool _change_meta = false, bool finalpath = false);
 
 public:
 
 	ImportModel* import_model;
 	ImportMesh* import_mesh;
 	ImportTexture* import_texture;
+	ImportAnimation* import_animation;
 
 };
 
