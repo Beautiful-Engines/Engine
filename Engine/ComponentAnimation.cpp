@@ -2,6 +2,8 @@
 #include "ModuleResource.h"
 #include "ModuleScene.h"
 #include "ModuleTimeManager.h"
+#include "ModuleImport.h"
+#include "ImportAnimation.h"
 #include "GameObject.h"
 #include "ResourceAnimation.h"
 #include "ComponentAnimation.h"
@@ -112,6 +114,11 @@ void ComponentAnimation::Save(const nlohmann::json::iterator& _iterator)
 		{"attack", attack_animation->GetId()},
 		{"run", run_animation->GetId()},
 		{"idle", idle_animation->GetId()},
+		{"resource_animation_file", resource_animation->GetFile()},
+		{"attack_file", attack_animation->GetFile()},
+		{"run_file", run_animation->GetFile()},
+		{"idle_file", idle_animation->GetFile()},
+		{ "bones",nlohmann::json::array()}
 		};
 	}
 	else
@@ -123,8 +130,24 @@ void ComponentAnimation::Save(const nlohmann::json::iterator& _iterator)
 		{"attack", 0},
 		{"run", 0},
 		{"idle", 0},
+		{"resource_animation_file", "nofile"},
+		{"attack_file", "nofile"},
+		{"run_file", "nofile"},
+		{"idle_file", "nofile"},
+		{ "bones",nlohmann::json::array()}
 		};
 	}
+	for (uint i = 0; i < resource_animation->num_channels; i++) 
+	{
+		nlohmann::json::iterator _iterator_bones = json.find("bones");
+		nlohmann::json json_bones = {
+			{"id", resource_animation->nodes[i].name_node},
+			{ "exported_file", LIBRARY_ANIMATION_FOLDER + resource_animation->nodes[i].name_node + OUR_ANIMATION_EXTENSION }
+		};
+
+		_iterator_bones.value().push_back(json_bones);
+	};
+	
 	_iterator.value().push_back(json);
 }
 
@@ -140,5 +163,33 @@ void ComponentAnimation::Load(const nlohmann::json _json)
 		run_animation = (ResourceAnimation*)App->resource->Get(_json["run"]);
 	if (_json["idle"] != 0)
 		idle_animation = (ResourceAnimation*)App->resource->Get(_json["idle"]);
+
+	if (_json["resource_animation_file"] != "nofile")
+	{
+		if (resource_animation == nullptr && idle_animation == nullptr)
+		{
+			resource_animation = (ResourceAnimation*)App->resource->CreateResource(OUR_ANIMATION_EXTENSION, _json["animation"]);
+			resource_animation->SetFile(_json["resource_animation_file"]);
+			resource_animation->SetName("idle");
+			App->importer->import_animation->LoadAnimationFromResource((ResourceAnimation*)resource_animation);
+			idle_animation = resource_animation;
+		}
+		if (attack_animation == nullptr)
+		{
+			attack_animation = (ResourceAnimation*)App->resource->CreateResource(OUR_ANIMATION_EXTENSION, _json["attack"]);
+			attack_animation->SetFile(_json["attack_file"]);
+			attack_animation->SetName("attack");
+			App->importer->import_animation->LoadAnimationFromResource((ResourceAnimation*)attack_animation);
+		}
+		if (run_animation == nullptr)
+		{
+			run_animation = (ResourceAnimation*)App->resource->CreateResource(OUR_ANIMATION_EXTENSION, _json["run"]);
+			run_animation->SetFile(_json["run_file"]);
+			run_animation->SetName("run");
+			App->importer->import_animation->LoadAnimationFromResource((ResourceAnimation*)run_animation);
+		}
+		
+	}
+	
 }
 

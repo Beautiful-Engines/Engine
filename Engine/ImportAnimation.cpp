@@ -37,7 +37,7 @@ uint ImportAnimation::Import(aiAnimation* _animation)
 	anim->duration = _animation->mDuration;
 	anim->ticks_per_second = _animation->mTicksPerSecond;
 	anim->num_channels = _animation->mNumChannels;
-
+	anim->SetFile(LIBRARY_ANIMATION_FOLDER + std::to_string(anim->GetId()) + OUR_ANIMATION_EXTENSION);
 	// Nodes
 	if (anim->num_channels > 0)
 	{

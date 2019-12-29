@@ -116,8 +116,8 @@ uint ImportModel::ImportFBX(const char* _path)
 				// adding animations to meta
 				nlohmann::json::iterator _iterator = json.find("animations");
 				nlohmann::json json_mesh = {
-					{"id_animation", model->animations[i]},
-					{ "exported_file_animation", LIBRARY_ANIMATION_FOLDER + std::to_string(model->animations.back()) + OUR_ANIMATION_EXTENSION }
+					{"id", model->animations[i]},
+					{ "exported_file", LIBRARY_ANIMATION_FOLDER + std::to_string(model->animations.back()) + OUR_ANIMATION_EXTENSION }
 				};
 				_iterator.value().push_back(json_mesh);
 			}
@@ -228,6 +228,7 @@ ResourceModel::ModelNode ImportModel::ImportNode(const aiNode* _node, const aiSc
 		for (int i = 0; i < _node->mNumChildren; i++)
 		{
 			ResourceMesh* resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION);
+			resource_mesh->SetFile(LIBRARY_MESH_FOLDER + std::to_string(resource_mesh->GetId()) + OUR_MESH_EXTENSION);
 			_resource_model->nodes.push_back(ImportNode(_node->mChildren[i], _scene, resource_mesh, _resource_model, &resource_node));
 		}
 	}
@@ -337,7 +338,10 @@ GameObject* ImportModel::CreateModel(ResourceModel* _resource_model)
 				ComponentAnimation* animation = new ComponentAnimation(go_model);
 				ResourceAnimation* resource_animation = nullptr;
 				if (App->resource->Get(*iterator_animation) != nullptr)
+				{
 					resource_animation = (ResourceAnimation*)App->resource->GetAndUse(*iterator_animation);
+					resource_animation->SetFile(LIBRARY_ANIMATION_FOLDER + std::to_string(*iterator_animation) + OUR_ANIMATION_EXTENSION);
+				}
 				else
 				{
 					resource_animation = (ResourceAnimation*)App->resource->CreateResource(OUR_ANIMATION_EXTENSION, *iterator_animation);

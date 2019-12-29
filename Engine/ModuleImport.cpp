@@ -74,7 +74,6 @@ void ModuleImport::ImportFile(const char* _path, bool _change_meta, bool _final_
 		if (extension == "fbx")
 		{
 			// Import
-
 			import_model->ImportFBX(final_path.c_str());
 		}
 		else if (extension == "png" || extension == "dds" || extension == "tga")

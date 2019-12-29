@@ -72,7 +72,7 @@ void ComponentTexture::DrawTexture(ResourceMesh* _resource_mesh)
 		
 		if(!checkered && texture != nullptr)
 			glBindTexture(GL_TEXTURE_2D, texture->id_texture);
-		else
+		else if(default_texture != nullptr)
 			glBindTexture(GL_TEXTURE_2D, default_texture->id_texture);
 	}
 }

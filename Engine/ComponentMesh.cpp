@@ -7,6 +7,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h"
 #include "ModuleResource.h"
+#include "ImportMesh.h"
 #include "ResourceMesh.h"
 #include "ResourceModel.h"
 #include "ResourceBone.h"
@@ -56,7 +57,10 @@ void ComponentMesh::Save(const nlohmann::json::iterator& _iterator)
 		{"face_normals", face_normals},
 		{"textures", textures },
 		{"debug_bb", debug_bb },
-		{"resource_mesh", resource_mesh->GetId() }
+		{"resource_mesh", resource_mesh->GetId() },
+		{"resource_mesh_file", resource_mesh->GetFile() },
+		{"resource_mesh_default_texture", resource_mesh->id_buffer_default_texture },
+		{"resource_mesh_texture", resource_mesh->id_buffer_texture }
 	};
 
 	_iterator.value().push_back(json);
@@ -70,6 +74,15 @@ void ComponentMesh::Load(const nlohmann::json _json)
 	textures = _json["textures"];
 	debug_bb = _json["debug_bb"];
 	resource_mesh = (ResourceMesh*) App->resource->Get(_json["resource_mesh"]);
+	if (resource_mesh == nullptr)
+	{
+		resource_mesh = (ResourceMesh*)App->resource->CreateResource(OUR_MESH_EXTENSION, _json["resource_mesh"]);
+		resource_mesh->SetFile(_json["resource_mesh_file"]);
+		resource_mesh->id_buffer_default_texture = App->resource->GetId("default_texture");
+		resource_mesh->id_buffer_texture = _json["resource_mesh_texture"];
+		App->importer->import_mesh->LoadMeshFromResource((ResourceMesh*)resource_mesh);
+		
+	}
 }
 
 void ComponentMesh::Draw(ComponentTexture *component_texture)

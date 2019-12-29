@@ -111,7 +111,19 @@ void ModuleResource::LoadAllAssets()
 
 	LoadByFolder(ASSETS_FOLDER);
 
-	/*App->scene->LoadScene();*/
+	// just for delivery, then delete it
+	std::string path = "skeleton@idle.fbx";
+	path = ASSETS_FOLDER + path;
+	App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
+	path = "skeleton@attack.fbx";
+	path = ASSETS_FOLDER + path;
+	App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
+	path = "skeleton@run.fbx";
+	path = ASSETS_FOLDER + path;
+	App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
+	path = "street environment_v01.fbx";
+	path = ASSETS_FOLDER + path;
+	App->importer->import_model->CreateModel((ResourceModel*)App->resource->GetAndUse(App->resource->GetId(path.c_str())));
 
 }
 
@@ -194,7 +206,7 @@ void ModuleResource::LoadFile(const char * _path)
 
 			for (nlohmann::json::iterator iterator = json.find("animations").value().begin(); iterator != json.find("animations").value().end(); ++iterator)
 			{
-				resource_model->animations.push_back((*iterator)["id_animation"]);
+				resource_model->animations.push_back((*iterator)["id"]);
 			}
 			App->importer->import_model->LoadModel(resource_model);
 		}
