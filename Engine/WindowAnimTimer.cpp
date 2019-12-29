@@ -23,9 +23,13 @@ bool WindowAnimTimer::FillInfo()
 	{
 		component_animation = (ComponentAnimation*)App->scene->GetSelected()->GetAnimation();
 
-		num_frames = component_animation->resource_animation->duration;
+		if (component_animation->resource_animation != nullptr)
+		{
+			num_frames = component_animation->resource_animation->duration;
 
-		ret = true;
+			ret = true;
+		}
+			
 	}
 
 	return ret;

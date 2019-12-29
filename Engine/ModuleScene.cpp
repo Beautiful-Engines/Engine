@@ -103,6 +103,7 @@ update_status ModuleScene::Update(float dt)
 	else if (App->input->GetKey(SDL_SCANCODE_2) == KEY_UP && App->timemanager->play)
 	{
 		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->resource_animation = GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->idle_animation;
+		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->blend = false;
 		GetGameObjectByName("Assets/skeleton@idle.fbx")->GetAnimation()->running = false;
 	}
 	
